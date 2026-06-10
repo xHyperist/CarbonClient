@@ -1,0 +1,17 @@
+.gradle/
+.idea/
+.vscode/
+build/
+out/
+run/
+eclipse/
+bin/
+*.iml
+*.ipr
+*.iws
+*.log
+hs_err_pid*
+
+# Local workspace files
+work/
+outputs/

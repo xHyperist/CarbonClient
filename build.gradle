@@ -1,0 +1,57 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "https://maven.minecraftforge.net"
+        }
+    }
+    dependencies {
+        classpath "net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT"
+    }
+}
+
+apply plugin: "net.minecraftforge.gradle.forge"
+
+version = mod_version
+group = mod_group
+archivesBaseName = mod_name
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+minecraft {
+    version = "${minecraft_version}-${forge_version}-${minecraft_version}"
+    runDir = "run"
+    mappings = mcp_mappings
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mcversion", minecraft_version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include "mcmod.info"
+        expand(
+            "version": project.version,
+            "mcversion": minecraft_version
+        )
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude "mcmod.info"
+    }
+}
+
+jar {
+    manifest {
+        attributes(
+            "Specification-Title": "Carbon Client",
+            "Specification-Vendor": "Carbon Client",
+            "Specification-Version": project.version,
+            "Implementation-Title": project.name,
+            "Implementation-Version": project.version,
+            "Implementation-Vendor": "Carbon Client"
+        )
+    }
+}
