@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Carbon Client v0.1
 
 Carbon Client, Minecraft 1.8.9 ve Forge 11.15.1.2318 tabanli bir PvP client
@@ -215,3 +216,6 @@ olarak sec.
 ```properties
 org.gradle.jvmargs=-Xmx1G
 ```
+=======
+# CarbonClient
+>>>>>>> 78826172fbaa022edd218b451175df0916b29af6

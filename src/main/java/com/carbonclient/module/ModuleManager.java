@@ -35,6 +35,32 @@ public final class ModuleManager {
         return null;
     }
 
+    public List<Module> getModulesByKeyCode(int keyCode) {
+        List<Module> matches = new ArrayList<Module>();
+
+        if (keyCode == 0) {
+            return matches;
+        }
+
+        for (Module module : modules) {
+            if (module.getKeyCode() == keyCode) {
+                matches.add(module);
+            }
+        }
+
+        return matches;
+    }
+
+    public boolean toggleByKeyCode(int keyCode) {
+        List<Module> matches = getModulesByKeyCode(keyCode);
+
+        for (Module module : matches) {
+            module.toggle();
+        }
+
+        return !matches.isEmpty();
+    }
+
     public boolean toggle(String name) {
         Module module = getModule(name);
         if (module == null) {

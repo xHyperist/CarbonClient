@@ -6,6 +6,7 @@ public abstract class Module {
     private final String description;
     private final ModuleCategory category;
     private boolean enabled;
+    private int keyCode;
 
     protected Module(String name, String description, ModuleCategory category) {
         if (name == null || name.trim().isEmpty()) {
@@ -66,5 +67,13 @@ public abstract class Module {
 
     public final boolean isEnabled() {
         return enabled;
+    }
+
+    public final int getKeyCode() {
+        return keyCode;
+    }
+
+    public final void setKeyCode(int keyCode) {
+        this.keyCode = keyCode;
     }
 }
