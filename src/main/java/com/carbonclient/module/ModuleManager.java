@@ -1,12 +1,22 @@
 package com.carbonclient.module;
 
+import com.carbonclient.event.EventBus;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public final class ModuleManager {
 
+    private final EventBus eventBus;
     private final List<Module> modules = new ArrayList<Module>();
+
+    public ModuleManager(EventBus eventBus) {
+        if (eventBus == null) {
+            throw new IllegalArgumentException("EventBus cannot be null.");
+        }
+
+        this.eventBus = eventBus;
+    }
 
     public void register(Module module) {
         if (module == null) {
@@ -18,6 +28,7 @@ public final class ModuleManager {
             );
         }
 
+        module.attachEventBus(eventBus);
         modules.add(module);
     }
 

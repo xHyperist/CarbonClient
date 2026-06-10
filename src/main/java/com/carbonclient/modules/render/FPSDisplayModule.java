@@ -1,11 +1,10 @@
 package com.carbonclient.modules.render;
 
+import com.carbonclient.event.EventListener;
+import com.carbonclient.event.impl.Render2DEvent;
 import com.carbonclient.module.Module;
 import com.carbonclient.module.ModuleCategory;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
 public final class FPSDisplayModule extends Module {
@@ -15,6 +14,13 @@ public final class FPSDisplayModule extends Module {
     private static final int Y = 5;
 
     private final Minecraft minecraft = Minecraft.getMinecraft();
+    private final EventListener<Render2DEvent> renderListener =
+        new EventListener<Render2DEvent>() {
+            @Override
+            public void onEvent(Render2DEvent event) {
+                renderFps();
+            }
+        };
 
     public FPSDisplayModule() {
         super(
@@ -27,20 +33,15 @@ public final class FPSDisplayModule extends Module {
 
     @Override
     protected void onEnable() {
-        MinecraftForge.EVENT_BUS.register(this);
+        subscribe(Render2DEvent.class, renderListener);
     }
 
     @Override
     protected void onDisable() {
-        MinecraftForge.EVENT_BUS.unregister(this);
+        unsubscribe(Render2DEvent.class, renderListener);
     }
 
-    @SubscribeEvent
-    public void onRenderGameOverlay(RenderGameOverlayEvent.Text event) {
-        if (!isEnabled()) {
-            return;
-        }
-
+    private void renderFps() {
         String text = "FPS: " + Minecraft.getDebugFPS();
         minecraft.fontRendererObj.drawStringWithShadow(text, X, Y, TEXT_COLOR);
     }

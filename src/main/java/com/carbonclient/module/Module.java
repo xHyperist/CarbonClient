@@ -1,10 +1,15 @@
 package com.carbonclient.module;
 
+import com.carbonclient.event.Event;
+import com.carbonclient.event.EventBus;
+import com.carbonclient.event.EventListener;
+
 public abstract class Module {
 
     private final String name;
     private final String description;
     private final ModuleCategory category;
+    private EventBus eventBus;
     private boolean enabled;
     private int keyCode;
 
@@ -51,6 +56,36 @@ public abstract class Module {
     }
 
     protected void onToggle() {
+    }
+
+    final void attachEventBus(EventBus eventBus) {
+        if (this.eventBus != null) {
+            throw new IllegalStateException("Module is already attached to an EventBus.");
+        }
+
+        this.eventBus = eventBus;
+    }
+
+    protected final <T extends Event> void subscribe(
+        Class<T> eventType,
+        EventListener<T> listener
+    ) {
+        requireEventBus().subscribe(eventType, listener);
+    }
+
+    protected final <T extends Event> void unsubscribe(
+        Class<T> eventType,
+        EventListener<T> listener
+    ) {
+        requireEventBus().unsubscribe(eventType, listener);
+    }
+
+    private EventBus requireEventBus() {
+        if (eventBus == null) {
+            throw new IllegalStateException("Module must be registered before it is enabled.");
+        }
+
+        return eventBus;
     }
 
     public final String getName() {
