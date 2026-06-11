@@ -8,6 +8,7 @@ import com.carbonclient.module.ModuleManager;
 import com.carbonclient.module.impl.ExampleModule;
 import com.carbonclient.modules.render.CPSDisplayModule;
 import com.carbonclient.modules.render.FPSDisplayModule;
+import com.carbonclient.modules.render.KeystrokesModule;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -36,6 +37,9 @@ public final class Client {
         CPSDisplayModule cpsDisplay = new CPSDisplayModule();
         moduleManager.register(cpsDisplay);
         cpsDisplay.setEnabled(true);
+        KeystrokesModule keystrokes = new KeystrokesModule();
+        moduleManager.register(keystrokes);
+        keystrokes.setEnabled(true);
         MinecraftForge.EVENT_BUS.register(forgeEventBridge);
         FMLCommonHandler.instance().bus().register(keyInputHandler);
         logger.info(
@@ -49,6 +53,12 @@ public final class Client {
             cpsDisplay.getName(),
             cpsDisplay.isEnabled(),
             cpsDisplay.getKeyCode()
+        );
+        logger.info(
+            "Registered module: {} (enabled: {}, keyCode: {})",
+            keystrokes.getName(),
+            keystrokes.isEnabled(),
+            keystrokes.getKeyCode()
         );
         logger.info("{} initialized successfully.", Reference.MOD_NAME);
     }
