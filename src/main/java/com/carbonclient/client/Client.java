@@ -6,6 +6,7 @@ import com.carbonclient.event.bridge.ForgeEventBridge;
 import com.carbonclient.input.KeyInputHandler;
 import com.carbonclient.module.ModuleManager;
 import com.carbonclient.module.impl.ExampleModule;
+import com.carbonclient.modules.render.CPSDisplayModule;
 import com.carbonclient.modules.render.FPSDisplayModule;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -32,6 +33,9 @@ public final class Client {
         FPSDisplayModule fpsDisplay = new FPSDisplayModule();
         moduleManager.register(fpsDisplay);
         fpsDisplay.setEnabled(true);
+        CPSDisplayModule cpsDisplay = new CPSDisplayModule();
+        moduleManager.register(cpsDisplay);
+        cpsDisplay.setEnabled(true);
         MinecraftForge.EVENT_BUS.register(forgeEventBridge);
         FMLCommonHandler.instance().bus().register(keyInputHandler);
         logger.info(
@@ -39,6 +43,12 @@ public final class Client {
             fpsDisplay.getName(),
             fpsDisplay.isEnabled(),
             fpsDisplay.getKeyCode()
+        );
+        logger.info(
+            "Registered module: {} (enabled: {}, keyCode: {})",
+            cpsDisplay.getName(),
+            cpsDisplay.isEnabled(),
+            cpsDisplay.getKeyCode()
         );
         logger.info("{} initialized successfully.", Reference.MOD_NAME);
     }
