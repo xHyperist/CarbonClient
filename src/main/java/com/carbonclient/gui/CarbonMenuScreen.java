@@ -4,18 +4,19 @@ import com.carbonclient.common.Reference;
 import com.carbonclient.module.Module;
 import com.carbonclient.module.ModuleCategory;
 import com.carbonclient.module.ModuleManager;
+import com.carbonclient.setting.Setting;
+import com.carbonclient.setting.impl.BooleanSetting;
+import com.carbonclient.setting.impl.ColorSetting;
+import com.carbonclient.setting.impl.ModeSetting;
+import com.carbonclient.setting.impl.NumberSetting;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Keyboard;
 
 public final class CarbonMenuScreen extends GuiScreen {
-
-    private static final Logger LOGGER = LogManager.getLogger(Reference.MOD_NAME);
 
     private static final int OVERLAY_COLOR = 0xC0080B14;
     private static final int BACKGROUND_COLOR = 0xFF0D1220;
@@ -40,8 +41,20 @@ public final class CarbonMenuScreen extends GuiScreen {
     private static final int CARD_GAP = 10;
     private static final int CARD_HEIGHT = 126;
     private static final int BUTTON_HEIGHT = 18;
+    private static final int SETTING_ROW_HEIGHT = 31;
+    private static final int CONTROL_WIDTH = 150;
+    private static final int[] COLOR_PRESETS = {
+        0xFFFFFFFF,
+        0xFF6EE7FF,
+        0xFF4DA6FF,
+        0xFFFF4FA3,
+        0xB0121824,
+        0xD0506078
+    };
 
     private final ModuleManager moduleManager;
+    private Module selectedModule;
+    private NumberSetting draggingSlider;
 
     public CarbonMenuScreen(ModuleManager moduleManager) {
         if (moduleManager == null) {
@@ -77,12 +90,15 @@ public final class CarbonMenuScreen extends GuiScreen {
             PRIMARY_TEXT_COLOR
         );
 
-        int tabsX = panelX + 190;
-        drawTab("Mods", tabsX, panelY, true);
-        drawTab("Settings", tabsX + 70, panelY, false);
-        drawTab("Profiles", tabsX + 160, panelY, false);
-
-        drawModuleCards(mouseX, mouseY, panelX, headerBottom, panelWidth);
+        if (selectedModule == null) {
+            int tabsX = panelX + 190;
+            drawTab("Mods", tabsX, panelY, true);
+            drawTab("Settings", tabsX + 70, panelY, false);
+            drawTab("Profiles", tabsX + 160, panelY, false);
+            drawModuleCards(mouseX, mouseY, panelX, headerBottom, panelWidth);
+        } else {
+            drawOptionsView(mouseX, mouseY, panelX, panelY, headerBottom, panelWidth);
+        }
 
         fontRendererObj.drawString(
             "Version: " + Reference.VERSION,
@@ -222,11 +238,188 @@ public final class CarbonMenuScreen extends GuiScreen {
         fontRendererObj.drawString(label, textX, textY, PRIMARY_TEXT_COLOR);
     }
 
+    private void drawOptionsView(
+        int mouseX,
+        int mouseY,
+        int panelX,
+        int panelY,
+        int contentTop,
+        int panelWidth
+    ) {
+        drawBackButton(mouseX, mouseY, panelX + panelWidth - 76, panelY + 14);
+
+        fontRendererObj.drawString(
+            selectedModule.getName() + " Options",
+            panelX + PADDING,
+            contentTop + 12,
+            PRIMARY_TEXT_COLOR
+        );
+
+        List<Setting<?>> settings = selectedModule.getSettings();
+        int rowX = panelX + PADDING;
+        int rowWidth = panelWidth - PADDING * 2;
+        int rowY = contentTop + 32;
+
+        if (settings.isEmpty()) {
+            fontRendererObj.drawString(
+                "This module has no settings.",
+                rowX,
+                rowY + 8,
+                SECONDARY_TEXT_COLOR
+            );
+            return;
+        }
+
+        for (int index = 0; index < settings.size(); index++) {
+            drawSettingRow(
+                settings.get(index),
+                mouseX,
+                mouseY,
+                rowX,
+                rowY + index * SETTING_ROW_HEIGHT,
+                rowWidth
+            );
+        }
+    }
+
+    private void drawBackButton(int mouseX, int mouseY, int x, int y) {
+        drawButton(
+            "< Back",
+            x,
+            y,
+            60,
+            mouseX,
+            mouseY,
+            PRIMARY_ACCENT
+        );
+    }
+
+    private void drawSettingRow(
+        Setting<?> setting,
+        int mouseX,
+        int mouseY,
+        int x,
+        int y,
+        int width
+    ) {
+        Gui.drawRect(x, y, x + width, y + SETTING_ROW_HEIGHT - 4, CARD_COLOR);
+        Gui.drawRect(x, y, x + 2, y + SETTING_ROW_HEIGHT - 4, SECONDARY_ACCENT);
+        fontRendererObj.drawString(
+            setting.getName(),
+            x + 10,
+            y + 11,
+            PRIMARY_TEXT_COLOR
+        );
+
+        int controlX = x + width - CONTROL_WIDTH - 10;
+        int controlY = y + 6;
+
+        if (setting instanceof BooleanSetting) {
+            BooleanSetting booleanSetting = (BooleanSetting) setting;
+            drawButton(
+                booleanSetting.isEnabled() ? "ON" : "OFF",
+                controlX + 80,
+                controlY,
+                70,
+                mouseX,
+                mouseY,
+                booleanSetting.isEnabled() ? CYAN_GLOW : PRIMARY_ACCENT
+            );
+        } else if (setting instanceof NumberSetting) {
+            drawNumberSetting(
+                (NumberSetting) setting,
+                controlX,
+                controlY,
+                mouseX,
+                mouseY
+            );
+        } else if (setting instanceof ModeSetting) {
+            ModeSetting modeSetting = (ModeSetting) setting;
+            drawButton(
+                modeSetting.getValue(),
+                controlX,
+                controlY,
+                CONTROL_WIDTH,
+                mouseX,
+                mouseY,
+                SECONDARY_ACCENT
+            );
+        } else if (setting instanceof ColorSetting) {
+            drawColorSetting(
+                (ColorSetting) setting,
+                controlX,
+                controlY,
+                mouseX,
+                mouseY
+            );
+        }
+    }
+
+    private void drawNumberSetting(
+        NumberSetting setting,
+        int x,
+        int y,
+        int mouseX,
+        int mouseY
+    ) {
+        int sliderY = y + 8;
+        int sliderWidth = 105;
+        double range = setting.getMaximum() - setting.getMinimum();
+        double progress = range == 0.0D
+            ? 0.0D
+            : (setting.getValue() - setting.getMinimum()) / range;
+        int fillWidth = (int) Math.round(sliderWidth * progress);
+
+        Gui.drawRect(x, sliderY, x + sliderWidth, sliderY + 4, BUTTON_COLOR);
+        Gui.drawRect(x, sliderY, x + fillWidth, sliderY + 4, CYAN_GLOW);
+        Gui.drawRect(
+            x + fillWidth - 2,
+            sliderY - 3,
+            x + fillWidth + 2,
+            sliderY + 7,
+            PRIMARY_TEXT_COLOR
+        );
+
+        String value = formatNumber(setting.getValue());
+        fontRendererObj.drawString(
+            value,
+            x + CONTROL_WIDTH - fontRendererObj.getStringWidth(value),
+            y + 5,
+            PRIMARY_TEXT_COLOR
+        );
+    }
+
+    private void drawColorSetting(
+        ColorSetting setting,
+        int x,
+        int y,
+        int mouseX,
+        int mouseY
+    ) {
+        boolean hovered = isInside(mouseX, mouseY, x, y, CONTROL_WIDTH, BUTTON_HEIGHT);
+        Gui.drawRect(
+            x,
+            y,
+            x + CONTROL_WIDTH,
+            y + BUTTON_HEIGHT,
+            hovered ? BUTTON_HOVER_COLOR : BUTTON_COLOR
+        );
+        Gui.drawRect(x + 4, y + 4, x + 20, y + BUTTON_HEIGHT - 4, setting.getColor());
+
+        String value = String.format("#%08X", setting.getColor());
+        fontRendererObj.drawString(value, x + 27, y + 5, PRIMARY_TEXT_COLOR);
+    }
+
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton)
         throws IOException {
-        if (mouseButton == 0 && handleModuleCardClick(mouseX, mouseY)) {
-            return;
+        if (mouseButton == 0) {
+            if (selectedModule != null && handleOptionsClick(mouseX, mouseY)) {
+                return;
+            }
+            if (selectedModule == null && handleModuleCardClick(mouseX, mouseY)) {
+                return;
+            }
         }
 
         super.mouseClicked(mouseX, mouseY, mouseButton);
@@ -259,12 +452,123 @@ public final class CarbonMenuScreen extends GuiScreen {
                 return true;
             }
             if (isInside(mouseX, mouseY, optionsX, buttonY, buttonWidth, BUTTON_HEIGHT)) {
-                LOGGER.info("Options requested for module: {}", module.getName());
+                selectedModule = module;
                 return true;
             }
         }
 
         return false;
+    }
+
+    private boolean handleOptionsClick(int mouseX, int mouseY) {
+        int panelWidth = getPanelWidth();
+        int panelHeight = getPanelHeight();
+        int panelX = getPanelX(panelWidth);
+        int panelY = getPanelY(panelHeight);
+        int contentTop = panelY + HEADER_HEIGHT;
+
+        if (isInside(mouseX, mouseY, panelX + panelWidth - 76, panelY + 14, 60, BUTTON_HEIGHT)) {
+            selectedModule = null;
+            draggingSlider = null;
+            return true;
+        }
+
+        List<Setting<?>> settings = selectedModule.getSettings();
+        int rowX = panelX + PADDING;
+        int rowWidth = panelWidth - PADDING * 2;
+        int rowY = contentTop + 32;
+
+        for (int index = 0; index < settings.size(); index++) {
+            Setting<?> setting = settings.get(index);
+            int settingY = rowY + index * SETTING_ROW_HEIGHT;
+            int controlX = rowX + rowWidth - CONTROL_WIDTH - 10;
+            int controlY = settingY + 6;
+
+            if (setting instanceof BooleanSetting
+                && isInside(mouseX, mouseY, controlX + 80, controlY, 70, BUTTON_HEIGHT)) {
+                ((BooleanSetting) setting).toggle();
+                return true;
+            }
+            if (setting instanceof NumberSetting
+                && isInside(mouseX, mouseY, controlX, controlY, 105, BUTTON_HEIGHT)) {
+                draggingSlider = (NumberSetting) setting;
+                updateSliderValue(draggingSlider, mouseX, controlX, 105);
+                return true;
+            }
+            if (setting instanceof ModeSetting
+                && isInside(mouseX, mouseY, controlX, controlY, CONTROL_WIDTH, BUTTON_HEIGHT)) {
+                cycleMode((ModeSetting) setting);
+                return true;
+            }
+            if (setting instanceof ColorSetting
+                && isInside(mouseX, mouseY, controlX, controlY, CONTROL_WIDTH, BUTTON_HEIGHT)) {
+                cycleColor((ColorSetting) setting);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    protected void mouseClickMove(
+        int mouseX,
+        int mouseY,
+        int clickedMouseButton,
+        long timeSinceLastClick
+    ) {
+        if (clickedMouseButton == 0 && draggingSlider != null && selectedModule != null) {
+            int panelWidth = getPanelWidth();
+            int panelX = getPanelX(panelWidth);
+            int rowWidth = panelWidth - PADDING * 2;
+            int controlX = panelX + PADDING + rowWidth - CONTROL_WIDTH - 10;
+            updateSliderValue(draggingSlider, mouseX, controlX, 105);
+        }
+
+        super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
+    }
+
+    @Override
+    protected void mouseReleased(int mouseX, int mouseY, int state) {
+        draggingSlider = null;
+        super.mouseReleased(mouseX, mouseY, state);
+    }
+
+    private void updateSliderValue(
+        NumberSetting setting,
+        int mouseX,
+        int sliderX,
+        int sliderWidth
+    ) {
+        double progress = (mouseX - sliderX) / (double) sliderWidth;
+        progress = Math.max(0.0D, Math.min(1.0D, progress));
+        double value = setting.getMinimum()
+            + (setting.getMaximum() - setting.getMinimum()) * progress;
+        setting.setValue(value);
+    }
+
+    private void cycleMode(ModeSetting setting) {
+        List<String> modes = setting.getModes();
+        int index = modes.indexOf(setting.getValue());
+        int nextIndex = (index + 1) % modes.size();
+        setting.setValue(modes.get(nextIndex));
+    }
+
+    private void cycleColor(ColorSetting setting) {
+        int currentColor = setting.getColor();
+
+        for (int index = 0; index < COLOR_PRESETS.length; index++) {
+            if (COLOR_PRESETS[index] == currentColor) {
+                setting.setValue(COLOR_PRESETS[(index + 1) % COLOR_PRESETS.length]);
+                return;
+            }
+        }
+
+        setting.setValue(COLOR_PRESETS[0]);
+    }
+
+    private String formatNumber(double value) {
+        return String.format("%.1f", value);
     }
 
     private List<Module> getVisibleModules() {
@@ -312,6 +616,11 @@ public final class CarbonMenuScreen extends GuiScreen {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
+        if (keyCode == Keyboard.KEY_ESCAPE && selectedModule != null) {
+            selectedModule = null;
+            draggingSlider = null;
+            return;
+        }
         if (keyCode == Keyboard.KEY_ESCAPE || keyCode == Keyboard.KEY_RSHIFT) {
             mc.displayGuiScreen(null);
             return;

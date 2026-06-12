@@ -31,7 +31,7 @@ public abstract class Setting<T> {
         if (value == null) {
             throw new IllegalArgumentException("Setting value cannot be null.");
         }
-J
+
         this.value = validate(value);
     }
 
