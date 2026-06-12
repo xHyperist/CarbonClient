@@ -26,7 +26,7 @@ public final class KeyInputHandler {
 
         if (keyCode == Keyboard.KEY_RSHIFT) {
             if (minecraft.currentScreen == null) {
-                minecraft.displayGuiScreen(new CarbonMenuScreen());
+                minecraft.displayGuiScreen(new CarbonMenuScreen(moduleManager));
             } else if (minecraft.currentScreen instanceof CarbonMenuScreen) {
                 minecraft.displayGuiScreen(null);
             }
