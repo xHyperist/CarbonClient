@@ -2,7 +2,6 @@ package com.carbonclient.modules.render;
 
 import com.carbonclient.event.EventListener;
 import com.carbonclient.event.impl.Render2DEvent;
-import com.carbonclient.module.DraggableHudModule;
 import com.carbonclient.module.Module;
 import com.carbonclient.module.ModuleCategory;
 import com.carbonclient.setting.impl.BooleanSetting;
@@ -15,8 +14,10 @@ import net.minecraft.client.settings.KeyBinding;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
-public final class KeystrokesModule extends Module implements DraggableHudModule {
+public final class KeystrokesModule extends Module {
 
+    private static final int X = 5;
+    private static final int Y = 36;
     private static final int KEY_WIDTH = 20;
     private static final int KEY_HEIGHT = 15;
     private static final int MOUSE_WIDTH = 31;
@@ -29,10 +30,6 @@ public final class KeystrokesModule extends Module implements DraggableHudModule
         addSetting(new BooleanSetting("Show Movement Keys", true));
     private final NumberSetting scale =
         addSetting(new NumberSetting("Scale", 1.0D, 0.5D, 2.0D, 0.1D));
-    private final NumberSetting positionX =
-        addSetting(new NumberSetting("Position X", 5.0D, 0.0D, 10000.0D, 1.0D));
-    private final NumberSetting positionY =
-        addSetting(new NumberSetting("Position Y", 36.0D, 0.0D, 10000.0D, 1.0D));
     private final ColorSetting textColor =
         addSetting(new ColorSetting("Text Color", 0xFFFFFFFF));
     private final ColorSetting backgroundColor =
@@ -43,7 +40,7 @@ public final class KeystrokesModule extends Module implements DraggableHudModule
         new EventListener<Render2DEvent>() {
             @Override
             public void onEvent(Render2DEvent event) {
-                renderHud();
+                renderKeystrokes();
             }
         };
 
@@ -66,11 +63,10 @@ public final class KeystrokesModule extends Module implements DraggableHudModule
         unsubscribe(Render2DEvent.class, renderListener);
     }
 
-    @Override
-    public void renderHud() {
+    private void renderKeystrokes() {
         float renderScale = scale.getValue().floatValue();
-        int renderX = Math.round(getPositionX() / renderScale);
-        int renderY = Math.round(getPositionY() / renderScale);
+        int renderX = Math.round(X / renderScale);
+        int renderY = Math.round(Y / renderScale);
         int secondRowY = renderY + KEY_HEIGHT + GAP;
         int mouseRowY = showMovementKeys.isEnabled()
             ? secondRowY + KEY_HEIGHT + GAP
@@ -122,52 +118,6 @@ public final class KeystrokesModule extends Module implements DraggableHudModule
         }
 
         GlStateManager.popMatrix();
-    }
-
-    @Override
-    public int getPositionX() {
-        return positionX.getValue().intValue();
-    }
-
-    @Override
-    public int getPositionY() {
-        return positionY.getValue().intValue();
-    }
-
-    @Override
-    public void setPosition(int x, int y) {
-        positionX.setValue((double) Math.max(0, x));
-        positionY.setValue((double) Math.max(0, y));
-    }
-
-    @Override
-    public int getHudWidth() {
-        int width = showMovementKeys.isEnabled()
-            ? KEY_WIDTH * 3 + GAP * 2
-            : 0;
-
-        if (showClicks.isEnabled()) {
-            width = Math.max(width, MOUSE_WIDTH * 2 + GAP);
-        }
-
-        return Math.round(width * scale.getValue().floatValue());
-    }
-
-    @Override
-    public int getHudHeight() {
-        int height = 0;
-
-        if (showMovementKeys.isEnabled()) {
-            height = KEY_HEIGHT * 2 + GAP;
-        }
-        if (showClicks.isEnabled()) {
-            if (height > 0) {
-                height += GAP;
-            }
-            height += KEY_HEIGHT;
-        }
-
-        return Math.round(height * scale.getValue().floatValue());
     }
 
     private boolean isKeyDown(KeyBinding keyBinding) {

@@ -2,6 +2,7 @@ package com.carbonclient.client;
 
 import com.carbonclient.common.Reference;
 import com.carbonclient.config.ConfigManager;
+import com.carbonclient.client.service.ServiceRegistry;
 import com.carbonclient.event.EventBus;
 import com.carbonclient.event.bridge.ForgeEventBridge;
 import com.carbonclient.input.KeyInputHandler;
@@ -19,6 +20,7 @@ import org.apache.logging.log4j.Logger;
 
 public final class Client {
 
+    private final ServiceRegistry serviceRegistry = new ServiceRegistry();
     private final EventBus eventBus = new EventBus();
     private final ModuleManager moduleManager = new ModuleManager(eventBus);
     private final KeyInputHandler keyInputHandler = new KeyInputHandler(moduleManager);
@@ -91,6 +93,10 @@ public final class Client {
 
     public ConfigManager getConfigManager() {
         return configManager;
+    }
+
+    public ServiceRegistry getServiceRegistry() {
+        return serviceRegistry;
     }
 
     private void registerConfigShutdownHook() {
