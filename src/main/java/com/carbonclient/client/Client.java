@@ -1,6 +1,7 @@
 package com.carbonclient.client;
 
 import com.carbonclient.common.Reference;
+import com.carbonclient.config.ConfigManager;
 import com.carbonclient.event.EventBus;
 import com.carbonclient.event.bridge.ForgeEventBridge;
 import com.carbonclient.input.KeyInputHandler;
@@ -22,10 +23,16 @@ public final class Client {
     private final ModuleManager moduleManager = new ModuleManager(eventBus);
     private final KeyInputHandler keyInputHandler = new KeyInputHandler(moduleManager);
     private final ForgeEventBridge forgeEventBridge = new ForgeEventBridge(eventBus);
+    private ConfigManager configManager;
     private Logger logger;
 
     public void preInitialize(FMLPreInitializationEvent event) {
         logger = event.getModLog();
+        configManager = new ConfigManager(
+            event.getModConfigurationDirectory().getParentFile(),
+            moduleManager,
+            logger
+        );
         logger.info("{} v{} is starting.", Reference.MOD_NAME, Reference.VERSION);
     }
 
@@ -40,6 +47,8 @@ public final class Client {
         KeystrokesModule keystrokes = new KeystrokesModule();
         moduleManager.register(keystrokes);
         keystrokes.setEnabled(true);
+        configManager.load();
+        registerConfigShutdownHook();
         MinecraftForge.EVENT_BUS.register(forgeEventBridge);
         FMLCommonHandler.instance().bus().register(keyInputHandler);
         logger.info(
@@ -77,5 +86,23 @@ public final class Client {
 
     public EventBus getEventBus() {
         return eventBus;
+    }
+
+    public ConfigManager getConfigManager() {
+        return configManager;
+    }
+
+    private void registerConfigShutdownHook() {
+        Runtime.getRuntime().addShutdownHook(
+            new Thread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        configManager.save();
+                    }
+                },
+                "Carbon Client Config Saver"
+            )
+        );
     }
 }
