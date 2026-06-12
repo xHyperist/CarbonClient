@@ -5,6 +5,7 @@ import com.carbonclient.module.ModuleManager;
 import com.carbonclient.setting.Setting;
 import com.carbonclient.setting.impl.BooleanSetting;
 import com.carbonclient.setting.impl.ColorSetting;
+import com.carbonclient.setting.impl.KeybindSetting;
 import com.carbonclient.setting.impl.ModeSetting;
 import com.carbonclient.setting.impl.NumberSetting;
 import com.google.gson.Gson;
@@ -149,6 +150,8 @@ public final class ConfigManager {
         try {
             if (setting instanceof BooleanSetting) {
                 ((BooleanSetting) setting).setValue(value.getAsBoolean());
+            } else if (setting instanceof KeybindSetting) {
+                ((KeybindSetting) setting).setValue(value.getAsInt());
             } else if (setting instanceof NumberSetting) {
                 ((NumberSetting) setting).setValue(value.getAsDouble());
             } else if (setting instanceof ModeSetting) {
@@ -183,6 +186,8 @@ public final class ConfigManager {
     private void addSettingValue(JsonObject settingsObject, Setting<?> setting) {
         if (setting instanceof BooleanSetting) {
             settingsObject.addProperty(setting.getName(), (Boolean) setting.getValue());
+        } else if (setting instanceof KeybindSetting) {
+            settingsObject.addProperty(setting.getName(), (Integer) setting.getValue());
         } else if (setting instanceof NumberSetting) {
             settingsObject.addProperty(setting.getName(), (Double) setting.getValue());
         } else if (setting instanceof ModeSetting) {

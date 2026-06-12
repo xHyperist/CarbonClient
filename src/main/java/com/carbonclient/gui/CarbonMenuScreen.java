@@ -8,6 +8,7 @@ import com.carbonclient.module.ModuleManager;
 import com.carbonclient.setting.Setting;
 import com.carbonclient.setting.impl.BooleanSetting;
 import com.carbonclient.setting.impl.ColorSetting;
+import com.carbonclient.setting.impl.KeybindSetting;
 import com.carbonclient.setting.impl.ModeSetting;
 import com.carbonclient.setting.impl.NumberSetting;
 import java.io.IOException;
@@ -58,6 +59,7 @@ public final class CarbonMenuScreen extends GuiScreen {
     private final ConfigManager configManager;
     private Module selectedModule;
     private NumberSetting draggingSlider;
+    private KeybindSetting listeningKeybind;
     private int optionsScrollIndex;
     private int moduleScrollRow;
 
@@ -374,6 +376,21 @@ public final class CarbonMenuScreen extends GuiScreen {
                 mouseY,
                 booleanSetting.isEnabled() ? CYAN_GLOW : PRIMARY_ACCENT
             );
+        } else if (setting instanceof KeybindSetting) {
+            KeybindSetting keybindSetting = (KeybindSetting) setting;
+            drawButton(
+                listeningKeybind == keybindSetting
+                    ? "Press a key..."
+                    : keybindSetting.getKeyName(),
+                controlX,
+                controlY,
+                CONTROL_WIDTH,
+                mouseX,
+                mouseY,
+                listeningKeybind == keybindSetting
+                    ? PRIMARY_ACCENT
+                    : SECONDARY_ACCENT
+            );
         } else if (setting instanceof NumberSetting) {
             drawNumberSetting(
                 (NumberSetting) setting,
@@ -554,6 +571,7 @@ public final class CarbonMenuScreen extends GuiScreen {
         if (isInside(mouseX, mouseY, panelX + panelWidth - 76, panelY + 14, 60, BUTTON_HEIGHT)) {
             selectedModule = null;
             draggingSlider = null;
+            listeningKeybind = null;
             optionsScrollIndex = 0;
             return true;
         }
@@ -578,6 +596,19 @@ public final class CarbonMenuScreen extends GuiScreen {
             if (setting instanceof BooleanSetting
                 && isInside(mouseX, mouseY, controlX + 80, controlY, 70, BUTTON_HEIGHT)) {
                 ((BooleanSetting) setting).toggle();
+                return true;
+            }
+            if (setting instanceof KeybindSetting
+                && isInside(
+                    mouseX,
+                    mouseY,
+                    controlX,
+                    controlY,
+                    CONTROL_WIDTH,
+                    BUTTON_HEIGHT
+                )) {
+                listeningKeybind = (KeybindSetting) setting;
+                draggingSlider = null;
                 return true;
             }
             if (setting instanceof NumberSetting
@@ -778,9 +809,25 @@ public final class CarbonMenuScreen extends GuiScreen {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
+        if (listeningKeybind != null) {
+            if (keyCode == Keyboard.KEY_ESCAPE) {
+                listeningKeybind = null;
+                return;
+            }
+
+            listeningKeybind.setValue(
+                keyCode == Keyboard.KEY_DELETE
+                    ? Keyboard.KEY_NONE
+                    : keyCode
+            );
+            listeningKeybind = null;
+            return;
+        }
+
         if (keyCode == Keyboard.KEY_ESCAPE && selectedModule != null) {
             selectedModule = null;
             draggingSlider = null;
+            listeningKeybind = null;
             optionsScrollIndex = 0;
             return;
         }
