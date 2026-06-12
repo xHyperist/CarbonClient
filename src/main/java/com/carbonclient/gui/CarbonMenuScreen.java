@@ -11,29 +11,20 @@ import com.carbonclient.setting.impl.ColorSetting;
 import com.carbonclient.setting.impl.KeybindSetting;
 import com.carbonclient.setting.impl.ModeSetting;
 import com.carbonclient.setting.impl.NumberSetting;
+import com.carbonclient.ui.component.ButtonComponent;
+import com.carbonclient.ui.component.CardComponent;
+import com.carbonclient.ui.component.SliderComponent;
+import com.carbonclient.ui.component.ToggleComponent;
+import com.carbonclient.ui.render.RenderUtils;
+import com.carbonclient.ui.theme.CarbonTheme;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 public final class CarbonMenuScreen extends GuiScreen {
-
-    private static final int OVERLAY_COLOR = 0xC0080B14;
-    private static final int BACKGROUND_COLOR = 0xFF0D1220;
-    private static final int PANEL_COLOR = 0xFF121A2E;
-    private static final int CARD_COLOR = 0xE0182238;
-    private static final int CARD_HOVER_COLOR = 0xF01C2942;
-    private static final int BORDER_COLOR = 0xFF273653;
-    private static final int PRIMARY_ACCENT = 0xFFFF4FA3;
-    private static final int SECONDARY_ACCENT = 0xFF4DA6FF;
-    private static final int CYAN_GLOW = 0xFF6EE7FF;
-    private static final int PRIMARY_TEXT_COLOR = 0xFFFFFFFF;
-    private static final int SECONDARY_TEXT_COLOR = 0xFF9AA8BE;
-    private static final int BUTTON_COLOR = 0xFF202D49;
-    private static final int BUTTON_HOVER_COLOR = 0xFF2A3B5E;
 
     private static final int PANEL_WIDTH = 500;
     private static final int PANEL_HEIGHT = 410;
@@ -57,6 +48,10 @@ public final class CarbonMenuScreen extends GuiScreen {
 
     private final ModuleManager moduleManager;
     private final ConfigManager configManager;
+    private final ButtonComponent buttonComponent = new ButtonComponent();
+    private final ToggleComponent toggleComponent = new ToggleComponent();
+    private final CardComponent cardComponent = new CardComponent();
+    private final SliderComponent sliderComponent = new SliderComponent();
     private Module selectedModule;
     private NumberSetting draggingSlider;
     private KeybindSetting listeningKeybind;
@@ -79,7 +74,7 @@ public final class CarbonMenuScreen extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        Gui.drawRect(0, 0, width, height, OVERLAY_COLOR);
+        RenderUtils.drawPanel(0, 0, width, height, CarbonTheme.OVERLAY);
 
         int panelWidth = getPanelWidth();
         int panelHeight = getPanelHeight();
@@ -90,17 +85,48 @@ public final class CarbonMenuScreen extends GuiScreen {
         int headerBottom = panelY + HEADER_HEIGHT;
         int footerTop = panelBottom - FOOTER_HEIGHT;
 
-        Gui.drawRect(panelX - 1, panelY - 1, panelRight + 1, panelBottom + 1, BORDER_COLOR);
-        Gui.drawRect(panelX, panelY, panelRight, headerBottom, PANEL_COLOR);
-        Gui.drawRect(panelX, headerBottom, panelRight, footerTop, BACKGROUND_COLOR);
-        Gui.drawRect(panelX, footerTop, panelRight, panelBottom, PANEL_COLOR);
-        Gui.drawRect(panelX, panelY, panelX + 3, headerBottom, PRIMARY_ACCENT);
+        RenderUtils.drawOutline(
+            panelX,
+            panelY,
+            panelWidth,
+            panelHeight,
+            CarbonTheme.BORDER
+        );
+        RenderUtils.drawPanel(
+            panelX,
+            panelY,
+            panelWidth,
+            HEADER_HEIGHT,
+            CarbonTheme.PANEL
+        );
+        RenderUtils.drawPanel(
+            panelX,
+            headerBottom,
+            panelWidth,
+            footerTop - headerBottom,
+            CarbonTheme.BACKGROUND
+        );
+        RenderUtils.drawPanel(
+            panelX,
+            footerTop,
+            panelWidth,
+            FOOTER_HEIGHT,
+            CarbonTheme.PANEL
+        );
+        RenderUtils.drawPanel(
+            panelX,
+            panelY,
+            3,
+            HEADER_HEIGHT,
+            CarbonTheme.PRIMARY
+        );
 
-        fontRendererObj.drawString(
+        RenderUtils.drawText(
+            fontRendererObj,
             "CARBON CLIENT",
             panelX + PADDING,
             panelY + 18,
-            PRIMARY_TEXT_COLOR
+            CarbonTheme.TEXT
         );
 
         if (selectedModule == null) {
@@ -114,30 +140,31 @@ public final class CarbonMenuScreen extends GuiScreen {
             drawOptionsView(mouseX, mouseY, panelX, panelY, headerBottom, panelWidth);
         }
 
-        fontRendererObj.drawString(
+        RenderUtils.drawText(
+            fontRendererObj,
             "Version: " + Reference.VERSION,
             panelX + PADDING,
             footerTop + 10,
-            SECONDARY_TEXT_COLOR
+            CarbonTheme.MUTED_TEXT
         );
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
     private void drawTab(String label, int x, int panelY, boolean selected) {
-        int color = selected ? PRIMARY_TEXT_COLOR : SECONDARY_TEXT_COLOR;
+        int color = selected ? CarbonTheme.TEXT : CarbonTheme.MUTED_TEXT;
         int textY = panelY + 18;
 
-        fontRendererObj.drawString(label, x, textY, color);
+        RenderUtils.drawText(fontRendererObj, label, x, textY, color);
 
         if (selected) {
             int underlineY = panelY + HEADER_HEIGHT - 3;
-            Gui.drawRect(
+            RenderUtils.drawPanel(
                 x,
                 underlineY,
-                x + fontRendererObj.getStringWidth(label),
-                underlineY + 2,
-                PRIMARY_ACCENT
+                fontRendererObj.getStringWidth(label),
+                2,
+                CarbonTheme.PRIMARY
             );
         }
     }
@@ -177,12 +204,13 @@ public final class CarbonMenuScreen extends GuiScreen {
                 + "/"
                 + (totalRows - visibleRows + 1);
             int footerTop = panelY + getPanelHeight() - FOOTER_HEIGHT;
-            fontRendererObj.drawString(
+            RenderUtils.drawText(
+                fontRendererObj,
                 scrollText,
                 panelX + panelWidth - PADDING
                     - fontRendererObj.getStringWidth(scrollText),
                 footerTop - 13,
-                SECONDARY_TEXT_COLOR
+                CarbonTheme.MUTED_TEXT
             );
         }
     }
@@ -195,34 +223,36 @@ public final class CarbonMenuScreen extends GuiScreen {
         int y,
         int width
     ) {
-        boolean hovered = isInside(mouseX, mouseY, x, y, width, CARD_HEIGHT);
-        int accent = module.isEnabled() ? CYAN_GLOW : PRIMARY_ACCENT;
-
-        Gui.drawRect(x - 1, y - 1, x + width + 1, y + CARD_HEIGHT + 1, BORDER_COLOR);
-        Gui.drawRect(
+        int accent = module.isEnabled()
+            ? CarbonTheme.ACCENT
+            : CarbonTheme.PRIMARY;
+        cardComponent.render(
             x,
             y,
-            x + width,
-            y + CARD_HEIGHT,
-            hovered ? CARD_HOVER_COLOR : CARD_COLOR
+            width,
+            CARD_HEIGHT,
+            mouseX,
+            mouseY,
+            accent
         );
-        Gui.drawRect(x, y, x + 3, y + CARD_HEIGHT, accent);
 
-        fontRendererObj.drawString(
+        RenderUtils.drawText(
+            fontRendererObj,
             module.getName(),
             x + 10,
             y + 12,
-            PRIMARY_TEXT_COLOR
+            CarbonTheme.TEXT
         );
-        fontRendererObj.drawString(
+        RenderUtils.drawText(
+            fontRendererObj,
             module.getCategory().name(),
             x + 10,
             y + 30,
-            SECONDARY_TEXT_COLOR
+            CarbonTheme.MUTED_TEXT
         );
 
         String status = module.isEnabled() ? "ENABLED" : "DISABLED";
-        fontRendererObj.drawString(status, x + 10, y + 50, accent);
+        RenderUtils.drawText(fontRendererObj, status, x + 10, y + 50, accent);
 
         int buttonY = y + CARD_HEIGHT - BUTTON_HEIGHT - 10;
         int buttonGap = 6;
@@ -246,7 +276,7 @@ public final class CarbonMenuScreen extends GuiScreen {
             buttonWidth,
             mouseX,
             mouseY,
-            SECONDARY_ACCENT
+            CarbonTheme.SECONDARY
         );
     }
 
@@ -259,20 +289,17 @@ public final class CarbonMenuScreen extends GuiScreen {
         int mouseY,
         int accent
     ) {
-        boolean hovered = isInside(mouseX, mouseY, x, y, width, BUTTON_HEIGHT);
-
-        Gui.drawRect(
+        buttonComponent.render(
+            fontRendererObj,
+            label,
             x,
             y,
-            x + width,
-            y + BUTTON_HEIGHT,
-            hovered ? BUTTON_HOVER_COLOR : BUTTON_COLOR
+            width,
+            BUTTON_HEIGHT,
+            mouseX,
+            mouseY,
+            accent
         );
-        Gui.drawRect(x, y + BUTTON_HEIGHT - 2, x + width, y + BUTTON_HEIGHT, accent);
-
-        int textX = x + (width - fontRendererObj.getStringWidth(label)) / 2;
-        int textY = y + (BUTTON_HEIGHT - fontRendererObj.FONT_HEIGHT) / 2;
-        fontRendererObj.drawString(label, textX, textY, PRIMARY_TEXT_COLOR);
     }
 
     private void drawOptionsView(
@@ -285,11 +312,12 @@ public final class CarbonMenuScreen extends GuiScreen {
     ) {
         drawBackButton(mouseX, mouseY, panelX + panelWidth - 76, panelY + 14);
 
-        fontRendererObj.drawString(
+        RenderUtils.drawText(
+            fontRendererObj,
             selectedModule.getName() + " Options",
             panelX + PADDING,
             contentTop + 12,
-            PRIMARY_TEXT_COLOR
+            CarbonTheme.TEXT
         );
 
         List<Setting<?>> settings = getVisibleSettings();
@@ -303,11 +331,12 @@ public final class CarbonMenuScreen extends GuiScreen {
         );
 
         if (settings.isEmpty()) {
-            fontRendererObj.drawString(
+            RenderUtils.drawText(
+                fontRendererObj,
                 "This module has no settings.",
                 rowX,
                 rowY + 8,
-                SECONDARY_TEXT_COLOR
+                CarbonTheme.MUTED_TEXT
             );
             return;
         }
@@ -324,11 +353,12 @@ public final class CarbonMenuScreen extends GuiScreen {
         }
 
         if (settings.size() > visibleCount) {
-            fontRendererObj.drawString(
+            RenderUtils.drawText(
+                fontRendererObj,
                 "Mouse wheel: more options",
                 rowX,
                 panelY + getPanelHeight() - FOOTER_HEIGHT - 13,
-                SECONDARY_TEXT_COLOR
+                CarbonTheme.MUTED_TEXT
             );
         }
     }
@@ -341,7 +371,7 @@ public final class CarbonMenuScreen extends GuiScreen {
             60,
             mouseX,
             mouseY,
-            PRIMARY_ACCENT
+            CarbonTheme.PRIMARY
         );
     }
 
@@ -353,13 +383,26 @@ public final class CarbonMenuScreen extends GuiScreen {
         int y,
         int width
     ) {
-        Gui.drawRect(x, y, x + width, y + SETTING_ROW_HEIGHT - 4, CARD_COLOR);
-        Gui.drawRect(x, y, x + 2, y + SETTING_ROW_HEIGHT - 4, SECONDARY_ACCENT);
-        fontRendererObj.drawString(
+        RenderUtils.drawPanel(
+            x,
+            y,
+            width,
+            SETTING_ROW_HEIGHT - 4,
+            CarbonTheme.CARD
+        );
+        RenderUtils.drawPanel(
+            x,
+            y,
+            2,
+            SETTING_ROW_HEIGHT - 4,
+            CarbonTheme.SECONDARY
+        );
+        RenderUtils.drawText(
+            fontRendererObj,
             setting.getName(),
             x + 10,
             y + 11,
-            PRIMARY_TEXT_COLOR
+            CarbonTheme.TEXT
         );
 
         int controlX = x + width - CONTROL_WIDTH - 10;
@@ -367,14 +410,15 @@ public final class CarbonMenuScreen extends GuiScreen {
 
         if (setting instanceof BooleanSetting) {
             BooleanSetting booleanSetting = (BooleanSetting) setting;
-            drawButton(
-                booleanSetting.isEnabled() ? "ON" : "OFF",
+            toggleComponent.render(
+                fontRendererObj,
+                booleanSetting.isEnabled(),
                 controlX + 80,
                 controlY,
                 70,
+                BUTTON_HEIGHT,
                 mouseX,
-                mouseY,
-                booleanSetting.isEnabled() ? CYAN_GLOW : PRIMARY_ACCENT
+                mouseY
             );
         } else if (setting instanceof KeybindSetting) {
             KeybindSetting keybindSetting = (KeybindSetting) setting;
@@ -388,8 +432,8 @@ public final class CarbonMenuScreen extends GuiScreen {
                 mouseX,
                 mouseY,
                 listeningKeybind == keybindSetting
-                    ? PRIMARY_ACCENT
-                    : SECONDARY_ACCENT
+                    ? CarbonTheme.PRIMARY
+                    : CarbonTheme.SECONDARY
             );
         } else if (setting instanceof NumberSetting) {
             drawNumberSetting(
@@ -408,7 +452,7 @@ public final class CarbonMenuScreen extends GuiScreen {
                 CONTROL_WIDTH,
                 mouseX,
                 mouseY,
-                SECONDARY_ACCENT
+                CarbonTheme.SECONDARY
             );
         } else if (setting instanceof ColorSetting) {
             drawColorSetting(
@@ -428,30 +472,21 @@ public final class CarbonMenuScreen extends GuiScreen {
         int mouseX,
         int mouseY
     ) {
-        int sliderY = y + 8;
         int sliderWidth = 105;
         double range = setting.getMaximum() - setting.getMinimum();
         double progress = range == 0.0D
             ? 0.0D
             : (setting.getValue() - setting.getMinimum()) / range;
-        int fillWidth = (int) Math.round(sliderWidth * progress);
-
-        Gui.drawRect(x, sliderY, x + sliderWidth, sliderY + 4, BUTTON_COLOR);
-        Gui.drawRect(x, sliderY, x + fillWidth, sliderY + 4, CYAN_GLOW);
-        Gui.drawRect(
-            x + fillWidth - 2,
-            sliderY - 3,
-            x + fillWidth + 2,
-            sliderY + 7,
-            PRIMARY_TEXT_COLOR
-        );
 
         String value = formatNumber(setting.getValue());
-        fontRendererObj.drawString(
+        sliderComponent.render(
+            fontRendererObj,
             value,
-            x + CONTROL_WIDTH - fontRendererObj.getStringWidth(value),
-            y + 5,
-            PRIMARY_TEXT_COLOR
+            progress,
+            x,
+            y,
+            sliderWidth,
+            CONTROL_WIDTH
         );
     }
 
@@ -462,18 +497,30 @@ public final class CarbonMenuScreen extends GuiScreen {
         int mouseX,
         int mouseY
     ) {
-        boolean hovered = isInside(mouseX, mouseY, x, y, CONTROL_WIDTH, BUTTON_HEIGHT);
-        Gui.drawRect(
+        RenderUtils.drawButton(
             x,
             y,
-            x + CONTROL_WIDTH,
-            y + BUTTON_HEIGHT,
-            hovered ? BUTTON_HOVER_COLOR : BUTTON_COLOR
+            CONTROL_WIDTH,
+            BUTTON_HEIGHT,
+            isInside(mouseX, mouseY, x, y, CONTROL_WIDTH, BUTTON_HEIGHT),
+            CarbonTheme.SECONDARY
         );
-        Gui.drawRect(x + 4, y + 4, x + 20, y + BUTTON_HEIGHT - 4, setting.getColor());
+        RenderUtils.drawPanel(
+            x + 4,
+            y + 4,
+            16,
+            BUTTON_HEIGHT - 8,
+            setting.getColor()
+        );
 
         String value = String.format("#%08X", setting.getColor());
-        fontRendererObj.drawString(value, x + 27, y + 5, PRIMARY_TEXT_COLOR);
+        RenderUtils.drawText(
+            fontRendererObj,
+            value,
+            x + 27,
+            y + 5,
+            CarbonTheme.TEXT
+        );
     }
 
     @Override
