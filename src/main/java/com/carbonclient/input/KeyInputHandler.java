@@ -1,5 +1,6 @@
 package com.carbonclient.input;
 
+import com.carbonclient.gui.CarbonMenuScreen;
 import com.carbonclient.module.ModuleManager;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -19,10 +20,23 @@ public final class KeyInputHandler {
         if (!Keyboard.getEventKeyState() || Keyboard.isRepeatEvent()) {
             return;
         }
-        if (Minecraft.getMinecraft().currentScreen != null) {
+
+        Minecraft minecraft = Minecraft.getMinecraft();
+        int keyCode = Keyboard.getEventKey();
+
+        if (keyCode == Keyboard.KEY_RSHIFT) {
+            if (minecraft.currentScreen == null) {
+                minecraft.displayGuiScreen(new CarbonMenuScreen());
+            } else if (minecraft.currentScreen instanceof CarbonMenuScreen) {
+                minecraft.displayGuiScreen(null);
+            }
             return;
         }
 
-        moduleManager.toggleByKeyCode(Keyboard.getEventKey());
+        if (minecraft.currentScreen != null) {
+            return;
+        }
+
+        moduleManager.toggleByKeyCode(keyCode);
     }
 }

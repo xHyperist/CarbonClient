@@ -3,12 +3,17 @@ package com.carbonclient.module;
 import com.carbonclient.event.Event;
 import com.carbonclient.event.EventBus;
 import com.carbonclient.event.EventListener;
+import com.carbonclient.setting.Setting;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public abstract class Module {
 
     private final String name;
     private final String description;
     private final ModuleCategory category;
+    private final List<Setting<?>> settings = new ArrayList<Setting<?>>();
     private EventBus eventBus;
     private boolean enabled;
     private int keyCode;
@@ -80,6 +85,23 @@ public abstract class Module {
         requireEventBus().unsubscribe(eventType, listener);
     }
 
+    protected final <T extends Setting<?>> T addSetting(T setting) {
+        if (setting == null) {
+            throw new IllegalArgumentException("Setting cannot be null.");
+        }
+
+        for (Setting<?> existing : settings) {
+            if (existing.getName().equalsIgnoreCase(setting.getName())) {
+                throw new IllegalArgumentException(
+                    "A setting named '" + setting.getName() + "' already exists."
+                );
+            }
+        }
+
+        settings.add(setting);
+        return setting;
+    }
+
     private EventBus requireEventBus() {
         if (eventBus == null) {
             throw new IllegalStateException("Module must be registered before it is enabled.");
@@ -98,6 +120,10 @@ public abstract class Module {
 
     public final ModuleCategory getCategory() {
         return category;
+    }
+
+    public final List<Setting<?>> getSettings() {
+        return Collections.unmodifiableList(settings);
     }
 
     public final boolean isEnabled() {
