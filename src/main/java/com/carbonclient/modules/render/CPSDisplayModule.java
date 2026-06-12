@@ -27,9 +27,13 @@ public final class CPSDisplayModule extends Module implements DraggableHudModule
     private final NumberSetting scale =
         addSetting(new NumberSetting("Scale", 1.0D, 0.5D, 2.0D, 0.1D));
     private final NumberSetting positionX =
-        addSetting(new NumberSetting("Position X", 5.0D, 0.0D, 10000.0D, 1.0D));
+        addHiddenSetting(
+            new NumberSetting("Position X", 5.0D, 0.0D, 10000.0D, 1.0D)
+        );
     private final NumberSetting positionY =
-        addSetting(new NumberSetting("Position Y", 16.0D, 0.0D, 10000.0D, 1.0D));
+        addHiddenSetting(
+            new NumberSetting("Position Y", 16.0D, 0.0D, 10000.0D, 1.0D)
+        );
     private final ColorSetting textColor =
         addSetting(new ColorSetting("Text Color", 0xFFFFFFFF));
     private final ColorSetting backgroundColor =

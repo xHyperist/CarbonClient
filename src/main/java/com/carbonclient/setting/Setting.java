@@ -5,6 +5,7 @@ public abstract class Setting<T> {
     private final String name;
     private final T defaultValue;
     private T value;
+    private boolean visibleInOptions = true;
 
     protected Setting(String name, T defaultValue) {
         if (name == null || name.trim().isEmpty()) {
@@ -41,6 +42,14 @@ public abstract class Setting<T> {
 
     public final void reset() {
         value = defaultValue;
+    }
+
+    public final boolean isVisibleInOptions() {
+        return visibleInOptions;
+    }
+
+    public final void setVisibleInOptions(boolean visibleInOptions) {
+        this.visibleInOptions = visibleInOptions;
     }
 
     protected T validate(T value) {

@@ -102,6 +102,12 @@ public abstract class Module {
         return setting;
     }
 
+    protected final <T extends Setting<?>> T addHiddenSetting(T setting) {
+        T addedSetting = addSetting(setting);
+        addedSetting.setVisibleInOptions(false);
+        return addedSetting;
+    }
+
     private EventBus requireEventBus() {
         if (eventBus == null) {
             throw new IllegalStateException("Module must be registered before it is enabled.");

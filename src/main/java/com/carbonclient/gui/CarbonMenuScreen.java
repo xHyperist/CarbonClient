@@ -16,6 +16,7 @@ import java.util.List;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 
 public final class CarbonMenuScreen extends GuiScreen {
 
@@ -34,7 +35,7 @@ public final class CarbonMenuScreen extends GuiScreen {
     private static final int BUTTON_HOVER_COLOR = 0xFF2A3B5E;
 
     private static final int PANEL_WIDTH = 500;
-    private static final int PANEL_HEIGHT = 300;
+    private static final int PANEL_HEIGHT = 410;
     private static final int HEADER_HEIGHT = 46;
     private static final int FOOTER_HEIGHT = 28;
     private static final int PADDING = 16;
@@ -57,6 +58,8 @@ public final class CarbonMenuScreen extends GuiScreen {
     private final ConfigManager configManager;
     private Module selectedModule;
     private NumberSetting draggingSlider;
+    private int optionsScrollIndex;
+    private int moduleScrollRow;
 
     public CarbonMenuScreen(
         ModuleManager moduleManager,
@@ -147,15 +150,38 @@ public final class CarbonMenuScreen extends GuiScreen {
         List<Module> modules = getVisibleModules();
         int gridWidth = panelWidth - PADDING * 2;
         int cardWidth = (gridWidth - CARD_GAP * (GRID_COLUMNS - 1)) / GRID_COLUMNS;
+        int panelY = contentTop - HEADER_HEIGHT;
+        int visibleRows = getVisibleModuleRowCount(panelY, contentTop);
+        int firstIndex = moduleScrollRow * GRID_COLUMNS;
+        int endIndex = Math.min(
+            modules.size(),
+            firstIndex + visibleRows * GRID_COLUMNS
+        );
 
-        for (int index = 0; index < modules.size(); index++) {
+        for (int index = firstIndex; index < endIndex; index++) {
             Module module = modules.get(index);
             int column = index % GRID_COLUMNS;
-            int row = index / GRID_COLUMNS;
+            int row = index / GRID_COLUMNS - moduleScrollRow;
             int cardX = panelX + PADDING + column * (cardWidth + CARD_GAP);
             int cardY = contentTop + PADDING + row * (CARD_HEIGHT + CARD_GAP);
 
             drawModuleCard(module, mouseX, mouseY, cardX, cardY, cardWidth);
+        }
+
+        int totalRows = getModuleRowCount(modules.size());
+        if (totalRows > visibleRows) {
+            String scrollText = "Mouse wheel: "
+                + (moduleScrollRow + 1)
+                + "/"
+                + (totalRows - visibleRows + 1);
+            int footerTop = panelY + getPanelHeight() - FOOTER_HEIGHT;
+            fontRendererObj.drawString(
+                scrollText,
+                panelX + panelWidth - PADDING
+                    - fontRendererObj.getStringWidth(scrollText),
+                footerTop - 13,
+                SECONDARY_TEXT_COLOR
+            );
         }
     }
 
@@ -264,10 +290,15 @@ public final class CarbonMenuScreen extends GuiScreen {
             PRIMARY_TEXT_COLOR
         );
 
-        List<Setting<?>> settings = selectedModule.getSettings();
+        List<Setting<?>> settings = getVisibleSettings();
         int rowX = panelX + PADDING;
         int rowWidth = panelWidth - PADDING * 2;
         int rowY = contentTop + 32;
+        int visibleCount = getVisibleSettingCount(panelY, rowY);
+        int endIndex = Math.min(
+            settings.size(),
+            optionsScrollIndex + visibleCount
+        );
 
         if (settings.isEmpty()) {
             fontRendererObj.drawString(
@@ -279,14 +310,23 @@ public final class CarbonMenuScreen extends GuiScreen {
             return;
         }
 
-        for (int index = 0; index < settings.size(); index++) {
+        for (int index = optionsScrollIndex; index < endIndex; index++) {
             drawSettingRow(
                 settings.get(index),
                 mouseX,
                 mouseY,
                 rowX,
-                rowY + index * SETTING_ROW_HEIGHT,
+                rowY + (index - optionsScrollIndex) * SETTING_ROW_HEIGHT,
                 rowWidth
+            );
+        }
+
+        if (settings.size() > visibleCount) {
+            fontRendererObj.drawString(
+                "Mouse wheel: more options",
+                rowX,
+                panelY + getPanelHeight() - FOOTER_HEIGHT - 13,
+                SECONDARY_TEXT_COLOR
             );
         }
     }
@@ -471,11 +511,17 @@ public final class CarbonMenuScreen extends GuiScreen {
         int gridWidth = panelWidth - PADDING * 2;
         int cardWidth = (gridWidth - CARD_GAP * (GRID_COLUMNS - 1)) / GRID_COLUMNS;
         List<Module> modules = getVisibleModules();
+        int visibleRows = getVisibleModuleRowCount(panelY, contentTop);
+        int firstIndex = moduleScrollRow * GRID_COLUMNS;
+        int endIndex = Math.min(
+            modules.size(),
+            firstIndex + visibleRows * GRID_COLUMNS
+        );
 
-        for (int index = 0; index < modules.size(); index++) {
+        for (int index = firstIndex; index < endIndex; index++) {
             Module module = modules.get(index);
             int column = index % GRID_COLUMNS;
-            int row = index / GRID_COLUMNS;
+            int row = index / GRID_COLUMNS - moduleScrollRow;
             int cardX = panelX + PADDING + column * (cardWidth + CARD_GAP);
             int cardY = contentTop + PADDING + row * (CARD_HEIGHT + CARD_GAP);
             int buttonY = cardY + CARD_HEIGHT - BUTTON_HEIGHT - 10;
@@ -490,6 +536,7 @@ public final class CarbonMenuScreen extends GuiScreen {
             }
             if (isInside(mouseX, mouseY, optionsX, buttonY, buttonWidth, BUTTON_HEIGHT)) {
                 selectedModule = module;
+                optionsScrollIndex = 0;
                 return true;
             }
         }
@@ -507,17 +554,24 @@ public final class CarbonMenuScreen extends GuiScreen {
         if (isInside(mouseX, mouseY, panelX + panelWidth - 76, panelY + 14, 60, BUTTON_HEIGHT)) {
             selectedModule = null;
             draggingSlider = null;
+            optionsScrollIndex = 0;
             return true;
         }
 
-        List<Setting<?>> settings = selectedModule.getSettings();
+        List<Setting<?>> settings = getVisibleSettings();
         int rowX = panelX + PADDING;
         int rowWidth = panelWidth - PADDING * 2;
         int rowY = contentTop + 32;
+        int visibleCount = getVisibleSettingCount(panelY, rowY);
+        int endIndex = Math.min(
+            settings.size(),
+            optionsScrollIndex + visibleCount
+        );
 
-        for (int index = 0; index < settings.size(); index++) {
+        for (int index = optionsScrollIndex; index < endIndex; index++) {
             Setting<?> setting = settings.get(index);
-            int settingY = rowY + index * SETTING_ROW_HEIGHT;
+            int settingY = rowY
+                + (index - optionsScrollIndex) * SETTING_ROW_HEIGHT;
             int controlX = rowX + rowWidth - CONTROL_WIDTH - 10;
             int controlY = settingY + 6;
 
@@ -545,6 +599,46 @@ public final class CarbonMenuScreen extends GuiScreen {
         }
 
         return false;
+    }
+
+    @Override
+    public void handleMouseInput() throws IOException {
+        super.handleMouseInput();
+
+        int wheel = Mouse.getEventDWheel();
+        if (wheel == 0) {
+            return;
+        }
+
+        if (selectedModule == null) {
+            List<Module> modules = getVisibleModules();
+            int panelY = getPanelY(getPanelHeight());
+            int contentTop = panelY + HEADER_HEIGHT;
+            int visibleRows = getVisibleModuleRowCount(panelY, contentTop);
+            int maximumRow = Math.max(
+                0,
+                getModuleRowCount(modules.size()) - visibleRows
+            );
+
+            if (wheel < 0) {
+                moduleScrollRow = Math.min(maximumRow, moduleScrollRow + 1);
+            } else {
+                moduleScrollRow = Math.max(0, moduleScrollRow - 1);
+            }
+            return;
+        }
+
+        List<Setting<?>> settings = getVisibleSettings();
+        int panelY = getPanelY(getPanelHeight());
+        int rowY = panelY + HEADER_HEIGHT + 32;
+        int visibleCount = getVisibleSettingCount(panelY, rowY);
+        int maximumIndex = Math.max(0, settings.size() - visibleCount);
+
+        if (wheel < 0) {
+            optionsScrollIndex = Math.min(maximumIndex, optionsScrollIndex + 1);
+        } else {
+            optionsScrollIndex = Math.max(0, optionsScrollIndex - 1);
+        }
     }
 
     @Override
@@ -604,6 +698,36 @@ public final class CarbonMenuScreen extends GuiScreen {
         setting.setValue(COLOR_PRESETS[0]);
     }
 
+    private List<Setting<?>> getVisibleSettings() {
+        List<Setting<?>> visibleSettings = new ArrayList<Setting<?>>();
+
+        for (Setting<?> setting : selectedModule.getSettings()) {
+            if (setting.isVisibleInOptions()) {
+                visibleSettings.add(setting);
+            }
+        }
+
+        return visibleSettings;
+    }
+
+    private int getVisibleSettingCount(int panelY, int rowY) {
+        int footerTop = panelY + getPanelHeight() - FOOTER_HEIGHT;
+        return Math.max(1, (footerTop - rowY - 16) / SETTING_ROW_HEIGHT);
+    }
+
+    private int getVisibleModuleRowCount(int panelY, int contentTop) {
+        int footerTop = panelY + getPanelHeight() - FOOTER_HEIGHT;
+        int availableHeight = footerTop - contentTop - PADDING * 2;
+        return Math.max(
+            1,
+            (availableHeight + CARD_GAP) / (CARD_HEIGHT + CARD_GAP)
+        );
+    }
+
+    private int getModuleRowCount(int moduleCount) {
+        return (moduleCount + GRID_COLUMNS - 1) / GRID_COLUMNS;
+    }
+
     private String formatNumber(double value) {
         return String.format("%.1f", value);
     }
@@ -613,7 +737,8 @@ public final class CarbonMenuScreen extends GuiScreen {
 
         for (Module module : moduleManager.getModules()) {
             if (module.getCategory() == ModuleCategory.RENDER
-                || module.getCategory() == ModuleCategory.HUD) {
+                || module.getCategory() == ModuleCategory.HUD
+                || module.getCategory() == ModuleCategory.MOVEMENT) {
                 visibleModules.add(module);
             }
         }
@@ -656,6 +781,7 @@ public final class CarbonMenuScreen extends GuiScreen {
         if (keyCode == Keyboard.KEY_ESCAPE && selectedModule != null) {
             selectedModule = null;
             draggingSlider = null;
+            optionsScrollIndex = 0;
             return;
         }
         if (keyCode == Keyboard.KEY_ESCAPE || keyCode == Keyboard.KEY_RSHIFT) {

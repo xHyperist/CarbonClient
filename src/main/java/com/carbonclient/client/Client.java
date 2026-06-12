@@ -8,6 +8,7 @@ import com.carbonclient.event.bridge.ForgeEventBridge;
 import com.carbonclient.input.KeyInputHandler;
 import com.carbonclient.module.ModuleManager;
 import com.carbonclient.module.impl.ExampleModule;
+import com.carbonclient.modules.movement.ToggleSprintModule;
 import com.carbonclient.modules.render.CPSDisplayModule;
 import com.carbonclient.modules.render.FPSDisplayModule;
 import com.carbonclient.modules.render.KeystrokesModule;
@@ -50,7 +51,11 @@ public final class Client {
         KeystrokesModule keystrokes = new KeystrokesModule();
         moduleManager.register(keystrokes);
         keystrokes.setEnabled(true);
+        ToggleSprintModule toggleSprint = new ToggleSprintModule();
+        moduleManager.register(toggleSprint);
+        toggleSprint.setEnabled(true);
         configManager.load();
+        toggleSprint.setKeyCode(0);
         registerConfigShutdownHook();
         MinecraftForge.EVENT_BUS.register(forgeEventBridge);
         FMLCommonHandler.instance().bus().register(keyInputHandler);
@@ -71,6 +76,12 @@ public final class Client {
             keystrokes.getName(),
             keystrokes.isEnabled(),
             keystrokes.getKeyCode()
+        );
+        logger.info(
+            "Registered module: {} (enabled: {}, keyCode: {})",
+            toggleSprint.getName(),
+            toggleSprint.isEnabled(),
+            toggleSprint.getKeyCode()
         );
         logger.info("{} initialized successfully.", Reference.MOD_NAME);
     }
