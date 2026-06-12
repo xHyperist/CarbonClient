@@ -50,6 +50,8 @@ public final class ToggleSprintModule extends Module implements DraggableHudModu
         );
     private final BooleanSetting inventorySneak =
         addSetting(new BooleanSetting("Inventory Sneak", false));
+    private final BooleanSetting disableSneakWhileFlying =
+        addSetting(new BooleanSetting("Disable Sneak While Flying", true));
     private final BooleanSetting useSeparateToggleButtons =
         addSetting(new BooleanSetting("Use Separate Toggle Buttons", false));
     private final NumberSetting sprintToggleKey =
@@ -84,6 +86,8 @@ public final class ToggleSprintModule extends Module implements DraggableHudModu
     private boolean sneakToggled;
     private boolean sprintButtonWasDown;
     private boolean sneakButtonWasDown;
+    private boolean sprintButtonDown;
+    private boolean sneakButtonDown;
     private final EventListener<ClientTickEvent> tickListener =
         new EventListener<ClientTickEvent>() {
             @Override
@@ -120,6 +124,8 @@ public final class ToggleSprintModule extends Module implements DraggableHudModu
         unsubscribe(Render2DEvent.class, renderListener);
         sprintToggled = false;
         sneakToggled = false;
+        sprintButtonDown = false;
+        sneakButtonDown = false;
         resetButtonStates();
 
         if (minecraft.thePlayer != null) {
@@ -132,14 +138,17 @@ public final class ToggleSprintModule extends Module implements DraggableHudModu
         if (minecraft.thePlayer == null || minecraft.theWorld == null) {
             sprintToggled = false;
             sneakToggled = false;
+            sprintButtonDown = false;
+            sneakButtonDown = false;
             resetButtonStates();
+            releaseSneakKey();
             return;
         }
 
         int sprintKey = getSprintToggleKey();
         int sneakKey = getSneakToggleKey();
-        boolean sprintButtonDown = isPhysicalKeyDown(sprintKey);
-        boolean sneakButtonDown = isPhysicalKeyDown(sneakKey);
+        sprintButtonDown = isPhysicalKeyDown(sprintKey);
+        sneakButtonDown = isPhysicalKeyDown(sneakKey);
         boolean canToggle = minecraft.currentScreen == null;
 
         if (toggleSprint.isEnabled()
@@ -165,21 +174,47 @@ public final class ToggleSprintModule extends Module implements DraggableHudModu
             sneakToggled = false;
         }
 
-        if (sprintToggled && minecraft.thePlayer.movementInput.moveForward > 0.0F) {
-            minecraft.thePlayer.setSprinting(true);
+        applySprint(canToggle);
+        applySneak(canToggle);
+    }
+
+    private void applySprint(boolean gameplayActive) {
+        if (!toggleSprint.isEnabled()) {
+            return;
         }
 
+        boolean shouldSprint = gameplayActive
+            && sprintToggled
+            && minecraft.thePlayer.movementInput.moveForward > 0.0F
+            && !minecraft.thePlayer.isSneaking();
+
+        minecraft.thePlayer.setSprinting(shouldSprint);
+    }
+
+    private void applySneak(boolean gameplayActive) {
         // Inventory sneak can be considered unfair on some servers; keep it opt-in.
-        boolean allowSneak = minecraft.currentScreen == null
-            || inventorySneak.isEnabled();
-        if (sneakToggled && allowSneak) {
+        boolean flyingBlocked = disableSneakWhileFlying.isEnabled()
+            && minecraft.thePlayer.capabilities.isFlying;
+        boolean sprintingBlocked = minecraft.thePlayer.isSprinting();
+
+        if (!toggleSneak.isEnabled() || flyingBlocked || sprintingBlocked) {
+            sneakToggled = false;
+        }
+
+        boolean screenAllowsSneak = gameplayActive || inventorySneak.isEnabled();
+        boolean vanillaSneakHeld = isPhysicalKeyDown(
+            minecraft.gameSettings.keyBindSneak.getKeyCode()
+        );
+        boolean shouldSneak = screenAllowsSneak
+            && !flyingBlocked
+            && (sneakToggled || vanillaSneakHeld);
+
+        if (shouldSneak) {
             KeyBinding.setKeyBindState(
                 minecraft.gameSettings.keyBindSneak.getKeyCode(),
                 true
             );
-        } else if (!isPhysicalKeyDown(
-            minecraft.gameSettings.keyBindSneak.getKeyCode()
-        )) {
+        } else {
             releaseSneakKey();
         }
     }
@@ -258,13 +293,27 @@ public final class ToggleSprintModule extends Module implements DraggableHudModu
 
     private List<String> getHudLines() {
         List<String> lines = new ArrayList<String>();
+        MovementState sprintState = getSprintState();
+        MovementState sneakState = getSneakState();
 
         if ("Classic".equalsIgnoreCase(renderMode.getValue())) {
-            if (sprintToggled) {
-                lines.add("[" + sprintText.getValue() + " (Toggled)]");
+            if (sprintState != MovementState.OFF) {
+                lines.add(
+                    "["
+                        + sprintText.getValue()
+                        + " ("
+                        + sprintState.getLabel()
+                        + ")]"
+                );
             }
-            if (sneakToggled) {
-                lines.add("[" + sneakText.getValue() + " (Toggled)]");
+            if (sneakState != MovementState.OFF) {
+                lines.add(
+                    "["
+                        + sneakText.getValue()
+                        + " ("
+                        + sneakState.getLabel()
+                        + ")]"
+                );
             }
             if (lines.isEmpty()) {
                 lines.add("[Movement Toggles Off]");
@@ -272,9 +321,32 @@ public final class ToggleSprintModule extends Module implements DraggableHudModu
             return lines;
         }
 
-        lines.add("Sprint [" + (sprintToggled ? "ON" : "OFF") + "]");
-        lines.add("Sneak [" + (sneakToggled ? "ON" : "OFF") + "]");
+        lines.add("Sprint [" + sprintState.getModernLabel() + "]");
+        lines.add("Sneak [" + sneakState.getModernLabel() + "]");
         return lines;
+    }
+
+    private MovementState getSprintState() {
+        if (sprintToggled) {
+            return MovementState.TOGGLED;
+        }
+        if (minecraft.thePlayer != null && minecraft.thePlayer.isSprinting()) {
+            return MovementState.VANILLA;
+        }
+        if (sprintButtonDown) {
+            return MovementState.HOLDING;
+        }
+        return MovementState.OFF;
+    }
+
+    private MovementState getSneakState() {
+        if (sneakToggled) {
+            return MovementState.TOGGLED;
+        }
+        if (sneakButtonDown) {
+            return MovementState.HOLDING;
+        }
+        return MovementState.OFF;
     }
 
     private int getContentWidth(List<String> lines) {
@@ -324,5 +396,28 @@ public final class ToggleSprintModule extends Module implements DraggableHudModu
             (getContentHeight(getHudLines()) + padding)
                 * scale.getValue().floatValue()
         );
+    }
+
+    private enum MovementState {
+        OFF("Off", "OFF"),
+        HOLDING("Holding", "HOLD"),
+        TOGGLED("Toggled", "ON"),
+        VANILLA("Vanilla", "ON");
+
+        private final String label;
+        private final String modernLabel;
+
+        MovementState(String label, String modernLabel) {
+            this.label = label;
+            this.modernLabel = modernLabel;
+        }
+
+        public String getLabel() {
+            return label;
+        }
+
+        public String getModernLabel() {
+            return modernLabel;
+        }
     }
 }
