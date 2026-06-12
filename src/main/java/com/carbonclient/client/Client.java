@@ -33,6 +33,7 @@ public final class Client {
             moduleManager,
             logger
         );
+        keyInputHandler.setConfigManager(configManager);
         logger.info("{} v{} is starting.", Reference.MOD_NAME, Reference.VERSION);
     }
 

@@ -1,6 +1,7 @@
 package com.carbonclient.gui;
 
 import com.carbonclient.common.Reference;
+import com.carbonclient.config.ConfigManager;
 import com.carbonclient.module.Module;
 import com.carbonclient.module.ModuleCategory;
 import com.carbonclient.module.ModuleManager;
@@ -53,15 +54,22 @@ public final class CarbonMenuScreen extends GuiScreen {
     };
 
     private final ModuleManager moduleManager;
+    private final ConfigManager configManager;
     private Module selectedModule;
     private NumberSetting draggingSlider;
 
-    public CarbonMenuScreen(ModuleManager moduleManager) {
-        if (moduleManager == null) {
-            throw new IllegalArgumentException("ModuleManager cannot be null.");
+    public CarbonMenuScreen(
+        ModuleManager moduleManager,
+        ConfigManager configManager
+    ) {
+        if (moduleManager == null || configManager == null) {
+            throw new IllegalArgumentException(
+                "ModuleManager and ConfigManager cannot be null."
+            );
         }
 
         this.moduleManager = moduleManager;
+        this.configManager = configManager;
     }
 
     @Override
@@ -91,10 +99,11 @@ public final class CarbonMenuScreen extends GuiScreen {
         );
 
         if (selectedModule == null) {
-            int tabsX = panelX + 190;
+            int tabsX = panelX + 150;
             drawTab("Mods", tabsX, panelY, true);
-            drawTab("Settings", tabsX + 70, panelY, false);
-            drawTab("Profiles", tabsX + 160, panelY, false);
+            drawTab("Settings", tabsX + 55, panelY, false);
+            drawTab("Profiles", tabsX + 130, panelY, false);
+            drawTab("HUD Editor", tabsX + 205, panelY, false);
             drawModuleCards(mouseX, mouseY, panelX, headerBottom, panelWidth);
         } else {
             drawOptionsView(mouseX, mouseY, panelX, panelY, headerBottom, panelWidth);
@@ -414,6 +423,9 @@ public final class CarbonMenuScreen extends GuiScreen {
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton)
         throws IOException {
         if (mouseButton == 0) {
+            if (selectedModule == null && handleHudEditorTabClick(mouseX, mouseY)) {
+                return;
+            }
             if (selectedModule != null && handleOptionsClick(mouseX, mouseY)) {
                 return;
             }
@@ -423,6 +435,31 @@ public final class CarbonMenuScreen extends GuiScreen {
         }
 
         super.mouseClicked(mouseX, mouseY, mouseButton);
+    }
+
+    private boolean handleHudEditorTabClick(int mouseX, int mouseY) {
+        int panelWidth = getPanelWidth();
+        int panelHeight = getPanelHeight();
+        int panelX = getPanelX(panelWidth);
+        int panelY = getPanelY(panelHeight);
+        int tabsX = panelX + 150;
+        int hudEditorX = tabsX + 205;
+
+        if (isInside(
+            mouseX,
+            mouseY,
+            hudEditorX,
+            panelY + 12,
+            fontRendererObj.getStringWidth("HUD Editor"),
+            22
+        )) {
+            mc.displayGuiScreen(
+                new HudLayoutEditorScreen(moduleManager, configManager)
+            );
+            return true;
+        }
+
+        return false;
     }
 
     private boolean handleModuleCardClick(int mouseX, int mouseY) {
