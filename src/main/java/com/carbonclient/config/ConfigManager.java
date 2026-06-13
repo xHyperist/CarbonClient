@@ -50,8 +50,11 @@ public final class ConfigManager {
     }
 
     public void load() {
+        moduleManager.resetAllToDefaults();
+
         if (!configFile.isFile()) {
             logger.info("No Carbon config found. Using default values.");
+            save();
             return;
         }
 
@@ -62,26 +65,37 @@ public final class ConfigManager {
             JsonElement rootElement = new JsonParser().parse(reader);
             if (!rootElement.isJsonObject()) {
                 logger.warn("Carbon config root is not a JSON object. Using defaults.");
-                return;
+            } else {
+                JsonObject modulesObject = getObject(
+                    rootElement.getAsJsonObject(),
+                    "modules"
+                );
+                if (modulesObject == null) {
+                    logger.warn(
+                        "Carbon config has no valid modules object. Using defaults."
+                    );
+                } else {
+                    for (Module module : moduleManager.getModules()) {
+                        loadModule(
+                            module,
+                            getObject(modulesObject, module.getName())
+                        );
+                    }
+                    logger.info(
+                        "Loaded Carbon config from {}",
+                        configFile.getAbsolutePath()
+                    );
+                }
             }
-
-            JsonObject modulesObject = getObject(rootElement.getAsJsonObject(), "modules");
-            if (modulesObject == null) {
-                logger.warn("Carbon config has no valid modules object. Using defaults.");
-                return;
-            }
-
-            for (Module module : moduleManager.getModules()) {
-                loadModule(module, getObject(modulesObject, module.getName()));
-            }
-
-            logger.info("Loaded Carbon config from {}", configFile.getAbsolutePath());
         } catch (Exception exception) {
             logger.warn(
                 "Could not load Carbon config. Default values will be used.",
                 exception
             );
+            moduleManager.resetAllToDefaults();
         }
+
+        save();
     }
 
     public synchronized void save() {

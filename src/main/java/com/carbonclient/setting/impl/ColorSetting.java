@@ -148,6 +148,14 @@ public final class ColorSetting extends Setting<Integer> {
         this.speed = Math.max(0.1D, Math.min(5.0D, speed));
     }
 
+    @Override
+    protected void onReset() {
+        setBaseColor(getDefaultValue());
+        chroma = false;
+        type = TYPE_STATIC;
+        speed = 1.0D;
+    }
+
     private void syncBaseValue() {
         setValue(getBaseColor());
     }

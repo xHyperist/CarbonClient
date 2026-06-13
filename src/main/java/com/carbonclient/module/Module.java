@@ -13,12 +13,24 @@ public abstract class Module {
     private final String name;
     private final String description;
     private final ModuleCategory category;
+    private final boolean defaultEnabled;
+    private final int defaultKeyCode;
     private final List<Setting<?>> settings = new ArrayList<Setting<?>>();
     private EventBus eventBus;
     private boolean enabled;
     private int keyCode;
 
     protected Module(String name, String description, ModuleCategory category) {
+        this(name, description, category, false, 0);
+    }
+
+    protected Module(
+        String name,
+        String description,
+        ModuleCategory category,
+        boolean defaultEnabled,
+        int defaultKeyCode
+    ) {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Module name cannot be empty.");
         }
@@ -32,6 +44,9 @@ public abstract class Module {
         this.name = name;
         this.description = description;
         this.category = category;
+        this.defaultEnabled = defaultEnabled;
+        this.defaultKeyCode = defaultKeyCode;
+        this.keyCode = defaultKeyCode;
     }
 
     public final void toggle() {
@@ -142,5 +157,26 @@ public abstract class Module {
 
     public final void setKeyCode(int keyCode) {
         this.keyCode = keyCode;
+    }
+
+    public final boolean isDefaultEnabled() {
+        return defaultEnabled;
+    }
+
+    public final int getDefaultKeyCode() {
+        return defaultKeyCode;
+    }
+
+    public final void resetToDefaults() {
+        if (enabled) {
+            setEnabled(false);
+        }
+
+        for (Setting<?> setting : settings) {
+            setting.reset();
+        }
+
+        keyCode = defaultKeyCode;
+        setEnabled(defaultEnabled);
     }
 }

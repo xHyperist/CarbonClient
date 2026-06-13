@@ -88,7 +88,9 @@ public final class ToggleSprintModule extends Module implements DraggableHudModu
         super(
             "ToggleSprint",
             "Provides configurable toggle sprint and toggle sneak controls.",
-            ModuleCategory.MOVEMENT
+            ModuleCategory.MOVEMENT,
+            true,
+            Keyboard.KEY_NONE
         );
     }
 

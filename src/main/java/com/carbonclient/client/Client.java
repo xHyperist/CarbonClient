@@ -44,18 +44,13 @@ public final class Client {
         moduleManager.register(new ExampleModule());
         FPSDisplayModule fpsDisplay = new FPSDisplayModule();
         moduleManager.register(fpsDisplay);
-        fpsDisplay.setEnabled(true);
         CPSDisplayModule cpsDisplay = new CPSDisplayModule();
         moduleManager.register(cpsDisplay);
-        cpsDisplay.setEnabled(true);
         KeystrokesModule keystrokes = new KeystrokesModule();
         moduleManager.register(keystrokes);
-        keystrokes.setEnabled(true);
         ToggleSprintModule toggleSprint = new ToggleSprintModule();
         moduleManager.register(toggleSprint);
-        toggleSprint.setEnabled(true);
         configManager.load();
-        toggleSprint.setKeyCode(0);
         registerConfigShutdownHook();
         MinecraftForge.EVENT_BUS.register(forgeEventBridge);
         FMLCommonHandler.instance().bus().register(keyInputHandler);

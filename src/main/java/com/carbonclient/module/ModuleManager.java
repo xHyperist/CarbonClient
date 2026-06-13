@@ -30,6 +30,7 @@ public final class ModuleManager {
 
         module.attachEventBus(eventBus);
         modules.add(module);
+        module.resetToDefaults();
     }
 
     public Module getModule(String name) {
@@ -94,5 +95,11 @@ public final class ModuleManager {
 
     public List<Module> getModules() {
         return Collections.unmodifiableList(modules);
+    }
+
+    public void resetAllToDefaults() {
+        for (Module module : modules) {
+            module.resetToDefaults();
+        }
     }
 }

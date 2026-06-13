@@ -46,9 +46,10 @@ public final class FPSDisplayModule extends Module implements DraggableHudModule
         super(
             "FPS Display",
             "Displays the current FPS in the top-left corner.",
-            ModuleCategory.RENDER
+            ModuleCategory.RENDER,
+            true,
+            Keyboard.KEY_F
         );
-        setKeyCode(Keyboard.KEY_F);
     }
 
     @Override

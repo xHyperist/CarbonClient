@@ -42,6 +42,7 @@ public abstract class Setting<T> {
 
     public final void reset() {
         value = defaultValue;
+        onReset();
     }
 
     public final boolean isVisibleInOptions() {
@@ -54,5 +55,8 @@ public abstract class Setting<T> {
 
     protected T validate(T value) {
         return value;
+    }
+
+    protected void onReset() {
     }
 }

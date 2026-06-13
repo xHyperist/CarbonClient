@@ -55,6 +55,8 @@ public final class CarbonMenuScreen extends GuiScreen {
     private int colorPickerDrag;
     private int optionsScrollIndex;
     private int moduleScrollRow;
+    private boolean settingsTab;
+    private boolean resetAllConfirmation;
 
     public CarbonMenuScreen(
         ModuleManager moduleManager,
@@ -129,11 +131,26 @@ public final class CarbonMenuScreen extends GuiScreen {
 
         if (selectedModule == null) {
             int tabsX = panelX + 150;
-            drawTab("Mods", tabsX, panelY, true);
-            drawTab("Settings", tabsX + 55, panelY, false);
+            drawTab("Mods", tabsX, panelY, !settingsTab);
+            drawTab("Settings", tabsX + 55, panelY, settingsTab);
             drawTab("Profiles", tabsX + 130, panelY, false);
             drawTab("HUD Editor", tabsX + 205, panelY, false);
-            drawModuleCards(mouseX, mouseY, panelX, headerBottom, panelWidth);
+            if (settingsTab) {
+                drawSettingsView(
+                    mouseX,
+                    mouseY,
+                    panelX,
+                    headerBottom
+                );
+            } else {
+                drawModuleCards(
+                    mouseX,
+                    mouseY,
+                    panelX,
+                    headerBottom,
+                    panelWidth
+                );
+            }
         } else {
             drawOptionsView(mouseX, mouseY, panelX, panelY, headerBottom, panelWidth);
         }
@@ -330,6 +347,15 @@ public final class CarbonMenuScreen extends GuiScreen {
             contentTop + 12,
             CarbonTheme.TEXT
         );
+        drawButton(
+            "Reset to Defaults",
+            panelX + panelWidth - PADDING - 130,
+            contentTop + 7,
+            130,
+            mouseX,
+            mouseY,
+            CarbonTheme.PRIMARY
+        );
 
         List<Setting<?>> settings = getVisibleSettings();
         int rowX = panelX + PADDING;
@@ -372,6 +398,40 @@ public final class CarbonMenuScreen extends GuiScreen {
                 CarbonTheme.MUTED_TEXT
             );
         }
+    }
+
+    private void drawSettingsView(
+        int mouseX,
+        int mouseY,
+        int panelX,
+        int contentTop
+    ) {
+        RenderUtils.drawText(
+            fontRendererObj,
+            "Client Settings",
+            panelX + PADDING,
+            contentTop + 18,
+            CarbonTheme.TEXT
+        );
+        RenderUtils.drawText(
+            fontRendererObj,
+            "Restore every module, keybind and HUD position.",
+            panelX + PADDING,
+            contentTop + 38,
+            CarbonTheme.MUTED_TEXT
+        );
+
+        drawButton(
+            resetAllConfirmation
+                ? "Click again to confirm"
+                : "Reset All Settings",
+            panelX + PADDING,
+            contentTop + 58,
+            180,
+            mouseX,
+            mouseY,
+            CarbonTheme.PRIMARY
+        );
     }
 
     private void drawBackButton(int mouseX, int mouseY, int x, int y) {
@@ -542,18 +602,92 @@ public final class CarbonMenuScreen extends GuiScreen {
                 handleColorPickerClick(mouseX, mouseY);
                 return;
             }
+            if (selectedModule == null && handleMainTabClick(mouseX, mouseY)) {
+                return;
+            }
             if (selectedModule == null && handleHudEditorTabClick(mouseX, mouseY)) {
+                return;
+            }
+            if (selectedModule == null
+                && settingsTab
+                && handleResetAllClick(mouseX, mouseY)) {
                 return;
             }
             if (selectedModule != null && handleOptionsClick(mouseX, mouseY)) {
                 return;
             }
-            if (selectedModule == null && handleModuleCardClick(mouseX, mouseY)) {
+            if (selectedModule == null
+                && !settingsTab
+                && handleModuleCardClick(mouseX, mouseY)) {
                 return;
             }
         }
 
         super.mouseClicked(mouseX, mouseY, mouseButton);
+    }
+
+    private boolean handleMainTabClick(int mouseX, int mouseY) {
+        int panelWidth = getPanelWidth();
+        int panelHeight = getPanelHeight();
+        int panelX = getPanelX(panelWidth);
+        int panelY = getPanelY(panelHeight);
+        int tabsX = panelX + 150;
+
+        if (isInside(
+            mouseX,
+            mouseY,
+            tabsX,
+            panelY + 12,
+            fontRendererObj.getStringWidth("Mods"),
+            22
+        )) {
+            settingsTab = false;
+            resetAllConfirmation = false;
+            return true;
+        }
+        if (isInside(
+            mouseX,
+            mouseY,
+            tabsX + 55,
+            panelY + 12,
+            fontRendererObj.getStringWidth("Settings"),
+            22
+        )) {
+            settingsTab = true;
+            resetAllConfirmation = false;
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean handleResetAllClick(int mouseX, int mouseY) {
+        int panelWidth = getPanelWidth();
+        int panelHeight = getPanelHeight();
+        int panelX = getPanelX(panelWidth);
+        int contentTop = getPanelY(panelHeight) + HEADER_HEIGHT;
+
+        if (!isInside(
+            mouseX,
+            mouseY,
+            panelX + PADDING,
+            contentTop + 58,
+            180,
+            BUTTON_HEIGHT
+        )) {
+            return false;
+        }
+
+        if (!resetAllConfirmation) {
+            resetAllConfirmation = true;
+            return true;
+        }
+
+        moduleManager.resetAllToDefaults();
+        configManager.save();
+        resetAllConfirmation = false;
+        moduleScrollRow = 0;
+        return true;
     }
 
     private boolean handleHudEditorTabClick(int mouseX, int mouseY) {
@@ -639,6 +773,22 @@ public final class CarbonMenuScreen extends GuiScreen {
             optionsScrollIndex = 0;
             return true;
         }
+        if (isInside(
+            mouseX,
+            mouseY,
+            panelX + panelWidth - PADDING - 130,
+            contentTop + 7,
+            130,
+            BUTTON_HEIGHT
+        )) {
+            selectedModule.resetToDefaults();
+            configManager.save();
+            draggingSlider = null;
+            listeningKeybind = null;
+            closeColorPicker();
+            optionsScrollIndex = 0;
+            return true;
+        }
 
         List<Setting<?>> settings = getVisibleSettings();
         int rowX = panelX + PADDING;
@@ -705,7 +855,7 @@ public final class CarbonMenuScreen extends GuiScreen {
             return;
         }
 
-        if (selectedModule == null) {
+        if (selectedModule == null && !settingsTab) {
             List<Module> modules = getVisibleModules();
             int panelY = getPanelY(getPanelHeight());
             int contentTop = panelY + HEADER_HEIGHT;
@@ -720,6 +870,9 @@ public final class CarbonMenuScreen extends GuiScreen {
             } else {
                 moduleScrollRow = Math.max(0, moduleScrollRow - 1);
             }
+            return;
+        }
+        if (selectedModule == null) {
             return;
         }
 
