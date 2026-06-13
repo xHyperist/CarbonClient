@@ -9,6 +9,7 @@ import com.carbonclient.input.KeyInputHandler;
 import com.carbonclient.module.ModuleManager;
 import com.carbonclient.module.impl.ExampleModule;
 import com.carbonclient.modules.movement.ToggleSprintModule;
+import com.carbonclient.modules.render.ArmorHudModule;
 import com.carbonclient.modules.render.CPSDisplayModule;
 import com.carbonclient.modules.render.FPSDisplayModule;
 import com.carbonclient.modules.render.KeystrokesModule;
@@ -50,6 +51,8 @@ public final class Client {
         moduleManager.register(keystrokes);
         ToggleSprintModule toggleSprint = new ToggleSprintModule();
         moduleManager.register(toggleSprint);
+        ArmorHudModule armorHud = new ArmorHudModule();
+        moduleManager.register(armorHud);
         configManager.load();
         registerConfigShutdownHook();
         MinecraftForge.EVENT_BUS.register(forgeEventBridge);
@@ -77,6 +80,12 @@ public final class Client {
             toggleSprint.getName(),
             toggleSprint.isEnabled(),
             toggleSprint.getKeyCode()
+        );
+        logger.info(
+            "Registered module: {} (enabled: {}, keyCode: {})",
+            armorHud.getName(),
+            armorHud.isEnabled(),
+            armorHud.getKeyCode()
         );
         logger.info("{} initialized successfully.", Reference.MOD_NAME);
     }
