@@ -47,6 +47,7 @@ public final class CarbonMenuScreen extends GuiScreen {
         new ColorPickerComponent();
     private final SliderComponent sliderComponent = new SliderComponent();
     private Module selectedModule;
+    private Module listeningModuleKeybind;
     private NumberSetting draggingSlider;
     private KeybindSetting listeningKeybind;
     private ColorSetting openColorSetting;
@@ -55,6 +56,7 @@ public final class CarbonMenuScreen extends GuiScreen {
     private int colorPickerDrag;
     private int optionsScrollIndex;
     private int moduleScrollRow;
+    private int keybindScrollIndex;
     private boolean settingsTab;
     private boolean resetAllConfirmation;
 
@@ -432,6 +434,99 @@ public final class CarbonMenuScreen extends GuiScreen {
             mouseY,
             CarbonTheme.PRIMARY
         );
+
+        List<Module> modules = getKeybindModules();
+        int rowX = panelX + PADDING;
+        int rowWidth = getPanelWidth() - PADDING * 2;
+        int rowY = contentTop + 92;
+        int panelY = contentTop - HEADER_HEIGHT;
+        int visibleCount = getVisibleKeybindCount(panelY, rowY);
+        int endIndex = Math.min(
+            modules.size(),
+            keybindScrollIndex + visibleCount
+        );
+
+        RenderUtils.drawText(
+            fontRendererObj,
+            "Keybinds",
+            rowX,
+            rowY - 16,
+            CarbonTheme.TEXT
+        );
+
+        for (int index = keybindScrollIndex; index < endIndex; index++) {
+            drawKeybindRow(
+                modules.get(index),
+                mouseX,
+                mouseY,
+                rowX,
+                rowY + (index - keybindScrollIndex) * SETTING_ROW_HEIGHT,
+                rowWidth
+            );
+        }
+
+        if (modules.size() > visibleCount) {
+            RenderUtils.drawText(
+                fontRendererObj,
+                "Mouse wheel: more keybinds",
+                rowX,
+                panelY + getPanelHeight() - FOOTER_HEIGHT - 13,
+                CarbonTheme.MUTED_TEXT
+            );
+        }
+    }
+
+    private void drawKeybindRow(
+        Module module,
+        int mouseX,
+        int mouseY,
+        int x,
+        int y,
+        int width
+    ) {
+        boolean conflict = hasKeybindConflict(module);
+        int accent = conflict ? CarbonTheme.DANGER : CarbonTheme.SECONDARY;
+        int rowHeight = SETTING_ROW_HEIGHT - 4;
+
+        RenderUtils.drawPanel(x, y, width, rowHeight, CarbonTheme.CARD);
+        RenderUtils.drawOutline(x, y, width, rowHeight, accent);
+        RenderUtils.drawText(
+            fontRendererObj,
+            module.getName(),
+            x + 10,
+            y + 10,
+            CarbonTheme.TEXT
+        );
+
+        String keyName = listeningModuleKeybind == module
+            ? "Press a key..."
+            : getKeyName(module.getKeyCode());
+        int keyX = x + width - 205;
+        RenderUtils.drawText(
+            fontRendererObj,
+            keyName,
+            keyX,
+            y + 10,
+            conflict ? CarbonTheme.DANGER : CarbonTheme.MUTED_TEXT
+        );
+        drawButton(
+            "Change",
+            x + width - 132,
+            y + 5,
+            68,
+            mouseX,
+            mouseY,
+            accent
+        );
+        drawButton(
+            "Reset",
+            x + width - 58,
+            y + 5,
+            52,
+            mouseX,
+            mouseY,
+            CarbonTheme.PRIMARY
+        );
     }
 
     private void drawBackButton(int mouseX, int mouseY, int x, int y) {
@@ -613,6 +708,11 @@ public final class CarbonMenuScreen extends GuiScreen {
                 && handleResetAllClick(mouseX, mouseY)) {
                 return;
             }
+            if (selectedModule == null
+                && settingsTab
+                && handleKeybindPanelClick(mouseX, mouseY)) {
+                return;
+            }
             if (selectedModule != null && handleOptionsClick(mouseX, mouseY)) {
                 return;
             }
@@ -687,7 +787,58 @@ public final class CarbonMenuScreen extends GuiScreen {
         configManager.save();
         resetAllConfirmation = false;
         moduleScrollRow = 0;
+        keybindScrollIndex = 0;
+        listeningModuleKeybind = null;
         return true;
+    }
+
+    private boolean handleKeybindPanelClick(int mouseX, int mouseY) {
+        int panelWidth = getPanelWidth();
+        int panelHeight = getPanelHeight();
+        int panelX = getPanelX(panelWidth);
+        int panelY = getPanelY(panelHeight);
+        int rowX = panelX + PADDING;
+        int rowWidth = panelWidth - PADDING * 2;
+        int rowY = panelY + HEADER_HEIGHT + 92;
+        List<Module> modules = getKeybindModules();
+        int visibleCount = getVisibleKeybindCount(panelY, rowY);
+        int endIndex = Math.min(
+            modules.size(),
+            keybindScrollIndex + visibleCount
+        );
+
+        for (int index = keybindScrollIndex; index < endIndex; index++) {
+            Module module = modules.get(index);
+            int currentY = rowY
+                + (index - keybindScrollIndex) * SETTING_ROW_HEIGHT;
+
+            if (isInside(
+                mouseX,
+                mouseY,
+                rowX + rowWidth - 132,
+                currentY + 5,
+                68,
+                BUTTON_HEIGHT
+            )) {
+                listeningModuleKeybind = module;
+                return true;
+            }
+            if (isInside(
+                mouseX,
+                mouseY,
+                rowX + rowWidth - 58,
+                currentY + 5,
+                52,
+                BUTTON_HEIGHT
+            )) {
+                module.setKeyCode(module.getDefaultKeyCode());
+                configManager.save();
+                listeningModuleKeybind = null;
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private boolean handleHudEditorTabClick(int mouseX, int mouseY) {
@@ -869,6 +1020,23 @@ public final class CarbonMenuScreen extends GuiScreen {
                 moduleScrollRow = Math.min(maximumRow, moduleScrollRow + 1);
             } else {
                 moduleScrollRow = Math.max(0, moduleScrollRow - 1);
+            }
+            return;
+        }
+        if (selectedModule == null && settingsTab) {
+            List<Module> modules = getKeybindModules();
+            int panelY = getPanelY(getPanelHeight());
+            int rowY = panelY + HEADER_HEIGHT + 92;
+            int visibleCount = getVisibleKeybindCount(panelY, rowY);
+            int maximumIndex = Math.max(0, modules.size() - visibleCount);
+
+            if (wheel < 0) {
+                keybindScrollIndex = Math.min(
+                    maximumIndex,
+                    keybindScrollIndex + 1
+                );
+            } else {
+                keybindScrollIndex = Math.max(0, keybindScrollIndex - 1);
             }
             return;
         }
@@ -1118,6 +1286,11 @@ public final class CarbonMenuScreen extends GuiScreen {
         return Math.max(1, (footerTop - rowY - 16) / SETTING_ROW_HEIGHT);
     }
 
+    private int getVisibleKeybindCount(int panelY, int rowY) {
+        int footerTop = panelY + getPanelHeight() - FOOTER_HEIGHT;
+        return Math.max(1, (footerTop - rowY - 16) / SETTING_ROW_HEIGHT);
+    }
+
     private int getVisibleModuleRowCount(int panelY, int contentTop) {
         int footerTop = panelY + getPanelHeight() - FOOTER_HEIGHT;
         int availableHeight = footerTop - contentTop - PADDING * 2;
@@ -1147,6 +1320,43 @@ public final class CarbonMenuScreen extends GuiScreen {
         }
 
         return visibleModules;
+    }
+
+    private List<Module> getKeybindModules() {
+        List<Module> modules = new ArrayList<Module>();
+
+        for (Module module : moduleManager.getModules()) {
+            if (!"Example Module".equalsIgnoreCase(module.getName())) {
+                modules.add(module);
+            }
+        }
+
+        return modules;
+    }
+
+    private boolean hasKeybindConflict(Module target) {
+        int keyCode = target.getKeyCode();
+        if (keyCode == Keyboard.KEY_NONE) {
+            return false;
+        }
+
+        int matches = 0;
+        for (Module module : getKeybindModules()) {
+            if (module.getKeyCode() == keyCode && ++matches >= 2) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private String getKeyName(int keyCode) {
+        if (keyCode == Keyboard.KEY_NONE) {
+            return "NONE";
+        }
+
+        String name = Keyboard.getKeyName(keyCode);
+        return name == null ? "UNKNOWN" : name;
     }
 
     private boolean isInside(
@@ -1213,6 +1423,22 @@ public final class CarbonMenuScreen extends GuiScreen {
             }
         }
 
+        if (listeningModuleKeybind != null) {
+            if (keyCode == Keyboard.KEY_ESCAPE) {
+                listeningModuleKeybind = null;
+                return;
+            }
+
+            listeningModuleKeybind.setKeyCode(
+                keyCode == Keyboard.KEY_DELETE || keyCode == Keyboard.KEY_BACK
+                    ? Keyboard.KEY_NONE
+                    : keyCode
+            );
+            configManager.save();
+            listeningModuleKeybind = null;
+            return;
+        }
+
         if (listeningKeybind != null) {
             if (keyCode == Keyboard.KEY_ESCAPE) {
                 listeningKeybind = null;
@@ -1220,10 +1446,11 @@ public final class CarbonMenuScreen extends GuiScreen {
             }
 
             listeningKeybind.setValue(
-                keyCode == Keyboard.KEY_DELETE
+                keyCode == Keyboard.KEY_DELETE || keyCode == Keyboard.KEY_BACK
                     ? Keyboard.KEY_NONE
                     : keyCode
             );
+            configManager.save();
             listeningKeybind = null;
             return;
         }

@@ -4,6 +4,7 @@ import com.carbonclient.event.Event;
 import com.carbonclient.event.EventBus;
 import com.carbonclient.event.EventListener;
 import com.carbonclient.setting.Setting;
+import com.carbonclient.setting.impl.KeybindSetting;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -19,6 +20,7 @@ public abstract class Module {
     private EventBus eventBus;
     private boolean enabled;
     private int keyCode;
+    private KeybindSetting primaryKeybindSetting;
 
     protected Module(String name, String description, ModuleCategory category) {
         this(name, description, category, false, 0);
@@ -51,6 +53,10 @@ public abstract class Module {
 
     public final void toggle() {
         setEnabled(!enabled);
+    }
+
+    public void onKeybindPressed() {
+        toggle();
     }
 
     public final void setEnabled(boolean enabled) {
@@ -123,6 +129,19 @@ public abstract class Module {
         return addedSetting;
     }
 
+    protected final KeybindSetting addPrimaryKeybindSetting(String name) {
+        if (primaryKeybindSetting != null) {
+            throw new IllegalStateException(
+                "Primary keybind setting is already registered."
+            );
+        }
+
+        primaryKeybindSetting = addSetting(
+            new KeybindSetting(name, defaultKeyCode)
+        );
+        return primaryKeybindSetting;
+    }
+
     private EventBus requireEventBus() {
         if (eventBus == null) {
             throw new IllegalStateException("Module must be registered before it is enabled.");
@@ -152,11 +171,16 @@ public abstract class Module {
     }
 
     public final int getKeyCode() {
-        return keyCode;
+        return primaryKeybindSetting == null
+            ? keyCode
+            : primaryKeybindSetting.getKeyCode();
     }
 
     public final void setKeyCode(int keyCode) {
         this.keyCode = keyCode;
+        if (primaryKeybindSetting != null) {
+            primaryKeybindSetting.setValue(keyCode);
+        }
     }
 
     public final boolean isDefaultEnabled() {

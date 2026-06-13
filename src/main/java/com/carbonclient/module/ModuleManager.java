@@ -67,7 +67,7 @@ public final class ModuleManager {
         List<Module> matches = getModulesByKeyCode(keyCode);
 
         for (Module module : matches) {
-            module.toggle();
+            module.onKeybindPressed();
         }
 
         return !matches.isEmpty();
