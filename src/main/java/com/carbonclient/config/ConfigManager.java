@@ -143,12 +143,16 @@ public final class ConfigManager {
         Setting<?> setting,
         JsonElement value
     ) {
-        if (value == null || !value.isJsonPrimitive()) {
+        if (value == null) {
             return;
         }
 
         try {
-            if (setting instanceof BooleanSetting) {
+            if (setting instanceof ColorSetting) {
+                loadColorSetting((ColorSetting) setting, value);
+            } else if (!value.isJsonPrimitive()) {
+                return;
+            } else if (setting instanceof BooleanSetting) {
                 ((BooleanSetting) setting).setValue(value.getAsBoolean());
             } else if (setting instanceof KeybindSetting) {
                 ((KeybindSetting) setting).setValue(value.getAsInt());
@@ -156,8 +160,6 @@ public final class ConfigManager {
                 ((NumberSetting) setting).setValue(value.getAsDouble());
             } else if (setting instanceof ModeSetting) {
                 ((ModeSetting) setting).setValue(value.getAsString());
-            } else if (setting instanceof ColorSetting) {
-                ((ColorSetting) setting).setValue(value.getAsInt());
             }
         } catch (Exception exception) {
             logger.warn(
@@ -176,7 +178,14 @@ public final class ConfigManager {
         moduleObject.addProperty("keyCode", module.getKeyCode());
 
         for (Setting<?> setting : module.getSettings()) {
-            addSettingValue(settingsObject, setting);
+            if (setting instanceof ColorSetting) {
+                settingsObject.add(
+                    setting.getName(),
+                    serializeColorSetting((ColorSetting) setting)
+                );
+            } else {
+                addSettingValue(settingsObject, setting);
+            }
         }
 
         moduleObject.add("settings", settingsObject);
@@ -192,9 +201,65 @@ public final class ConfigManager {
             settingsObject.addProperty(setting.getName(), (Double) setting.getValue());
         } else if (setting instanceof ModeSetting) {
             settingsObject.addProperty(setting.getName(), (String) setting.getValue());
-        } else if (setting instanceof ColorSetting) {
-            settingsObject.addProperty(setting.getName(), (Integer) setting.getValue());
         }
+    }
+
+    private void loadColorSetting(ColorSetting setting, JsonElement value) {
+        if (value.isJsonPrimitive()) {
+            setting.setBaseColor(value.getAsInt());
+            return;
+        }
+        if (!value.isJsonObject()) {
+            return;
+        }
+
+        JsonObject colorObject = value.getAsJsonObject();
+        JsonElement color = colorObject.get("color");
+        if (color != null && color.isJsonPrimitive()) {
+            setting.setBaseColor(color.getAsInt());
+        }
+        JsonElement hue = colorObject.get("hue");
+        JsonElement saturation = colorObject.get("saturation");
+        JsonElement brightness = colorObject.get("brightness");
+        JsonElement alpha = colorObject.get("alpha");
+        JsonElement chroma = colorObject.get("chroma");
+        JsonElement type = colorObject.get("type");
+        JsonElement speed = colorObject.get("speed");
+
+        if (hue != null) {
+            setting.setHue(hue.getAsFloat());
+        }
+        if (saturation != null) {
+            setting.setSaturation(saturation.getAsFloat());
+        }
+        if (brightness != null) {
+            setting.setBrightness(brightness.getAsFloat());
+        }
+        if (alpha != null) {
+            setting.setAlpha(alpha.getAsFloat());
+        }
+        if (chroma != null) {
+            setting.setChroma(chroma.getAsBoolean());
+        }
+        if (type != null) {
+            setting.setType(type.getAsString());
+        }
+        if (speed != null) {
+            setting.setSpeed(speed.getAsDouble());
+        }
+    }
+
+    private JsonObject serializeColorSetting(ColorSetting setting) {
+        JsonObject colorObject = new JsonObject();
+        colorObject.addProperty("color", setting.getBaseColor());
+        colorObject.addProperty("hue", setting.getHue());
+        colorObject.addProperty("saturation", setting.getSaturation());
+        colorObject.addProperty("brightness", setting.getBrightness());
+        colorObject.addProperty("alpha", setting.getAlpha());
+        colorObject.addProperty("chroma", setting.isChroma());
+        colorObject.addProperty("type", setting.getType());
+        colorObject.addProperty("speed", setting.getSpeed());
+        return colorObject;
     }
 
     private void writeAtomically(JsonObject root) throws Exception {

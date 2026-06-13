@@ -13,6 +13,7 @@ import com.carbonclient.setting.impl.ModeSetting;
 import com.carbonclient.setting.impl.NumberSetting;
 import com.carbonclient.ui.component.ButtonComponent;
 import com.carbonclient.ui.component.CardComponent;
+import com.carbonclient.ui.component.ColorPickerComponent;
 import com.carbonclient.ui.component.SliderComponent;
 import com.carbonclient.ui.component.ToggleComponent;
 import com.carbonclient.ui.render.RenderUtils;
@@ -37,24 +38,21 @@ public final class CarbonMenuScreen extends GuiScreen {
     private static final int BUTTON_HEIGHT = 18;
     private static final int SETTING_ROW_HEIGHT = 31;
     private static final int CONTROL_WIDTH = 150;
-    private static final int[] COLOR_PRESETS = {
-        0xFFFFFFFF,
-        0xFF6EE7FF,
-        0xFF4DA6FF,
-        0xFFFF4FA3,
-        0xB0121824,
-        0xD0506078
-    };
-
     private final ModuleManager moduleManager;
     private final ConfigManager configManager;
     private final ButtonComponent buttonComponent = new ButtonComponent();
     private final ToggleComponent toggleComponent = new ToggleComponent();
     private final CardComponent cardComponent = new CardComponent();
+    private final ColorPickerComponent colorPickerComponent =
+        new ColorPickerComponent();
     private final SliderComponent sliderComponent = new SliderComponent();
     private Module selectedModule;
     private NumberSetting draggingSlider;
     private KeybindSetting listeningKeybind;
+    private ColorSetting openColorSetting;
+    private String colorHexInput = "";
+    private boolean colorHexFocused;
+    private int colorPickerDrag;
     private int optionsScrollIndex;
     private int moduleScrollRow;
 
@@ -138,6 +136,19 @@ public final class CarbonMenuScreen extends GuiScreen {
             drawModuleCards(mouseX, mouseY, panelX, headerBottom, panelWidth);
         } else {
             drawOptionsView(mouseX, mouseY, panelX, panelY, headerBottom, panelWidth);
+        }
+
+        if (openColorSetting != null) {
+            colorPickerComponent.render(
+                fontRendererObj,
+                openColorSetting,
+                colorHexInput,
+                colorHexFocused,
+                getColorPickerX(panelX, panelWidth),
+                getColorPickerY(panelY),
+                mouseX,
+                mouseY
+            );
         }
 
         RenderUtils.drawText(
@@ -513,7 +524,7 @@ public final class CarbonMenuScreen extends GuiScreen {
             setting.getColor()
         );
 
-        String value = String.format("#%08X", setting.getColor());
+        String value = setting.getHexColor();
         RenderUtils.drawText(
             fontRendererObj,
             value,
@@ -527,6 +538,10 @@ public final class CarbonMenuScreen extends GuiScreen {
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton)
         throws IOException {
         if (mouseButton == 0) {
+            if (openColorSetting != null) {
+                handleColorPickerClick(mouseX, mouseY);
+                return;
+            }
             if (selectedModule == null && handleHudEditorTabClick(mouseX, mouseY)) {
                 return;
             }
@@ -601,6 +616,7 @@ public final class CarbonMenuScreen extends GuiScreen {
             if (isInside(mouseX, mouseY, optionsX, buttonY, buttonWidth, BUTTON_HEIGHT)) {
                 selectedModule = module;
                 optionsScrollIndex = 0;
+                closeColorPicker();
                 return true;
             }
         }
@@ -619,6 +635,7 @@ public final class CarbonMenuScreen extends GuiScreen {
             selectedModule = null;
             draggingSlider = null;
             listeningKeybind = null;
+            closeColorPicker();
             optionsScrollIndex = 0;
             return true;
         }
@@ -671,7 +688,7 @@ public final class CarbonMenuScreen extends GuiScreen {
             }
             if (setting instanceof ColorSetting
                 && isInside(mouseX, mouseY, controlX, controlY, CONTROL_WIDTH, BUTTON_HEIGHT)) {
-                cycleColor((ColorSetting) setting);
+                openColorPicker((ColorSetting) setting);
                 return true;
             }
         }
@@ -726,6 +743,37 @@ public final class CarbonMenuScreen extends GuiScreen {
         int clickedMouseButton,
         long timeSinceLastClick
     ) {
+        if (clickedMouseButton == 0
+            && openColorSetting != null
+            && colorPickerDrag != 0) {
+            int panelWidth = getPanelWidth();
+            int pickerX = getColorPickerX(getPanelX(panelWidth), panelWidth);
+            int pickerY = getColorPickerY(getPanelY(getPanelHeight()));
+
+            if (colorPickerDrag == 1) {
+                colorPickerComponent.updateSaturationBrightness(
+                    openColorSetting,
+                    mouseX,
+                    mouseY,
+                    pickerX,
+                    pickerY
+                );
+                updateColorHexDisplay();
+            } else if (colorPickerDrag == 2) {
+                colorPickerComponent.updateHue(openColorSetting, mouseY, pickerY);
+                updateColorHexDisplay();
+            } else if (colorPickerDrag == 3) {
+                colorPickerComponent.updateAlpha(openColorSetting, mouseY, pickerY);
+            } else if (colorPickerDrag == 4) {
+                colorPickerComponent.updateSpeed(
+                    openColorSetting,
+                    mouseX,
+                    pickerX
+                );
+            }
+            return;
+        }
+
         if (clickedMouseButton == 0 && draggingSlider != null && selectedModule != null) {
             int panelWidth = getPanelWidth();
             int panelX = getPanelX(panelWidth);
@@ -740,6 +788,7 @@ public final class CarbonMenuScreen extends GuiScreen {
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int state) {
         draggingSlider = null;
+        colorPickerDrag = 0;
         super.mouseReleased(mouseX, mouseY, state);
     }
 
@@ -763,17 +812,140 @@ public final class CarbonMenuScreen extends GuiScreen {
         setting.setValue(modes.get(nextIndex));
     }
 
-    private void cycleColor(ColorSetting setting) {
-        int currentColor = setting.getColor();
+    private void openColorPicker(ColorSetting setting) {
+        openColorSetting = setting;
+        colorHexInput = setting.getHexColor();
+        colorHexFocused = false;
+        draggingSlider = null;
+        listeningKeybind = null;
+    }
 
-        for (int index = 0; index < COLOR_PRESETS.length; index++) {
-            if (COLOR_PRESETS[index] == currentColor) {
-                setting.setValue(COLOR_PRESETS[(index + 1) % COLOR_PRESETS.length]);
-                return;
-            }
+    private void closeColorPicker() {
+        openColorSetting = null;
+        colorHexInput = "";
+        colorHexFocused = false;
+        colorPickerDrag = 0;
+    }
+
+    private void handleColorPickerClick(int mouseX, int mouseY) {
+        int panelWidth = getPanelWidth();
+        int panelX = getPanelX(panelWidth);
+        int panelY = getPanelY(getPanelHeight());
+        int pickerX = getColorPickerX(panelX, panelWidth);
+        int pickerY = getColorPickerY(panelY);
+
+        if (colorPickerComponent.isSaturationBrightness(
+            mouseX,
+            mouseY,
+            pickerX,
+            pickerY
+        )) {
+            colorPickerDrag = 1;
+            colorPickerComponent.updateSaturationBrightness(
+                openColorSetting,
+                mouseX,
+                mouseY,
+                pickerX,
+                pickerY
+            );
+            updateColorHexDisplay();
+            return;
+        }
+        if (colorPickerComponent.isHueSlider(
+            mouseX,
+            mouseY,
+            pickerX,
+            pickerY
+        )) {
+            colorPickerDrag = 2;
+            colorPickerComponent.updateHue(openColorSetting, mouseY, pickerY);
+            updateColorHexDisplay();
+            return;
+        }
+        if (colorPickerComponent.isAlphaSlider(
+            mouseX,
+            mouseY,
+            pickerX,
+            pickerY
+        )) {
+            colorPickerDrag = 3;
+            colorPickerComponent.updateAlpha(openColorSetting, mouseY, pickerY);
+            return;
+        }
+        if (colorPickerComponent.isSpeedSlider(
+            mouseX,
+            mouseY,
+            pickerX,
+            pickerY
+        )) {
+            colorPickerDrag = 4;
+            colorPickerComponent.updateSpeed(openColorSetting, mouseX, pickerX);
+            return;
         }
 
-        setting.setValue(COLOR_PRESETS[0]);
+        int preset = colorPickerComponent.getPresetAt(
+            mouseX,
+            mouseY,
+            pickerX,
+            pickerY
+        );
+
+        if (preset != -1) {
+            openColorSetting.setBaseColor(preset);
+            updateColorHexDisplay();
+            colorHexFocused = false;
+            return;
+        }
+
+        if (colorPickerComponent.isHexInputHovered(
+            mouseX,
+            mouseY,
+            pickerX,
+            pickerY
+        )) {
+            colorHexFocused = true;
+            colorHexInput = "#";
+            return;
+        }
+
+        if (colorPickerComponent.isChromaHovered(
+            mouseX,
+            mouseY,
+            pickerX,
+            pickerY
+        )) {
+            openColorSetting.setChroma(!openColorSetting.isChroma());
+            colorHexFocused = false;
+            return;
+        }
+
+        if (colorPickerComponent.isTypeHovered(
+            mouseX,
+            mouseY,
+            pickerX,
+            pickerY
+        )) {
+            openColorSetting.cycleType();
+            colorHexFocused = false;
+            return;
+        }
+
+        if (!colorPickerComponent.isInsidePanel(
+            mouseX,
+            mouseY,
+            pickerX,
+            pickerY
+        )) {
+            closeColorPicker();
+        }
+    }
+
+    private int getColorPickerX(int panelX, int panelWidth) {
+        return panelX + panelWidth - ColorPickerComponent.WIDTH - PADDING;
+    }
+
+    private int getColorPickerY(int panelY) {
+        return panelY + HEADER_HEIGHT + 20;
     }
 
     private List<Setting<?>> getVisibleSettings() {
@@ -856,6 +1028,38 @@ public final class CarbonMenuScreen extends GuiScreen {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
+        if (openColorSetting != null) {
+            if (keyCode == Keyboard.KEY_ESCAPE) {
+                closeColorPicker();
+                return;
+            }
+            if (colorHexFocused) {
+                if (keyCode == Keyboard.KEY_RETURN
+                    || keyCode == Keyboard.KEY_NUMPADENTER) {
+                    if (openColorSetting.setHexColor(colorHexInput)) {
+                        colorHexInput = openColorSetting.getHexColor();
+                    }
+                    colorHexFocused = false;
+                    return;
+                }
+                if (keyCode == Keyboard.KEY_BACK) {
+                    if (!colorHexInput.isEmpty()) {
+                        colorHexInput = colorHexInput.substring(
+                            0,
+                            colorHexInput.length() - 1
+                        );
+                    }
+                    applyHexInputIfValid();
+                    return;
+                }
+                if (isHexCharacter(typedChar) && colorHexInput.length() < 7) {
+                    colorHexInput += Character.toUpperCase(typedChar);
+                    applyHexInputIfValid();
+                }
+                return;
+            }
+        }
+
         if (listeningKeybind != null) {
             if (keyCode == Keyboard.KEY_ESCAPE) {
                 listeningKeybind = null;
@@ -875,6 +1079,7 @@ public final class CarbonMenuScreen extends GuiScreen {
             selectedModule = null;
             draggingSlider = null;
             listeningKeybind = null;
+            closeColorPicker();
             optionsScrollIndex = 0;
             return;
         }
@@ -884,6 +1089,23 @@ public final class CarbonMenuScreen extends GuiScreen {
         }
 
         super.keyTyped(typedChar, keyCode);
+    }
+
+    private void applyHexInputIfValid() {
+        if (openColorSetting.setHexColor(colorHexInput)) {
+            updateColorHexDisplay();
+        }
+    }
+
+    private void updateColorHexDisplay() {
+        colorHexInput = openColorSetting.getHexColor();
+    }
+
+    private boolean isHexCharacter(char character) {
+        return character == '#'
+            || character >= '0' && character <= '9'
+            || character >= 'a' && character <= 'f'
+            || character >= 'A' && character <= 'F';
     }
 
     @Override
