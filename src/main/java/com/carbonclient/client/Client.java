@@ -13,6 +13,7 @@ import com.carbonclient.modules.render.ArmorHudModule;
 import com.carbonclient.modules.render.CPSDisplayModule;
 import com.carbonclient.modules.render.FPSDisplayModule;
 import com.carbonclient.modules.render.KeystrokesModule;
+import com.carbonclient.modules.render.PotionHudModule;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -53,6 +54,8 @@ public final class Client {
         moduleManager.register(toggleSprint);
         ArmorHudModule armorHud = new ArmorHudModule();
         moduleManager.register(armorHud);
+        PotionHudModule potionHud = new PotionHudModule();
+        moduleManager.register(potionHud);
         configManager.load();
         registerConfigShutdownHook();
         MinecraftForge.EVENT_BUS.register(forgeEventBridge);
@@ -86,6 +89,12 @@ public final class Client {
             armorHud.getName(),
             armorHud.isEnabled(),
             armorHud.getKeyCode()
+        );
+        logger.info(
+            "Registered module: {} (enabled: {}, keyCode: {})",
+            potionHud.getName(),
+            potionHud.isEnabled(),
+            potionHud.getKeyCode()
         );
         logger.info("{} initialized successfully.", Reference.MOD_NAME);
     }
