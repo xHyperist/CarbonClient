@@ -5,6 +5,7 @@ import com.carbonclient.gui.CarbonMenuScreen;
 import com.carbonclient.module.ModuleManager;
 import com.carbonclient.notification.NotificationManager;
 import com.carbonclient.notification.NotificationRenderer;
+import com.carbonclient.profile.ProfileManager;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
@@ -16,6 +17,7 @@ public final class KeyInputHandler {
     private final NotificationManager notificationManager;
     private final NotificationRenderer notificationRenderer;
     private ConfigManager configManager;
+    private ProfileManager profileManager;
 
     public KeyInputHandler(
         ModuleManager moduleManager,
@@ -31,6 +33,10 @@ public final class KeyInputHandler {
         this.configManager = configManager;
     }
 
+    public void setProfileManager(ProfileManager profileManager) {
+        this.profileManager = profileManager;
+    }
+
     @SubscribeEvent
     public void onKeyInput(KeyInputEvent event) {
         if (!Keyboard.getEventKeyState() || Keyboard.isRepeatEvent()) {
@@ -41,11 +47,14 @@ public final class KeyInputHandler {
         int keyCode = Keyboard.getEventKey();
 
         if (keyCode == Keyboard.KEY_RSHIFT) {
-            if (minecraft.currentScreen == null && configManager != null) {
+            if (minecraft.currentScreen == null
+                && configManager != null
+                && profileManager != null) {
                 minecraft.displayGuiScreen(
                     new CarbonMenuScreen(
                         moduleManager,
                         configManager,
+                        profileManager,
                         notificationManager,
                         notificationRenderer
                     )

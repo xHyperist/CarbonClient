@@ -10,6 +10,8 @@ import com.carbonclient.module.ModuleManager;
 import com.carbonclient.module.impl.ExampleModule;
 import com.carbonclient.notification.NotificationManager;
 import com.carbonclient.notification.NotificationRenderer;
+import com.carbonclient.profile.ProfileManager;
+import com.carbonclient.profile.ProfileStorage;
 import com.carbonclient.modules.movement.ToggleSprintModule;
 import com.carbonclient.modules.render.ArmorHudModule;
 import com.carbonclient.modules.render.CPSDisplayModule;
@@ -42,6 +44,7 @@ public final class Client {
     );
     private final ForgeEventBridge forgeEventBridge = new ForgeEventBridge(eventBus);
     private ConfigManager configManager;
+    private ProfileManager profileManager;
     private Logger logger;
 
     public void preInitialize(FMLPreInitializationEvent event) {
@@ -53,7 +56,16 @@ public final class Client {
             logger,
             notificationManager
         );
+        profileManager = new ProfileManager(
+            new ProfileStorage(
+                event.getModConfigurationDirectory().getParentFile()
+            ),
+            configManager,
+            notificationManager,
+            logger
+        );
         keyInputHandler.setConfigManager(configManager);
+        keyInputHandler.setProfileManager(profileManager);
         logger.info("{} v{} is starting.", Reference.MOD_NAME, Reference.VERSION);
     }
 
@@ -78,6 +90,7 @@ public final class Client {
         CrosshairModule crosshair = new CrosshairModule();
         moduleManager.register(crosshair);
         configManager.load();
+        profileManager.initialize();
         registerConfigShutdownHook();
         MinecraftForge.EVENT_BUS.register(forgeEventBridge);
         FMLCommonHandler.instance().bus().register(keyInputHandler);
@@ -168,6 +181,10 @@ public final class Client {
 
     public NotificationRenderer getNotificationRenderer() {
         return notificationRenderer;
+    }
+
+    public ProfileManager getProfileManager() {
+        return profileManager;
     }
 
     private void registerConfigShutdownHook() {

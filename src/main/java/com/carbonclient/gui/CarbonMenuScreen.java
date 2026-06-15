@@ -8,6 +8,8 @@ import com.carbonclient.module.ModuleManager;
 import com.carbonclient.modules.render.CrosshairModule;
 import com.carbonclient.notification.NotificationManager;
 import com.carbonclient.notification.NotificationRenderer;
+import com.carbonclient.profile.Profile;
+import com.carbonclient.profile.ProfileManager;
 import com.carbonclient.setting.Setting;
 import com.carbonclient.setting.impl.BooleanSetting;
 import com.carbonclient.setting.impl.ColorSetting;
@@ -58,6 +60,7 @@ public final class CarbonMenuScreen extends GuiScreen {
     };
     private final ModuleManager moduleManager;
     private final ConfigManager configManager;
+    private final ProfileManager profileManager;
     private final NotificationManager notificationManager;
     private final NotificationRenderer notificationRenderer;
     private final ButtonComponent buttonComponent = new ButtonComponent();
@@ -77,10 +80,15 @@ public final class CarbonMenuScreen extends GuiScreen {
     private int optionsScrollIndex;
     private int moduleScrollOffset;
     private int keybindScrollIndex;
+    private int profileScrollIndex;
     private String moduleSearchQuery = "";
     private boolean moduleSearchFocused;
     private ModuleFilter moduleFilter = ModuleFilter.ALL;
-    private boolean settingsTab;
+    private MainTab activeTab = MainTab.MODS;
+    private String selectedProfileName;
+    private String profileNameInput = "";
+    private boolean profileNameFocused;
+    private String deleteConfirmationProfile;
     private boolean resetAllConfirmation;
     private String crosshairPreviewBackground = "Dark";
 
@@ -93,14 +101,22 @@ public final class CarbonMenuScreen extends GuiScreen {
         UTILITY
     }
 
+    private enum MainTab {
+        MODS,
+        SETTINGS,
+        PROFILES
+    }
+
     public CarbonMenuScreen(
         ModuleManager moduleManager,
         ConfigManager configManager,
+        ProfileManager profileManager,
         NotificationManager notificationManager,
         NotificationRenderer notificationRenderer
     ) {
         if (moduleManager == null
             || configManager == null
+            || profileManager == null
             || notificationManager == null
             || notificationRenderer == null) {
             throw new IllegalArgumentException(
@@ -110,8 +126,10 @@ public final class CarbonMenuScreen extends GuiScreen {
 
         this.moduleManager = moduleManager;
         this.configManager = configManager;
+        this.profileManager = profileManager;
         this.notificationManager = notificationManager;
         this.notificationRenderer = notificationRenderer;
+        this.selectedProfileName = profileManager.getActiveProfileName();
     }
 
     @Override
@@ -187,16 +205,48 @@ public final class CarbonMenuScreen extends GuiScreen {
         );
 
         if (selectedModule == null) {
-            drawTab(0, panelX, panelY, !settingsTab, true, mouseX, mouseY);
-            drawTab(1, panelX, panelY, settingsTab, true, mouseX, mouseY);
-            drawTab(2, panelX, panelY, false, false, mouseX, mouseY);
+            drawTab(
+                0,
+                panelX,
+                panelY,
+                activeTab == MainTab.MODS,
+                true,
+                mouseX,
+                mouseY
+            );
+            drawTab(
+                1,
+                panelX,
+                panelY,
+                activeTab == MainTab.SETTINGS,
+                true,
+                mouseX,
+                mouseY
+            );
+            drawTab(
+                2,
+                panelX,
+                panelY,
+                activeTab == MainTab.PROFILES,
+                true,
+                mouseX,
+                mouseY
+            );
             drawTab(3, panelX, panelY, false, true, mouseX, mouseY);
-            if (settingsTab) {
+            if (activeTab == MainTab.SETTINGS) {
                 drawSettingsView(
                     mouseX,
                     mouseY,
                     panelX,
                     headerBottom
+                );
+            } else if (activeTab == MainTab.PROFILES) {
+                drawProfilesView(
+                    mouseX,
+                    mouseY,
+                    panelX,
+                    headerBottom,
+                    panelWidth
                 );
             } else {
                 drawModuleCards(
@@ -843,6 +893,240 @@ public final class CarbonMenuScreen extends GuiScreen {
         }
     }
 
+    private void drawProfilesView(
+        int mouseX,
+        int mouseY,
+        int panelX,
+        int contentTop,
+        int panelWidth
+    ) {
+        int rowX = panelX + PADDING;
+        int inputY = contentTop + 42;
+        int listY = contentTop + 80;
+        int listWidth = 260;
+        int actionX = rowX + listWidth + CarbonTheme.SPACE_12;
+        int actionWidth = panelWidth
+            - PADDING * 2
+            - listWidth
+            - CarbonTheme.SPACE_12;
+
+        RenderUtils.drawText(
+            fontRendererObj,
+            "Profiles",
+            rowX,
+            contentTop + 16,
+            CarbonTheme.TEXT
+        );
+        RenderUtils.drawText(
+            fontRendererObj,
+            "Local configurations ready for future cloud sync.",
+            rowX,
+            contentTop + 30,
+            CarbonTheme.MUTED_TEXT
+        );
+
+        drawProfileNameInput(mouseX, mouseY, rowX, inputY, listWidth);
+        drawProfileList(
+            mouseX,
+            mouseY,
+            rowX,
+            listY,
+            listWidth,
+            contentTop
+        );
+
+        RenderUtils.drawPanel(
+            actionX,
+            listY,
+            actionWidth,
+            194,
+            CarbonTheme.ROW
+        );
+        RenderUtils.drawOutline(
+            actionX,
+            listY,
+            actionWidth,
+            194,
+            CarbonTheme.BORDER
+        );
+        RenderUtils.drawText(
+            fontRendererObj,
+            "Profile Actions",
+            actionX + CarbonTheme.SPACE_10,
+            listY + CarbonTheme.SPACE_10,
+            CarbonTheme.TEXT
+        );
+
+        int buttonX = actionX + CarbonTheme.SPACE_10;
+        int buttonWidth = actionWidth - CarbonTheme.SPACE_20;
+        int buttonY = listY + 30;
+        drawButton(
+            "Create Profile",
+            buttonX,
+            buttonY,
+            buttonWidth,
+            mouseX,
+            mouseY,
+            CarbonTheme.ACCENT
+        );
+        drawButton(
+            "Save Current Profile",
+            buttonX,
+            buttonY + 28,
+            buttonWidth,
+            mouseX,
+            mouseY,
+            CarbonTheme.SECONDARY
+        );
+        drawButton(
+            "Load Profile",
+            buttonX,
+            buttonY + 56,
+            buttonWidth,
+            mouseX,
+            mouseY,
+            CarbonTheme.ACCENT
+        );
+        drawButton(
+            "Rename Profile",
+            buttonX,
+            buttonY + 84,
+            buttonWidth,
+            mouseX,
+            mouseY,
+            CarbonTheme.SECONDARY
+        );
+        drawButton(
+            "Duplicate Profile",
+            buttonX,
+            buttonY + 112,
+            buttonWidth,
+            mouseX,
+            mouseY,
+            CarbonTheme.SECONDARY
+        );
+        drawButton(
+            isDeleteConfirmationActive()
+                ? "Click again to delete"
+                : "Delete Profile",
+            buttonX,
+            buttonY + 140,
+            buttonWidth,
+            mouseX,
+            mouseY,
+            CarbonTheme.DANGER
+        );
+    }
+
+    private void drawProfileNameInput(
+        int mouseX,
+        int mouseY,
+        int x,
+        int y,
+        int width
+    ) {
+        boolean hovered = isInside(mouseX, mouseY, x, y, width, 24);
+        RenderUtils.drawPanel(x, y, width, 24, CarbonTheme.TRACK);
+        RenderUtils.drawOutline(
+            x,
+            y,
+            width,
+            24,
+            profileNameFocused
+                ? CarbonTheme.ACCENT
+                : hovered
+                    ? CarbonTheme.BORDER_HOVER
+                    : CarbonTheme.BORDER
+        );
+        String text = profileNameInput.isEmpty()
+            ? "Profile name..."
+            : profileNameInput + (profileNameFocused ? "_" : "");
+        RenderUtils.drawText(
+            fontRendererObj,
+            text,
+            x + CarbonTheme.SPACE_10,
+            y + 8,
+            profileNameInput.isEmpty()
+                ? CarbonTheme.MUTED_TEXT
+                : CarbonTheme.TEXT
+        );
+    }
+
+    private void drawProfileList(
+        int mouseX,
+        int mouseY,
+        int x,
+        int y,
+        int width,
+        int contentTop
+    ) {
+        List<Profile> profiles = profileManager.getProfiles();
+        int panelY = contentTop - HEADER_HEIGHT;
+        int footerTop = panelY + getPanelHeight() - FOOTER_HEIGHT;
+        int visibleCount = Math.max(
+            1,
+            (footerTop - y - PADDING) / SETTING_ROW_HEIGHT
+        );
+        int maximumIndex = Math.max(0, profiles.size() - visibleCount);
+        profileScrollIndex = Math.min(profileScrollIndex, maximumIndex);
+        int endIndex = Math.min(
+            profiles.size(),
+            profileScrollIndex + visibleCount
+        );
+
+        for (int index = profileScrollIndex; index < endIndex; index++) {
+            Profile profile = profiles.get(index);
+            int currentY = y
+                + (index - profileScrollIndex) * SETTING_ROW_HEIGHT;
+            boolean selected = profile.getName().equalsIgnoreCase(
+                selectedProfileName
+            );
+            boolean active = profile.getName().equalsIgnoreCase(
+                profileManager.getActiveProfileName()
+            );
+            int accent = active
+                ? CarbonTheme.ACCENT
+                : selected
+                    ? CarbonTheme.PRIMARY
+                    : CarbonTheme.SECONDARY;
+
+            RenderUtils.drawRow(
+                x,
+                currentY,
+                width,
+                SETTING_ROW_HEIGHT - CarbonTheme.SPACE_4,
+                isInside(
+                    mouseX,
+                    mouseY,
+                    x,
+                    currentY,
+                    width,
+                    SETTING_ROW_HEIGHT - CarbonTheme.SPACE_4
+                ),
+                accent
+            );
+            RenderUtils.drawText(
+                fontRendererObj,
+                profile.getName(),
+                x + CarbonTheme.SPACE_10,
+                currentY + 10,
+                CarbonTheme.TEXT
+            );
+            if (active) {
+                String activeText = "ACTIVE";
+                RenderUtils.drawText(
+                    fontRendererObj,
+                    activeText,
+                    x + width
+                        - CarbonTheme.SPACE_10
+                        - fontRendererObj.getStringWidth(activeText),
+                    currentY + 10,
+                    CarbonTheme.ACCENT
+                );
+            }
+        }
+    }
+
     private void drawKeybindRow(
         Module module,
         int mouseX,
@@ -1083,25 +1367,30 @@ public final class CarbonMenuScreen extends GuiScreen {
                 return;
             }
             if (selectedModule == null
-                && !settingsTab
+                && activeTab == MainTab.MODS
                 && handleModuleSearchClick(mouseX, mouseY)) {
                 return;
             }
             if (selectedModule == null
-                && settingsTab
+                && activeTab == MainTab.SETTINGS
                 && handleResetAllClick(mouseX, mouseY)) {
                 return;
             }
             if (selectedModule == null
-                && settingsTab
+                && activeTab == MainTab.SETTINGS
                 && handleKeybindPanelClick(mouseX, mouseY)) {
+                return;
+            }
+            if (selectedModule == null
+                && activeTab == MainTab.PROFILES
+                && handleProfilesClick(mouseX, mouseY)) {
                 return;
             }
             if (selectedModule != null && handleOptionsClick(mouseX, mouseY)) {
                 return;
             }
             if (selectedModule == null
-                && !settingsTab
+                && activeTab == MainTab.MODS
                 && handleModuleCardClick(mouseX, mouseY)) {
                 return;
             }
@@ -1117,19 +1406,230 @@ public final class CarbonMenuScreen extends GuiScreen {
         int panelY = getPanelY(panelHeight);
 
         if (isInsideTab(mouseX, mouseY, panelX, panelY, 0)) {
-            settingsTab = false;
+            activeTab = MainTab.MODS;
             moduleSearchFocused = false;
+            profileNameFocused = false;
             resetAllConfirmation = false;
+            deleteConfirmationProfile = null;
             return true;
         }
         if (isInsideTab(mouseX, mouseY, panelX, panelY, 1)) {
-            settingsTab = true;
+            activeTab = MainTab.SETTINGS;
             moduleSearchFocused = false;
+            profileNameFocused = false;
             resetAllConfirmation = false;
+            deleteConfirmationProfile = null;
+            return true;
+        }
+        if (isInsideTab(mouseX, mouseY, panelX, panelY, 2)) {
+            activeTab = MainTab.PROFILES;
+            moduleSearchFocused = false;
+            profileNameFocused = false;
+            resetAllConfirmation = false;
+            deleteConfirmationProfile = null;
+            selectedProfileName = profileManager.getActiveProfileName();
             return true;
         }
 
         return false;
+    }
+
+    private boolean handleProfilesClick(int mouseX, int mouseY) {
+        int panelWidth = getPanelWidth();
+        int panelHeight = getPanelHeight();
+        int panelX = getPanelX(panelWidth);
+        int panelY = getPanelY(panelHeight);
+        int contentTop = panelY + HEADER_HEIGHT;
+        int rowX = panelX + PADDING;
+        int inputY = contentTop + 42;
+        int listY = contentTop + 80;
+        int listWidth = 260;
+        int actionX = rowX + listWidth + CarbonTheme.SPACE_12;
+        int actionWidth = panelWidth
+            - PADDING * 2
+            - listWidth
+            - CarbonTheme.SPACE_12;
+        int buttonX = actionX + CarbonTheme.SPACE_10;
+        int buttonWidth = actionWidth - CarbonTheme.SPACE_20;
+        int buttonY = listY + 30;
+
+        if (isInside(mouseX, mouseY, rowX, inputY, listWidth, 24)) {
+            profileNameFocused = true;
+            return true;
+        }
+        profileNameFocused = false;
+
+        List<Profile> profiles = profileManager.getProfiles();
+        int footerTop = panelY + getPanelHeight() - FOOTER_HEIGHT;
+        int visibleCount = Math.max(
+            1,
+            (footerTop - listY - PADDING) / SETTING_ROW_HEIGHT
+        );
+        int endIndex = Math.min(
+            profiles.size(),
+            profileScrollIndex + visibleCount
+        );
+
+        for (int index = profileScrollIndex; index < endIndex; index++) {
+            Profile profile = profiles.get(index);
+            int currentY = listY
+                + (index - profileScrollIndex) * SETTING_ROW_HEIGHT;
+            if (isInside(
+                mouseX,
+                mouseY,
+                rowX,
+                currentY,
+                listWidth,
+                SETTING_ROW_HEIGHT - CarbonTheme.SPACE_4
+            )) {
+                selectedProfileName = profile.getName();
+                profileNameInput = profile.getName();
+                deleteConfirmationProfile = null;
+                return true;
+            }
+        }
+
+        if (isInside(
+            mouseX,
+            mouseY,
+            buttonX,
+            buttonY,
+            buttonWidth,
+            BUTTON_HEIGHT
+        )) {
+            if (profileManager.createProfile(profileNameInput)) {
+                selectedProfileName = profileManager.sanitizeName(
+                    profileNameInput
+                );
+                profileNameInput = selectedProfileName;
+            } else {
+                notifyInvalidProfileName();
+            }
+            return true;
+        }
+        if (isInside(
+            mouseX,
+            mouseY,
+            buttonX,
+            buttonY + 28,
+            buttonWidth,
+            BUTTON_HEIGHT
+        )) {
+            profileManager.saveActiveProfile();
+            return true;
+        }
+        if (isInside(
+            mouseX,
+            mouseY,
+            buttonX,
+            buttonY + 56,
+            buttonWidth,
+            BUTTON_HEIGHT
+        )) {
+            if (!profileManager.loadProfile(selectedProfileName)) {
+                notificationManager.warning(
+                    "Profile Not Loaded",
+                    "Select a valid profile first."
+                );
+            }
+            return true;
+        }
+        if (isInside(
+            mouseX,
+            mouseY,
+            buttonX,
+            buttonY + 84,
+            buttonWidth,
+            BUTTON_HEIGHT
+        )) {
+            String renamed = profileManager.sanitizeName(profileNameInput);
+            if (profileManager.renameProfile(
+                selectedProfileName,
+                profileNameInput
+            )) {
+                selectedProfileName = renamed;
+                profileNameInput = renamed;
+            } else {
+                notifyInvalidProfileName();
+            }
+            return true;
+        }
+        if (isInside(
+            mouseX,
+            mouseY,
+            buttonX,
+            buttonY + 112,
+            buttonWidth,
+            BUTTON_HEIGHT
+        )) {
+            String duplicate = profileManager.sanitizeName(profileNameInput);
+            if (profileManager.duplicateActiveProfile(profileNameInput)) {
+                selectedProfileName = duplicate;
+                profileNameInput = duplicate;
+            } else {
+                notifyInvalidProfileName();
+            }
+            return true;
+        }
+        if (isInside(
+            mouseX,
+            mouseY,
+            buttonX,
+            buttonY + 140,
+            buttonWidth,
+            BUTTON_HEIGHT
+        )) {
+            handleDeleteProfile();
+            return true;
+        }
+
+        return false;
+    }
+
+    private void handleDeleteProfile() {
+        if (selectedProfileName == null) {
+            notificationManager.warning(
+                "Profile Not Selected",
+                "Select a profile to delete."
+            );
+            return;
+        }
+        if (ProfileManager.DEFAULT_PROFILE_NAME.equalsIgnoreCase(
+            selectedProfileName
+        )) {
+            notificationManager.warning(
+                "Protected Profile",
+                "Default profile cannot be deleted."
+            );
+            deleteConfirmationProfile = null;
+            return;
+        }
+        if (!isDeleteConfirmationActive()) {
+            deleteConfirmationProfile = selectedProfileName;
+            return;
+        }
+
+        String deletedName = selectedProfileName;
+        if (profileManager.deleteProfile(deletedName)) {
+            selectedProfileName = profileManager.getActiveProfileName();
+            profileNameInput = selectedProfileName;
+            profileScrollIndex = 0;
+        }
+        deleteConfirmationProfile = null;
+    }
+
+    private boolean isDeleteConfirmationActive() {
+        return selectedProfileName != null
+            && selectedProfileName.equalsIgnoreCase(
+                deleteConfirmationProfile
+            );
+    }
+
+    private void notifyInvalidProfileName() {
+        notificationManager.warning(
+            "Profile Action Failed",
+            "Use a unique, non-empty profile name."
+        );
     }
 
     private boolean handleResetAllClick(int mouseX, int mouseY) {
@@ -1442,7 +1942,7 @@ public final class CarbonMenuScreen extends GuiScreen {
             return;
         }
 
-        if (selectedModule == null && !settingsTab) {
+        if (selectedModule == null && activeTab == MainTab.MODS) {
             List<Module> modules = getFilteredModules();
             int panelY = getPanelY(getPanelHeight());
             int contentTop = panelY + HEADER_HEIGHT;
@@ -1472,7 +1972,7 @@ public final class CarbonMenuScreen extends GuiScreen {
             }
             return;
         }
-        if (selectedModule == null && settingsTab) {
+        if (selectedModule == null && activeTab == MainTab.SETTINGS) {
             List<Module> modules = getKeybindModules();
             int panelY = getPanelY(getPanelHeight());
             int rowY = panelY + HEADER_HEIGHT + 92;
@@ -1486,6 +1986,30 @@ public final class CarbonMenuScreen extends GuiScreen {
                 );
             } else {
                 keybindScrollIndex = Math.max(0, keybindScrollIndex - 1);
+            }
+            return;
+        }
+        if (selectedModule == null && activeTab == MainTab.PROFILES) {
+            List<Profile> profiles = profileManager.getProfiles();
+            int panelY = getPanelY(getPanelHeight());
+            int listY = panelY + HEADER_HEIGHT + 80;
+            int footerTop = panelY + getPanelHeight() - FOOTER_HEIGHT;
+            int visibleCount = Math.max(
+                1,
+                (footerTop - listY - PADDING) / SETTING_ROW_HEIGHT
+            );
+            int maximumIndex = Math.max(
+                0,
+                profiles.size() - visibleCount
+            );
+
+            if (wheel < 0) {
+                profileScrollIndex = Math.min(
+                    maximumIndex,
+                    profileScrollIndex + 1
+                );
+            } else {
+                profileScrollIndex = Math.max(0, profileScrollIndex - 1);
             }
             return;
         }
@@ -1997,9 +2521,37 @@ public final class CarbonMenuScreen extends GuiScreen {
             }
         }
 
+        if (profileNameFocused
+            && selectedModule == null
+            && activeTab == MainTab.PROFILES) {
+            if (keyCode == Keyboard.KEY_ESCAPE
+                || keyCode == Keyboard.KEY_RETURN
+                || keyCode == Keyboard.KEY_NUMPADENTER) {
+                profileNameFocused = false;
+                return;
+            }
+            if (keyCode == Keyboard.KEY_BACK) {
+                if (!profileNameInput.isEmpty()) {
+                    profileNameInput = profileNameInput.substring(
+                        0,
+                        profileNameInput.length() - 1
+                    );
+                }
+                deleteConfirmationProfile = null;
+                return;
+            }
+            if (typedChar >= 32
+                && typedChar != 127
+                && profileNameInput.length() < 48) {
+                profileNameInput += typedChar;
+                deleteConfirmationProfile = null;
+            }
+            return;
+        }
+
         if (moduleSearchFocused
             && selectedModule == null
-            && !settingsTab) {
+            && activeTab == MainTab.MODS) {
             if (keyCode == Keyboard.KEY_ESCAPE
                 || keyCode == Keyboard.KEY_RETURN
                 || keyCode == Keyboard.KEY_NUMPADENTER) {

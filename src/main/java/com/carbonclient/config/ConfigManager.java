@@ -133,15 +133,7 @@ public final class ConfigManager {
                 );
             }
 
-            JsonObject root = new JsonObject();
-            JsonObject modulesObject = new JsonObject();
-
-            for (Module module : moduleManager.getModules()) {
-                modulesObject.add(module.getName(), serializeModule(module));
-            }
-
-            root.add("modules", modulesObject);
-            writeAtomically(root);
+            writeAtomically(createSnapshot());
             logger.info("Saved Carbon config to {}", configFile.getAbsolutePath());
         } catch (Exception exception) {
             logger.warn("Could not save Carbon config.", exception);
@@ -149,6 +141,48 @@ public final class ConfigManager {
                 "Config Save Failed",
                 "Changes could not be written to disk."
             );
+        }
+    }
+
+    public synchronized JsonObject createSnapshot() {
+        JsonObject root = new JsonObject();
+        JsonObject modulesObject = new JsonObject();
+
+        for (Module module : moduleManager.getModules()) {
+            modulesObject.add(module.getName(), serializeModule(module));
+        }
+
+        root.add("modules", modulesObject);
+        return root;
+    }
+
+    public synchronized JsonObject createDefaultSnapshot() {
+        JsonObject root = new JsonObject();
+        JsonObject modulesObject = new JsonObject();
+
+        for (Module module : moduleManager.getModules()) {
+            modulesObject.add(module.getName(), serializeDefaultModule(module));
+        }
+
+        root.add("modules", modulesObject);
+        return root;
+    }
+
+    public synchronized void applySnapshot(JsonObject root) {
+        if (root == null) {
+            throw new IllegalArgumentException("Config snapshot cannot be null.");
+        }
+
+        JsonObject modulesObject = getObject(root, "modules");
+        if (modulesObject == null) {
+            throw new IllegalArgumentException(
+                "Config snapshot has no valid modules object."
+            );
+        }
+
+        moduleManager.resetAllToDefaults();
+        for (Module module : moduleManager.getModules()) {
+            loadModule(module, getObject(modulesObject, module.getName()));
         }
     }
 
@@ -238,6 +272,28 @@ public final class ConfigManager {
         return moduleObject;
     }
 
+    private JsonObject serializeDefaultModule(Module module) {
+        JsonObject moduleObject = new JsonObject();
+        JsonObject settingsObject = new JsonObject();
+
+        moduleObject.addProperty("enabled", module.isDefaultEnabled());
+        moduleObject.addProperty("keyCode", module.getDefaultKeyCode());
+
+        for (Setting<?> setting : module.getSettings()) {
+            if (setting instanceof ColorSetting) {
+                settingsObject.add(
+                    setting.getName(),
+                    serializeDefaultColorSetting((ColorSetting) setting)
+                );
+            } else {
+                addDefaultSettingValue(settingsObject, setting);
+            }
+        }
+
+        moduleObject.add("settings", settingsObject);
+        return moduleObject;
+    }
+
     private void addSettingValue(JsonObject settingsObject, Setting<?> setting) {
         if (setting instanceof BooleanSetting) {
             settingsObject.addProperty(setting.getName(), (Boolean) setting.getValue());
@@ -247,6 +303,33 @@ public final class ConfigManager {
             settingsObject.addProperty(setting.getName(), (Double) setting.getValue());
         } else if (setting instanceof ModeSetting) {
             settingsObject.addProperty(setting.getName(), (String) setting.getValue());
+        }
+    }
+
+    private void addDefaultSettingValue(
+        JsonObject settingsObject,
+        Setting<?> setting
+    ) {
+        if (setting instanceof BooleanSetting) {
+            settingsObject.addProperty(
+                setting.getName(),
+                (Boolean) setting.getDefaultValue()
+            );
+        } else if (setting instanceof KeybindSetting) {
+            settingsObject.addProperty(
+                setting.getName(),
+                (Integer) setting.getDefaultValue()
+            );
+        } else if (setting instanceof NumberSetting) {
+            settingsObject.addProperty(
+                setting.getName(),
+                (Double) setting.getDefaultValue()
+            );
+        } else if (setting instanceof ModeSetting) {
+            settingsObject.addProperty(
+                setting.getName(),
+                (String) setting.getDefaultValue()
+            );
         }
     }
 
@@ -305,6 +388,30 @@ public final class ConfigManager {
         colorObject.addProperty("chroma", setting.isChroma());
         colorObject.addProperty("type", setting.getType());
         colorObject.addProperty("speed", setting.getSpeed());
+        return colorObject;
+    }
+
+    private JsonObject serializeDefaultColorSetting(ColorSetting setting) {
+        JsonObject colorObject = new JsonObject();
+        int defaultColor = setting.getDefaultValue();
+        float[] hsb = java.awt.Color.RGBtoHSB(
+            defaultColor >> 16 & 0xFF,
+            defaultColor >> 8 & 0xFF,
+            defaultColor & 0xFF,
+            null
+        );
+
+        colorObject.addProperty("color", defaultColor);
+        colorObject.addProperty("hue", hsb[0]);
+        colorObject.addProperty("saturation", hsb[1]);
+        colorObject.addProperty("brightness", hsb[2]);
+        colorObject.addProperty(
+            "alpha",
+            (defaultColor >>> 24 & 0xFF) / 255.0F
+        );
+        colorObject.addProperty("chroma", false);
+        colorObject.addProperty("type", ColorSetting.TYPE_STATIC);
+        colorObject.addProperty("speed", 1.0D);
         return colorObject;
     }
 
