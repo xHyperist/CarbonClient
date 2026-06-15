@@ -12,6 +12,7 @@ import com.carbonclient.modules.movement.ToggleSprintModule;
 import com.carbonclient.modules.render.ArmorHudModule;
 import com.carbonclient.modules.render.CPSDisplayModule;
 import com.carbonclient.modules.render.CoordinatesHudModule;
+import com.carbonclient.modules.render.CrosshairModule;
 import com.carbonclient.modules.render.FPSDisplayModule;
 import com.carbonclient.modules.render.KeystrokesModule;
 import com.carbonclient.modules.render.PingDisplayModule;
@@ -62,6 +63,8 @@ public final class Client {
         moduleManager.register(coordinatesHud);
         PingDisplayModule pingDisplay = new PingDisplayModule();
         moduleManager.register(pingDisplay);
+        CrosshairModule crosshair = new CrosshairModule();
+        moduleManager.register(crosshair);
         configManager.load();
         registerConfigShutdownHook();
         MinecraftForge.EVENT_BUS.register(forgeEventBridge);
@@ -113,6 +116,12 @@ public final class Client {
             pingDisplay.getName(),
             pingDisplay.isEnabled(),
             pingDisplay.getKeyCode()
+        );
+        logger.info(
+            "Registered module: {} (enabled: {}, keyCode: {})",
+            crosshair.getName(),
+            crosshair.isEnabled(),
+            crosshair.getKeyCode()
         );
         logger.info("{} initialized successfully.", Reference.MOD_NAME);
     }

@@ -5,6 +5,7 @@ import com.carbonclient.config.ConfigManager;
 import com.carbonclient.module.Module;
 import com.carbonclient.module.ModuleCategory;
 import com.carbonclient.module.ModuleManager;
+import com.carbonclient.modules.render.CrosshairModule;
 import com.carbonclient.setting.Setting;
 import com.carbonclient.setting.impl.BooleanSetting;
 import com.carbonclient.setting.impl.ColorSetting;
@@ -59,6 +60,7 @@ public final class CarbonMenuScreen extends GuiScreen {
     private int keybindScrollIndex;
     private boolean settingsTab;
     private boolean resetAllConfirmation;
+    private String crosshairPreviewBackground = "Dark";
 
     public CarbonMenuScreen(
         ModuleManager moduleManager,
@@ -362,7 +364,16 @@ public final class CarbonMenuScreen extends GuiScreen {
         List<Setting<?>> settings = getVisibleSettings();
         int rowX = panelX + PADDING;
         int rowWidth = panelWidth - PADDING * 2;
-        int rowY = contentTop + 32;
+        int rowY = getOptionsRowY(contentTop);
+        if (isCrosshairOptions()) {
+            drawCrosshairPreview(
+                mouseX,
+                mouseY,
+                rowX,
+                contentTop + 32,
+                rowWidth
+            );
+        }
         int visibleCount = getVisibleSettingCount(panelY, rowY);
         int endIndex = Math.min(
             settings.size(),
@@ -400,6 +411,77 @@ public final class CarbonMenuScreen extends GuiScreen {
                 CarbonTheme.MUTED_TEXT
             );
         }
+    }
+
+    private void drawCrosshairPreview(
+        int mouseX,
+        int mouseY,
+        int x,
+        int y,
+        int width
+    ) {
+        int height = 96;
+        drawPreviewBackground(x, y, width, height);
+        RenderUtils.drawOutline(x, y, width, height, CarbonTheme.BORDER);
+        RenderUtils.drawText(
+            fontRendererObj,
+            "Live Preview",
+            x + 8,
+            y + 7,
+            CarbonTheme.MUTED_TEXT
+        );
+
+        drawButton(
+            crosshairPreviewBackground,
+            x + width - 98,
+            y + 5,
+            90,
+            mouseX,
+            mouseY,
+            CarbonTheme.SECONDARY
+        );
+
+        ((CrosshairModule) selectedModule).renderCrosshairAt(
+            x + width / 2,
+            y + height / 2 + 8,
+            true
+        );
+    }
+
+    private void drawPreviewBackground(int x, int y, int width, int height) {
+        if ("Light".equals(crosshairPreviewBackground)) {
+            RenderUtils.drawPanel(x, y, width, height, 0xFFE4E8F0);
+            return;
+        }
+        if ("Transparent/Grid".equals(crosshairPreviewBackground)) {
+            int cell = 10;
+            for (int row = 0; row * cell < height; row++) {
+                for (int column = 0; column * cell < width; column++) {
+                    RenderUtils.drawPanel(
+                        x + column * cell,
+                        y + row * cell,
+                        Math.min(cell, width - column * cell),
+                        Math.min(cell, height - row * cell),
+                        (row + column) % 2 == 0
+                            ? 0xFF30394A
+                            : 0xFF596579
+                    );
+                }
+            }
+            return;
+        }
+        if ("Game-like".equals(crosshairPreviewBackground)) {
+            RenderUtils.drawPanel(x, y, width, height / 2, 0xFF72A7D8);
+            RenderUtils.drawPanel(
+                x,
+                y + height / 2,
+                width,
+                height - height / 2,
+                0xFF547A3F
+            );
+            return;
+        }
+        RenderUtils.drawPanel(x, y, width, height, CarbonTheme.PANEL);
     }
 
     private void drawSettingsView(
@@ -938,13 +1020,28 @@ public final class CarbonMenuScreen extends GuiScreen {
             listeningKeybind = null;
             closeColorPicker();
             optionsScrollIndex = 0;
+            if (isCrosshairOptions()) {
+                crosshairPreviewBackground = "Dark";
+            }
+            return true;
+        }
+        if (isCrosshairOptions()
+            && isInside(
+                mouseX,
+                mouseY,
+                panelX + panelWidth - PADDING - 98,
+                contentTop + 37,
+                90,
+                BUTTON_HEIGHT
+            )) {
+            cycleCrosshairPreviewBackground();
             return true;
         }
 
         List<Setting<?>> settings = getVisibleSettings();
         int rowX = panelX + PADDING;
         int rowWidth = panelWidth - PADDING * 2;
-        int rowY = contentTop + 32;
+        int rowY = getOptionsRowY(contentTop);
         int visibleCount = getVisibleSettingCount(panelY, rowY);
         int endIndex = Math.min(
             settings.size(),
@@ -1046,7 +1143,7 @@ public final class CarbonMenuScreen extends GuiScreen {
 
         List<Setting<?>> settings = getVisibleSettings();
         int panelY = getPanelY(getPanelHeight());
-        int rowY = panelY + HEADER_HEIGHT + 32;
+        int rowY = getOptionsRowY(panelY + HEADER_HEIGHT);
         int visibleCount = getVisibleSettingCount(panelY, rowY);
         int maximumIndex = Math.max(0, settings.size() - visibleCount);
 
@@ -1284,6 +1381,26 @@ public final class CarbonMenuScreen extends GuiScreen {
     private int getVisibleSettingCount(int panelY, int rowY) {
         int footerTop = panelY + getPanelHeight() - FOOTER_HEIGHT;
         return Math.max(1, (footerTop - rowY - 16) / SETTING_ROW_HEIGHT);
+    }
+
+    private int getOptionsRowY(int contentTop) {
+        return contentTop + (isCrosshairOptions() ? 136 : 32);
+    }
+
+    private boolean isCrosshairOptions() {
+        return selectedModule instanceof CrosshairModule;
+    }
+
+    private void cycleCrosshairPreviewBackground() {
+        if ("Dark".equals(crosshairPreviewBackground)) {
+            crosshairPreviewBackground = "Light";
+        } else if ("Light".equals(crosshairPreviewBackground)) {
+            crosshairPreviewBackground = "Transparent/Grid";
+        } else if ("Transparent/Grid".equals(crosshairPreviewBackground)) {
+            crosshairPreviewBackground = "Game-like";
+        } else {
+            crosshairPreviewBackground = "Dark";
+        }
     }
 
     private int getVisibleKeybindCount(int panelY, int rowY) {
