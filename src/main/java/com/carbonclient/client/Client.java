@@ -14,6 +14,7 @@ import com.carbonclient.modules.render.CPSDisplayModule;
 import com.carbonclient.modules.render.CoordinatesHudModule;
 import com.carbonclient.modules.render.FPSDisplayModule;
 import com.carbonclient.modules.render.KeystrokesModule;
+import com.carbonclient.modules.render.PingDisplayModule;
 import com.carbonclient.modules.render.PotionHudModule;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -59,6 +60,8 @@ public final class Client {
         moduleManager.register(potionHud);
         CoordinatesHudModule coordinatesHud = new CoordinatesHudModule();
         moduleManager.register(coordinatesHud);
+        PingDisplayModule pingDisplay = new PingDisplayModule();
+        moduleManager.register(pingDisplay);
         configManager.load();
         registerConfigShutdownHook();
         MinecraftForge.EVENT_BUS.register(forgeEventBridge);
@@ -104,6 +107,12 @@ public final class Client {
             coordinatesHud.getName(),
             coordinatesHud.isEnabled(),
             coordinatesHud.getKeyCode()
+        );
+        logger.info(
+            "Registered module: {} (enabled: {}, keyCode: {})",
+            pingDisplay.getName(),
+            pingDisplay.isEnabled(),
+            pingDisplay.getKeyCode()
         );
         logger.info("{} initialized successfully.", Reference.MOD_NAME);
     }
