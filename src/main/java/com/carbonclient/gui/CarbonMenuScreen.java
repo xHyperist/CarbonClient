@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -44,6 +45,9 @@ public final class CarbonMenuScreen extends GuiScreen {
     private static final int CONTROL_WIDTH = CarbonTheme.CONTROL_WIDTH;
     private static final int TAB_START_OFFSET = 142;
     private static final int TAB_GAP = CarbonTheme.SPACE_4;
+    private static final int SEARCH_HEIGHT = 24;
+    private static final int MODULE_SCROLL_STEP = 36;
+    private static final int MAX_SEARCH_LENGTH = 64;
     private static final String[] TAB_LABELS = {
         "Mods",
         "Settings",
@@ -67,11 +71,23 @@ public final class CarbonMenuScreen extends GuiScreen {
     private boolean colorHexFocused;
     private int colorPickerDrag;
     private int optionsScrollIndex;
-    private int moduleScrollRow;
+    private int moduleScrollOffset;
     private int keybindScrollIndex;
+    private String moduleSearchQuery = "";
+    private boolean moduleSearchFocused;
+    private ModuleFilter moduleFilter = ModuleFilter.ALL;
     private boolean settingsTab;
     private boolean resetAllConfirmation;
     private String crosshairPreviewBackground = "Dark";
+
+    private enum ModuleFilter {
+        ALL,
+        HUD,
+        RENDER,
+        MOVEMENT,
+        PVP,
+        UTILITY
+    }
 
     public CarbonMenuScreen(
         ModuleManager moduleManager,
@@ -283,43 +299,184 @@ public final class CarbonMenuScreen extends GuiScreen {
         int contentTop,
         int panelWidth
     ) {
-        List<Module> modules = getVisibleModules();
+        List<Module> modules = getFilteredModules();
         int gridWidth = panelWidth - PADDING * 2;
         int cardWidth = (gridWidth - CARD_GAP * (GRID_COLUMNS - 1)) / GRID_COLUMNS;
         int panelY = contentTop - HEADER_HEIGHT;
-        int visibleRows = getVisibleModuleRowCount(panelY, contentTop);
-        int firstIndex = moduleScrollRow * GRID_COLUMNS;
-        int endIndex = Math.min(
+        int searchX = panelX + PADDING;
+        int searchY = contentTop + PADDING;
+        int searchWidth = panelWidth - PADDING * 2;
+        int gridTop = searchY + SEARCH_HEIGHT + CARD_GAP;
+        int gridBottom = getModuleGridBottom(panelY);
+        int viewportHeight = Math.max(0, gridBottom - gridTop);
+        int maximumScroll = getMaximumModuleScroll(
             modules.size(),
-            firstIndex + visibleRows * GRID_COLUMNS
+            viewportHeight
+        );
+        moduleScrollOffset = Math.max(
+            0,
+            Math.min(moduleScrollOffset, maximumScroll)
         );
 
-        for (int index = firstIndex; index < endIndex; index++) {
-            Module module = modules.get(index);
-            int column = index % GRID_COLUMNS;
-            int row = index / GRID_COLUMNS - moduleScrollRow;
-            int cardX = panelX + PADDING + column * (cardWidth + CARD_GAP);
-            int cardY = contentTop + PADDING + row * (CARD_HEIGHT + CARD_GAP);
+        drawModuleSearchBar(
+            mouseX,
+            mouseY,
+            searchX,
+            searchY,
+            searchWidth
+        );
 
-            drawModuleCard(module, mouseX, mouseY, cardX, cardY, cardWidth);
-        }
-
-        int totalRows = getModuleRowCount(modules.size());
-        if (totalRows > visibleRows) {
-            String scrollText = "Mouse wheel: "
-                + (moduleScrollRow + 1)
-                + "/"
-                + (totalRows - visibleRows + 1);
-            int footerTop = panelY + getPanelHeight() - FOOTER_HEIGHT;
-            RenderUtils.drawText(
+        if (modules.isEmpty()) {
+            RenderUtils.drawCenteredText(
                 fontRendererObj,
-                scrollText,
-                panelX + panelWidth - PADDING
-                    - fontRendererObj.getStringWidth(scrollText),
-                footerTop - 13,
+                "No mods found",
+                searchX,
+                gridTop,
+                searchWidth,
+                viewportHeight,
                 CarbonTheme.MUTED_TEXT
             );
+            return;
         }
+
+        boolean mouseInViewport = isInside(
+            mouseX,
+            mouseY,
+            searchX,
+            gridTop,
+            searchWidth,
+            viewportHeight
+        );
+        int cardMouseX = mouseInViewport ? mouseX : Integer.MIN_VALUE;
+        int cardMouseY = mouseInViewport ? mouseY : Integer.MIN_VALUE;
+
+        RenderUtils.beginScissor(
+            searchX - CarbonTheme.SPACE_2,
+            gridTop,
+            searchWidth + CarbonTheme.SPACE_4,
+            viewportHeight
+        );
+        for (int index = 0; index < modules.size(); index++) {
+            Module module = modules.get(index);
+            int column = index % GRID_COLUMNS;
+            int row = index / GRID_COLUMNS;
+            int cardX = panelX + PADDING + column * (cardWidth + CARD_GAP);
+            int cardY = gridTop
+                + row * (CARD_HEIGHT + CARD_GAP)
+                - moduleScrollOffset;
+
+            if (cardY + CARD_HEIGHT > gridTop && cardY < gridBottom) {
+                drawModuleCard(
+                    module,
+                    cardMouseX,
+                    cardMouseY,
+                    cardX,
+                    cardY,
+                    cardWidth
+                );
+            }
+        }
+        RenderUtils.endScissor();
+
+        drawModuleScrollbar(
+            panelX + panelWidth - CarbonTheme.SPACE_6,
+            gridTop,
+            viewportHeight,
+            moduleScrollOffset,
+            maximumScroll
+        );
+    }
+
+    private void drawModuleSearchBar(
+        int mouseX,
+        int mouseY,
+        int x,
+        int y,
+        int width
+    ) {
+        boolean hovered = isInside(mouseX, mouseY, x, y, width, SEARCH_HEIGHT);
+        int borderColor = moduleSearchFocused
+            ? CarbonTheme.ACCENT
+            : hovered
+                ? CarbonTheme.BORDER_HOVER
+                : CarbonTheme.BORDER;
+
+        RenderUtils.drawPanel(x, y, width, SEARCH_HEIGHT, CarbonTheme.TRACK);
+        RenderUtils.drawOutline(x, y, width, SEARCH_HEIGHT, borderColor);
+        RenderUtils.drawPanel(
+            x,
+            y,
+            CarbonTheme.ACCENT_BAR_WIDTH,
+            SEARCH_HEIGHT,
+            moduleSearchFocused ? CarbonTheme.PRIMARY : CarbonTheme.SECONDARY
+        );
+
+        String text = moduleSearchQuery.isEmpty()
+            ? "Search mods..."
+            : moduleSearchQuery + (moduleSearchFocused ? "_" : "");
+        int filterWidth = fontRendererObj.getStringWidth(moduleFilter.name())
+            + CarbonTheme.SPACE_12;
+        int textWidth = width
+            - filterWidth
+            - CarbonTheme.SPACE_24
+            - CarbonTheme.SPACE_6;
+        String visibleText = moduleSearchQuery.isEmpty()
+            ? text
+            : fontRendererObj.trimStringToWidth(text, textWidth, true);
+        RenderUtils.drawText(
+            fontRendererObj,
+            visibleText,
+            x + CarbonTheme.SPACE_12,
+            y + 8,
+            moduleSearchQuery.isEmpty()
+                ? CarbonTheme.MUTED_TEXT
+                : CarbonTheme.TEXT
+        );
+
+        String filterLabel = moduleFilter.name();
+        RenderUtils.drawPanel(
+            x + width - filterWidth - CarbonTheme.SPACE_6,
+            y + CarbonTheme.SPACE_4,
+            filterWidth,
+            SEARCH_HEIGHT - CarbonTheme.SPACE_8,
+            CarbonTheme.ROW
+        );
+        RenderUtils.drawCenteredText(
+            fontRendererObj,
+            filterLabel,
+            x + width - filterWidth - CarbonTheme.SPACE_6,
+            y + CarbonTheme.SPACE_4,
+            filterWidth,
+            SEARCH_HEIGHT - CarbonTheme.SPACE_8,
+            CarbonTheme.ACCENT
+        );
+    }
+
+    private void drawModuleScrollbar(
+        int x,
+        int y,
+        int height,
+        int scrollOffset,
+        int maximumScroll
+    ) {
+        if (maximumScroll <= 0 || height <= 0) {
+            return;
+        }
+
+        int thumbHeight = Math.max(24, height * height / (height + maximumScroll));
+        int travel = Math.max(1, height - thumbHeight);
+        int thumbY = y + (int) Math.round(
+            travel * (scrollOffset / (double) maximumScroll)
+        );
+
+        RenderUtils.drawPanel(x, y, 2, height, CarbonTheme.TRACK);
+        RenderUtils.drawPanel(
+            x,
+            thumbY,
+            2,
+            thumbHeight,
+            CarbonTheme.ACCENT
+        );
     }
 
     private void drawModuleCard(
@@ -914,6 +1071,11 @@ public final class CarbonMenuScreen extends GuiScreen {
                 return;
             }
             if (selectedModule == null
+                && !settingsTab
+                && handleModuleSearchClick(mouseX, mouseY)) {
+                return;
+            }
+            if (selectedModule == null
                 && settingsTab
                 && handleResetAllClick(mouseX, mouseY)) {
                 return;
@@ -944,11 +1106,13 @@ public final class CarbonMenuScreen extends GuiScreen {
 
         if (isInsideTab(mouseX, mouseY, panelX, panelY, 0)) {
             settingsTab = false;
+            moduleSearchFocused = false;
             resetAllConfirmation = false;
             return true;
         }
         if (isInsideTab(mouseX, mouseY, panelX, panelY, 1)) {
             settingsTab = true;
+            moduleSearchFocused = false;
             resetAllConfirmation = false;
             return true;
         }
@@ -981,7 +1145,7 @@ public final class CarbonMenuScreen extends GuiScreen {
         moduleManager.resetAllToDefaults();
         configManager.save();
         resetAllConfirmation = false;
-        moduleScrollRow = 0;
+        moduleScrollOffset = 0;
         keybindScrollIndex = 0;
         listeningModuleKeybind = null;
         return true;
@@ -1052,6 +1216,31 @@ public final class CarbonMenuScreen extends GuiScreen {
         return false;
     }
 
+    private boolean handleModuleSearchClick(int mouseX, int mouseY) {
+        int panelWidth = getPanelWidth();
+        int panelHeight = getPanelHeight();
+        int panelX = getPanelX(panelWidth);
+        int panelY = getPanelY(panelHeight);
+        int searchX = panelX + PADDING;
+        int searchY = panelY + HEADER_HEIGHT + PADDING;
+        int searchWidth = panelWidth - PADDING * 2;
+
+        if (isInside(
+            mouseX,
+            mouseY,
+            searchX,
+            searchY,
+            searchWidth,
+            SEARCH_HEIGHT
+        )) {
+            moduleSearchFocused = true;
+            return true;
+        }
+
+        moduleSearchFocused = false;
+        return false;
+    }
+
     private boolean handleModuleCardClick(int mouseX, int mouseY) {
         int panelWidth = getPanelWidth();
         int panelHeight = getPanelHeight();
@@ -1060,20 +1249,32 @@ public final class CarbonMenuScreen extends GuiScreen {
         int contentTop = panelY + HEADER_HEIGHT;
         int gridWidth = panelWidth - PADDING * 2;
         int cardWidth = (gridWidth - CARD_GAP * (GRID_COLUMNS - 1)) / GRID_COLUMNS;
-        List<Module> modules = getVisibleModules();
-        int visibleRows = getVisibleModuleRowCount(panelY, contentTop);
-        int firstIndex = moduleScrollRow * GRID_COLUMNS;
-        int endIndex = Math.min(
-            modules.size(),
-            firstIndex + visibleRows * GRID_COLUMNS
-        );
+        int gridTop = contentTop
+            + PADDING
+            + SEARCH_HEIGHT
+            + CARD_GAP;
+        int gridBottom = getModuleGridBottom(panelY);
+        List<Module> modules = getFilteredModules();
 
-        for (int index = firstIndex; index < endIndex; index++) {
+        if (!isInside(
+            mouseX,
+            mouseY,
+            panelX + PADDING,
+            gridTop,
+            gridWidth,
+            Math.max(0, gridBottom - gridTop)
+        )) {
+            return false;
+        }
+
+        for (int index = 0; index < modules.size(); index++) {
             Module module = modules.get(index);
             int column = index % GRID_COLUMNS;
-            int row = index / GRID_COLUMNS - moduleScrollRow;
+            int row = index / GRID_COLUMNS;
             int cardX = panelX + PADDING + column * (cardWidth + CARD_GAP);
-            int cardY = contentTop + PADDING + row * (CARD_HEIGHT + CARD_GAP);
+            int cardY = gridTop
+                + row * (CARD_HEIGHT + CARD_GAP)
+                - moduleScrollOffset;
             int buttonY = cardY + CARD_HEIGHT - BUTTON_HEIGHT - 10;
             int buttonGap = 6;
             int buttonWidth = (cardWidth - 20 - buttonGap) / 2;
@@ -1086,6 +1287,7 @@ public final class CarbonMenuScreen extends GuiScreen {
             }
             if (isInside(mouseX, mouseY, optionsX, buttonY, buttonWidth, BUTTON_HEIGHT)) {
                 selectedModule = module;
+                moduleSearchFocused = false;
                 optionsScrollIndex = 0;
                 closeColorPicker();
                 return true;
@@ -1211,19 +1413,32 @@ public final class CarbonMenuScreen extends GuiScreen {
         }
 
         if (selectedModule == null && !settingsTab) {
-            List<Module> modules = getVisibleModules();
+            List<Module> modules = getFilteredModules();
             int panelY = getPanelY(getPanelHeight());
             int contentTop = panelY + HEADER_HEIGHT;
-            int visibleRows = getVisibleModuleRowCount(panelY, contentTop);
-            int maximumRow = Math.max(
+            int gridTop = contentTop
+                + PADDING
+                + SEARCH_HEIGHT
+                + CARD_GAP;
+            int viewportHeight = Math.max(
                 0,
-                getModuleRowCount(modules.size()) - visibleRows
+                getModuleGridBottom(panelY) - gridTop
+            );
+            int maximumScroll = getMaximumModuleScroll(
+                modules.size(),
+                viewportHeight
             );
 
             if (wheel < 0) {
-                moduleScrollRow = Math.min(maximumRow, moduleScrollRow + 1);
+                moduleScrollOffset = Math.min(
+                    maximumScroll,
+                    moduleScrollOffset + MODULE_SCROLL_STEP
+                );
             } else {
-                moduleScrollRow = Math.max(0, moduleScrollRow - 1);
+                moduleScrollOffset = Math.max(
+                    0,
+                    moduleScrollOffset - MODULE_SCROLL_STEP
+                );
             }
             return;
         }
@@ -1550,35 +1765,76 @@ public final class CarbonMenuScreen extends GuiScreen {
         return Math.max(1, (footerTop - rowY - 16) / SETTING_ROW_HEIGHT);
     }
 
-    private int getVisibleModuleRowCount(int panelY, int contentTop) {
-        int footerTop = panelY + getPanelHeight() - FOOTER_HEIGHT;
-        int availableHeight = footerTop - contentTop - PADDING * 2;
-        return Math.max(
-            1,
-            (availableHeight + CARD_GAP) / (CARD_HEIGHT + CARD_GAP)
-        );
+    private int getModuleGridBottom(int panelY) {
+        return panelY + getPanelHeight() - FOOTER_HEIGHT - PADDING;
     }
 
     private int getModuleRowCount(int moduleCount) {
         return (moduleCount + GRID_COLUMNS - 1) / GRID_COLUMNS;
     }
 
+    private int getMaximumModuleScroll(int moduleCount, int viewportHeight) {
+        int rows = getModuleRowCount(moduleCount);
+        int contentHeight = rows == 0
+            ? 0
+            : rows * CARD_HEIGHT + (rows - 1) * CARD_GAP;
+        return Math.max(0, contentHeight - viewportHeight);
+    }
+
     private String formatNumber(double value) {
         return String.format("%.1f", value);
     }
 
-    private List<Module> getVisibleModules() {
-        List<Module> visibleModules = new ArrayList<Module>();
+    private List<Module> getFilteredModules() {
+        List<Module> filteredModules = new ArrayList<Module>();
+        String query = moduleSearchQuery.trim().toLowerCase(Locale.ROOT);
 
         for (Module module : moduleManager.getModules()) {
-            if (module.getCategory() == ModuleCategory.RENDER
-                || module.getCategory() == ModuleCategory.HUD
-                || module.getCategory() == ModuleCategory.MOVEMENT) {
-                visibleModules.add(module);
+            if (!isMenuModule(module) || !matchesModuleFilter(module)) {
+                continue;
+            }
+
+            if (query.isEmpty()) {
+                filteredModules.add(module);
+                continue;
+            }
+
+            String searchableText = (
+                module.getName()
+                    + " "
+                    + module.getDescription()
+                    + " "
+                    + module.getCategory().name()
+            ).toLowerCase(Locale.ROOT);
+            if (searchableText.contains(query)) {
+                filteredModules.add(module);
             }
         }
 
-        return visibleModules;
+        return filteredModules;
+    }
+
+    private boolean isMenuModule(Module module) {
+        return module.getCategory() == ModuleCategory.RENDER
+            || module.getCategory() == ModuleCategory.HUD
+            || module.getCategory() == ModuleCategory.MOVEMENT;
+    }
+
+    private boolean matchesModuleFilter(Module module) {
+        switch (moduleFilter) {
+            case HUD:
+                return module.getCategory() == ModuleCategory.HUD;
+            case RENDER:
+                return module.getCategory() == ModuleCategory.RENDER;
+            case MOVEMENT:
+                return module.getCategory() == ModuleCategory.MOVEMENT;
+            case PVP:
+            case UTILITY:
+                return false;
+            case ALL:
+            default:
+                return true;
+        }
     }
 
     private List<Module> getKeybindModules() {
@@ -1709,6 +1965,34 @@ public final class CarbonMenuScreen extends GuiScreen {
                 }
                 return;
             }
+        }
+
+        if (moduleSearchFocused
+            && selectedModule == null
+            && !settingsTab) {
+            if (keyCode == Keyboard.KEY_ESCAPE
+                || keyCode == Keyboard.KEY_RETURN
+                || keyCode == Keyboard.KEY_NUMPADENTER) {
+                moduleSearchFocused = false;
+                return;
+            }
+            if (keyCode == Keyboard.KEY_BACK) {
+                if (!moduleSearchQuery.isEmpty()) {
+                    moduleSearchQuery = moduleSearchQuery.substring(
+                        0,
+                        moduleSearchQuery.length() - 1
+                    );
+                    moduleScrollOffset = 0;
+                }
+                return;
+            }
+            if (typedChar >= 32
+                && typedChar != 127
+                && moduleSearchQuery.length() < MAX_SEARCH_LENGTH) {
+                moduleSearchQuery += typedChar;
+                moduleScrollOffset = 0;
+            }
+            return;
         }
 
         if (listeningModuleKeybind != null) {

@@ -1,8 +1,11 @@
 package com.carbonclient.ui.render;
 
 import com.carbonclient.ui.theme.CarbonTheme;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.ScaledResolution;
+import org.lwjgl.opengl.GL11;
 
 public final class RenderUtils {
 
@@ -128,6 +131,24 @@ public final class RenderUtils {
 
     public static void drawDivider(int x, int y, int width) {
         Gui.drawRect(x, y, x + width, y + 1, CarbonTheme.DIVIDER);
+    }
+
+    public static void beginScissor(int x, int y, int width, int height) {
+        Minecraft minecraft = Minecraft.getMinecraft();
+        ScaledResolution resolution = new ScaledResolution(minecraft);
+        int scale = resolution.getScaleFactor();
+
+        GL11.glEnable(GL11.GL_SCISSOR_TEST);
+        GL11.glScissor(
+            x * scale,
+            minecraft.displayHeight - (y + height) * scale,
+            Math.max(0, width * scale),
+            Math.max(0, height * scale)
+        );
+    }
+
+    public static void endScissor() {
+        GL11.glDisable(GL11.GL_SCISSOR_TEST);
     }
 
     public static void drawOutline(
