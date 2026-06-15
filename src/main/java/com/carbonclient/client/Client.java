@@ -11,6 +11,7 @@ import com.carbonclient.module.impl.ExampleModule;
 import com.carbonclient.modules.movement.ToggleSprintModule;
 import com.carbonclient.modules.render.ArmorHudModule;
 import com.carbonclient.modules.render.CPSDisplayModule;
+import com.carbonclient.modules.render.CoordinatesHudModule;
 import com.carbonclient.modules.render.FPSDisplayModule;
 import com.carbonclient.modules.render.KeystrokesModule;
 import com.carbonclient.modules.render.PotionHudModule;
@@ -56,6 +57,8 @@ public final class Client {
         moduleManager.register(armorHud);
         PotionHudModule potionHud = new PotionHudModule();
         moduleManager.register(potionHud);
+        CoordinatesHudModule coordinatesHud = new CoordinatesHudModule();
+        moduleManager.register(coordinatesHud);
         configManager.load();
         registerConfigShutdownHook();
         MinecraftForge.EVENT_BUS.register(forgeEventBridge);
@@ -95,6 +98,12 @@ public final class Client {
             potionHud.getName(),
             potionHud.isEnabled(),
             potionHud.getKeyCode()
+        );
+        logger.info(
+            "Registered module: {} (enabled: {}, keyCode: {})",
+            coordinatesHud.getName(),
+            coordinatesHud.isEnabled(),
+            coordinatesHud.getKeyCode()
         );
         logger.info("{} initialized successfully.", Reference.MOD_NAME);
     }
