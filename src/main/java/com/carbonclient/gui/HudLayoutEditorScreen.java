@@ -4,6 +4,8 @@ import com.carbonclient.config.ConfigManager;
 import com.carbonclient.module.DraggableHudModule;
 import com.carbonclient.module.Module;
 import com.carbonclient.module.ModuleManager;
+import com.carbonclient.notification.NotificationManager;
+import com.carbonclient.notification.NotificationRenderer;
 import com.carbonclient.ui.render.RenderUtils;
 import com.carbonclient.ui.theme.CarbonTheme;
 import java.io.IOException;
@@ -16,16 +18,31 @@ public final class HudLayoutEditorScreen extends GuiScreen {
 
     private final ModuleManager moduleManager;
     private final ConfigManager configManager;
+    private final NotificationManager notificationManager;
+    private final NotificationRenderer notificationRenderer;
     private DraggableHudModule selectedHud;
     private int dragOffsetX;
     private int dragOffsetY;
 
     public HudLayoutEditorScreen(
         ModuleManager moduleManager,
-        ConfigManager configManager
+        ConfigManager configManager,
+        NotificationManager notificationManager,
+        NotificationRenderer notificationRenderer
     ) {
+        if (moduleManager == null
+            || configManager == null
+            || notificationManager == null
+            || notificationRenderer == null) {
+            throw new IllegalArgumentException(
+                "HudLayoutEditorScreen dependencies cannot be null."
+            );
+        }
+
         this.moduleManager = moduleManager;
         this.configManager = configManager;
+        this.notificationManager = notificationManager;
+        this.notificationRenderer = notificationRenderer;
     }
 
     @Override
@@ -86,6 +103,7 @@ public final class HudLayoutEditorScreen extends GuiScreen {
         }
 
         super.drawScreen(mouseX, mouseY, partialTicks);
+        notificationRenderer.render(width, height);
     }
 
     @Override
@@ -136,6 +154,10 @@ public final class HudLayoutEditorScreen extends GuiScreen {
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         if (keyCode == Keyboard.KEY_ESCAPE) {
             configManager.save();
+            notificationManager.success(
+                "HUD Layout Saved",
+                "HUD positions were saved."
+            );
             mc.displayGuiScreen(null);
             return;
         }

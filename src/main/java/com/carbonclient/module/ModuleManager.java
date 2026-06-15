@@ -1,6 +1,7 @@
 package com.carbonclient.module;
 
 import com.carbonclient.event.EventBus;
+import com.carbonclient.notification.NotificationManager;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,6 +10,7 @@ public final class ModuleManager {
 
     private final EventBus eventBus;
     private final List<Module> modules = new ArrayList<Module>();
+    private NotificationManager notificationManager;
 
     public ModuleManager(EventBus eventBus) {
         if (eventBus == null) {
@@ -16,6 +18,12 @@ public final class ModuleManager {
         }
 
         this.eventBus = eventBus;
+    }
+
+    public void setNotificationManager(
+        NotificationManager notificationManager
+    ) {
+        this.notificationManager = notificationManager;
     }
 
     public void register(Module module) {
@@ -67,7 +75,9 @@ public final class ModuleManager {
         List<Module> matches = getModulesByKeyCode(keyCode);
 
         for (Module module : matches) {
+            boolean wasEnabled = module.isEnabled();
             module.onKeybindPressed();
+            notifyModuleState(module, wasEnabled);
         }
 
         return !matches.isEmpty();
@@ -79,7 +89,9 @@ public final class ModuleManager {
             return false;
         }
 
+        boolean wasEnabled = module.isEnabled();
         module.toggle();
+        notifyModuleState(module, wasEnabled);
         return true;
     }
 
@@ -89,7 +101,9 @@ public final class ModuleManager {
             return false;
         }
 
+        boolean wasEnabled = module.isEnabled();
         module.setEnabled(enabled);
+        notifyModuleState(module, wasEnabled);
         return true;
     }
 
@@ -101,5 +115,18 @@ public final class ModuleManager {
         for (Module module : modules) {
             module.resetToDefaults();
         }
+    }
+
+    private void notifyModuleState(Module module, boolean wasEnabled) {
+        if (notificationManager == null || wasEnabled == module.isEnabled()) {
+            return;
+        }
+
+        notificationManager.success(
+            module.getName() + (module.isEnabled() ? " Enabled" : " Disabled"),
+            module.isEnabled()
+                ? "Module is now active."
+                : "Module is now inactive."
+        );
     }
 }

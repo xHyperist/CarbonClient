@@ -12,6 +12,7 @@ public final class CarbonTheme {
     public static final int TEXT = 0xFFFFFFFF;
     public static final int MUTED_TEXT = 0xFFA8B0C2;
     public static final int DANGER = 0xFFFF4F6D;
+    public static final int WARNING = 0xFFFFB84D;
 
     // UI surfaces and interaction states
     public static final int CARD = 0xE0182238;

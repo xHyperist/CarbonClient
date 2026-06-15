@@ -2,6 +2,7 @@ package com.carbonclient.config;
 
 import com.carbonclient.module.Module;
 import com.carbonclient.module.ModuleManager;
+import com.carbonclient.notification.NotificationManager;
 import com.carbonclient.setting.Setting;
 import com.carbonclient.setting.impl.BooleanSetting;
 import com.carbonclient.setting.impl.ColorSetting;
@@ -35,11 +36,20 @@ public final class ConfigManager {
     private final File configDirectory;
     private final File configFile;
     private final Logger logger;
+    private final NotificationManager notificationManager;
 
-    public ConfigManager(File gameDirectory, ModuleManager moduleManager, Logger logger) {
-        if (gameDirectory == null || moduleManager == null || logger == null) {
+    public ConfigManager(
+        File gameDirectory,
+        ModuleManager moduleManager,
+        Logger logger,
+        NotificationManager notificationManager
+    ) {
+        if (gameDirectory == null
+            || moduleManager == null
+            || logger == null
+            || notificationManager == null) {
             throw new IllegalArgumentException(
-                "Game directory, ModuleManager and logger cannot be null."
+                "ConfigManager dependencies cannot be null."
             );
         }
 
@@ -47,6 +57,7 @@ public final class ConfigManager {
         this.configDirectory = new File(gameDirectory, "carbon");
         this.configFile = new File(configDirectory, "config.json");
         this.logger = logger;
+        this.notificationManager = notificationManager;
     }
 
     public void load() {
@@ -55,6 +66,10 @@ public final class ConfigManager {
         if (!configFile.isFile()) {
             logger.info("No Carbon config found. Using default values.");
             save();
+            notificationManager.success(
+                "Config Created",
+                "Default settings were applied."
+            );
             return;
         }
 
@@ -65,6 +80,10 @@ public final class ConfigManager {
             JsonElement rootElement = new JsonParser().parse(reader);
             if (!rootElement.isJsonObject()) {
                 logger.warn("Carbon config root is not a JSON object. Using defaults.");
+                notificationManager.warning(
+                    "Config Reset",
+                    "Invalid config root; defaults were restored."
+                );
             } else {
                 JsonObject modulesObject = getObject(
                     rootElement.getAsJsonObject(),
@@ -73,6 +92,10 @@ public final class ConfigManager {
                 if (modulesObject == null) {
                     logger.warn(
                         "Carbon config has no valid modules object. Using defaults."
+                    );
+                    notificationManager.warning(
+                        "Config Reset",
+                        "Missing module data; defaults were restored."
                     );
                 } else {
                     for (Module module : moduleManager.getModules()) {
@@ -93,6 +116,10 @@ public final class ConfigManager {
                 exception
             );
             moduleManager.resetAllToDefaults();
+            notificationManager.error(
+                "Config Load Failed",
+                "Defaults were restored safely."
+            );
         }
 
         save();
@@ -118,6 +145,10 @@ public final class ConfigManager {
             logger.info("Saved Carbon config to {}", configFile.getAbsolutePath());
         } catch (Exception exception) {
             logger.warn("Could not save Carbon config.", exception);
+            notificationManager.error(
+                "Config Save Failed",
+                "Changes could not be written to disk."
+            );
         }
     }
 

@@ -6,6 +6,8 @@ import com.carbonclient.module.Module;
 import com.carbonclient.module.ModuleCategory;
 import com.carbonclient.module.ModuleManager;
 import com.carbonclient.modules.render.CrosshairModule;
+import com.carbonclient.notification.NotificationManager;
+import com.carbonclient.notification.NotificationRenderer;
 import com.carbonclient.setting.Setting;
 import com.carbonclient.setting.impl.BooleanSetting;
 import com.carbonclient.setting.impl.ColorSetting;
@@ -56,6 +58,8 @@ public final class CarbonMenuScreen extends GuiScreen {
     };
     private final ModuleManager moduleManager;
     private final ConfigManager configManager;
+    private final NotificationManager notificationManager;
+    private final NotificationRenderer notificationRenderer;
     private final ButtonComponent buttonComponent = new ButtonComponent();
     private final ToggleComponent toggleComponent = new ToggleComponent();
     private final CardComponent cardComponent = new CardComponent();
@@ -91,16 +95,23 @@ public final class CarbonMenuScreen extends GuiScreen {
 
     public CarbonMenuScreen(
         ModuleManager moduleManager,
-        ConfigManager configManager
+        ConfigManager configManager,
+        NotificationManager notificationManager,
+        NotificationRenderer notificationRenderer
     ) {
-        if (moduleManager == null || configManager == null) {
+        if (moduleManager == null
+            || configManager == null
+            || notificationManager == null
+            || notificationRenderer == null) {
             throw new IllegalArgumentException(
-                "ModuleManager and ConfigManager cannot be null."
+                "CarbonMenuScreen dependencies cannot be null."
             );
         }
 
         this.moduleManager = moduleManager;
         this.configManager = configManager;
+        this.notificationManager = notificationManager;
+        this.notificationRenderer = notificationRenderer;
     }
 
     @Override
@@ -231,6 +242,7 @@ public final class CarbonMenuScreen extends GuiScreen {
         );
 
         super.drawScreen(mouseX, mouseY, partialTicks);
+        notificationRenderer.render(width, height);
     }
 
     private void drawTab(
@@ -1144,6 +1156,10 @@ public final class CarbonMenuScreen extends GuiScreen {
 
         moduleManager.resetAllToDefaults();
         configManager.save();
+        notificationManager.success(
+            "Settings Reset",
+            "All settings reset to defaults."
+        );
         resetAllConfirmation = false;
         moduleScrollOffset = 0;
         keybindScrollIndex = 0;
@@ -1192,6 +1208,11 @@ public final class CarbonMenuScreen extends GuiScreen {
             )) {
                 module.setKeyCode(module.getDefaultKeyCode());
                 configManager.save();
+                notificationManager.info(
+                    "Keybind Reset",
+                    module.getName() + " restored to "
+                        + getKeyName(module.getKeyCode()) + "."
+                );
                 listeningModuleKeybind = null;
                 return true;
             }
@@ -1208,7 +1229,12 @@ public final class CarbonMenuScreen extends GuiScreen {
 
         if (isInsideTab(mouseX, mouseY, panelX, panelY, 3)) {
             mc.displayGuiScreen(
-                new HudLayoutEditorScreen(moduleManager, configManager)
+                new HudLayoutEditorScreen(
+                    moduleManager,
+                    configManager,
+                    notificationManager,
+                    notificationRenderer
+                )
             );
             return true;
         }
@@ -1282,7 +1308,7 @@ public final class CarbonMenuScreen extends GuiScreen {
             int optionsX = toggleX + buttonWidth + buttonGap;
 
             if (isInside(mouseX, mouseY, toggleX, buttonY, buttonWidth, BUTTON_HEIGHT)) {
-                module.toggle();
+                moduleManager.toggle(module.getName());
                 return true;
             }
             if (isInside(mouseX, mouseY, optionsX, buttonY, buttonWidth, BUTTON_HEIGHT)) {
@@ -1322,6 +1348,10 @@ public final class CarbonMenuScreen extends GuiScreen {
         )) {
             selectedModule.resetToDefaults();
             configManager.save();
+            notificationManager.success(
+                "Settings Reset",
+                selectedModule.getName() + " reset to defaults."
+            );
             draggingSlider = null;
             listeningKeybind = null;
             closeColorPicker();
@@ -2007,6 +2037,7 @@ public final class CarbonMenuScreen extends GuiScreen {
                     : keyCode
             );
             configManager.save();
+            notifyModuleKeybindChanged(listeningModuleKeybind);
             listeningModuleKeybind = null;
             return;
         }
@@ -2023,6 +2054,12 @@ public final class CarbonMenuScreen extends GuiScreen {
                     : keyCode
             );
             configManager.save();
+            notificationManager.success(
+                "Keybind Changed",
+                selectedModule.getName() + " / "
+                    + listeningKeybind.getName() + ": "
+                    + listeningKeybind.getKeyName()
+            );
             listeningKeybind = null;
             return;
         }
@@ -2046,6 +2083,20 @@ public final class CarbonMenuScreen extends GuiScreen {
     private void applyHexInputIfValid() {
         if (openColorSetting.setHexColor(colorHexInput)) {
             updateColorHexDisplay();
+        }
+    }
+
+    private void notifyModuleKeybindChanged(Module module) {
+        notificationManager.success(
+            "Keybind Changed",
+            module.getName() + ": " + getKeyName(module.getKeyCode())
+        );
+        if (hasKeybindConflict(module)) {
+            notificationManager.warning(
+                "Keybind Conflict",
+                getKeyName(module.getKeyCode())
+                    + " is assigned to multiple modules."
+            );
         }
     }
 

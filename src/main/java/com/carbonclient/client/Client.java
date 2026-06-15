@@ -8,6 +8,8 @@ import com.carbonclient.event.bridge.ForgeEventBridge;
 import com.carbonclient.input.KeyInputHandler;
 import com.carbonclient.module.ModuleManager;
 import com.carbonclient.module.impl.ExampleModule;
+import com.carbonclient.notification.NotificationManager;
+import com.carbonclient.notification.NotificationRenderer;
 import com.carbonclient.modules.movement.ToggleSprintModule;
 import com.carbonclient.modules.render.ArmorHudModule;
 import com.carbonclient.modules.render.CPSDisplayModule;
@@ -28,18 +30,28 @@ public final class Client {
 
     private final ServiceRegistry serviceRegistry = new ServiceRegistry();
     private final EventBus eventBus = new EventBus();
+    private final NotificationManager notificationManager =
+        new NotificationManager();
+    private final NotificationRenderer notificationRenderer =
+        new NotificationRenderer(eventBus, notificationManager);
     private final ModuleManager moduleManager = new ModuleManager(eventBus);
-    private final KeyInputHandler keyInputHandler = new KeyInputHandler(moduleManager);
+    private final KeyInputHandler keyInputHandler = new KeyInputHandler(
+        moduleManager,
+        notificationManager,
+        notificationRenderer
+    );
     private final ForgeEventBridge forgeEventBridge = new ForgeEventBridge(eventBus);
     private ConfigManager configManager;
     private Logger logger;
 
     public void preInitialize(FMLPreInitializationEvent event) {
         logger = event.getModLog();
+        moduleManager.setNotificationManager(notificationManager);
         configManager = new ConfigManager(
             event.getModConfigurationDirectory().getParentFile(),
             moduleManager,
-            logger
+            logger,
+            notificationManager
         );
         keyInputHandler.setConfigManager(configManager);
         logger.info("{} v{} is starting.", Reference.MOD_NAME, Reference.VERSION);
@@ -148,6 +160,14 @@ public final class Client {
 
     public ServiceRegistry getServiceRegistry() {
         return serviceRegistry;
+    }
+
+    public NotificationManager getNotificationManager() {
+        return notificationManager;
+    }
+
+    public NotificationRenderer getNotificationRenderer() {
+        return notificationRenderer;
     }
 
     private void registerConfigShutdownHook() {
