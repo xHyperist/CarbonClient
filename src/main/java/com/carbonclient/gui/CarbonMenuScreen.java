@@ -21,6 +21,8 @@ import com.carbonclient.ui.render.RenderUtils;
 import com.carbonclient.ui.theme.CarbonTheme;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
@@ -1102,6 +1104,9 @@ public final class CarbonMenuScreen extends GuiScreen {
         if (wheel == 0) {
             return;
         }
+        if (openColorSetting != null) {
+            return;
+        }
 
         if (selectedModule == null && !settingsTab) {
             List<Module> modules = getVisibleModules();
@@ -1375,7 +1380,42 @@ public final class CarbonMenuScreen extends GuiScreen {
             }
         }
 
+        Collections.sort(
+            visibleSettings,
+            new Comparator<Setting<?>>() {
+                @Override
+                public int compare(Setting<?> first, Setting<?> second) {
+                    return Integer.compare(
+                        getSettingOrder(first),
+                        getSettingOrder(second)
+                    );
+                }
+            }
+        );
         return visibleSettings;
+    }
+
+    private int getSettingOrder(Setting<?> setting) {
+        String name = setting.getName();
+        if ("Enabled".equalsIgnoreCase(name)
+            || "Show HUD".equalsIgnoreCase(name)
+            || name.endsWith(" Enabled")) {
+            return 0;
+        }
+        if (name.startsWith("Show ")
+            || setting instanceof ModeSetting
+            || name.contains("Layout")
+            || name.contains("Format")
+            || name.contains("Precision")) {
+            return 1;
+        }
+        if (setting instanceof ColorSetting) {
+            return 2;
+        }
+        if ("Scale".equalsIgnoreCase(name)) {
+            return 3;
+        }
+        return 4;
     }
 
     private int getVisibleSettingCount(int panelY, int rowY) {
@@ -1468,7 +1508,7 @@ public final class CarbonMenuScreen extends GuiScreen {
     }
 
     private String getKeyName(int keyCode) {
-        if (keyCode == Keyboard.KEY_NONE) {
+        if (keyCode <= Keyboard.KEY_NONE || keyCode >= Keyboard.KEYBOARD_SIZE) {
             return "NONE";
         }
 

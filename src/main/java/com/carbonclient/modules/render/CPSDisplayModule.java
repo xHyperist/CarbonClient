@@ -94,6 +94,7 @@ public final class CPSDisplayModule extends Module implements DraggableHudModule
         float renderScale = scale.getValue().floatValue();
         int renderX = Math.round(getPositionX() / renderScale);
         int renderY = Math.round(getPositionY() / renderScale);
+        int padding = showBackground.isEnabled() ? PADDING : 0;
 
         GlStateManager.pushMatrix();
         GlStateManager.scale(renderScale, renderScale, 1.0F);
@@ -102,15 +103,15 @@ public final class CPSDisplayModule extends Module implements DraggableHudModule
             Gui.drawRect(
                 renderX,
                 renderY,
-                renderX + width + PADDING * 2,
-                renderY + height + PADDING * 2,
+                renderX + width + padding * 2,
+                renderY + height + padding * 2,
                 backgroundColor.getColor()
             );
         }
         minecraft.fontRendererObj.drawString(
             text,
-            renderX + PADDING,
-            renderY + PADDING,
+            renderX + padding,
+            renderY + padding,
             textColor.getColor()
         );
 
@@ -136,16 +137,18 @@ public final class CPSDisplayModule extends Module implements DraggableHudModule
     @Override
     public int getHudWidth() {
         String text = leftClicks.size() + " CPS";
+        int padding = showBackground.isEnabled() ? PADDING : 0;
         return Math.round(
-            (minecraft.fontRendererObj.getStringWidth(text) + PADDING * 2)
+            (minecraft.fontRendererObj.getStringWidth(text) + padding * 2)
                 * scale.getValue().floatValue()
         );
     }
 
     @Override
     public int getHudHeight() {
+        int padding = showBackground.isEnabled() ? PADDING : 0;
         return Math.round(
-            (minecraft.fontRendererObj.FONT_HEIGHT + PADDING * 2)
+            (minecraft.fontRendererObj.FONT_HEIGHT + padding * 2)
                 * scale.getValue().floatValue()
         );
     }

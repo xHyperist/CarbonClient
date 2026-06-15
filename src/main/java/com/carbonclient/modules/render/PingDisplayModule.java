@@ -150,10 +150,18 @@ public final class PingDisplayModule
         if (!colorByPing.isEnabled() || ping < 0) {
             return textColor.getColor();
         }
-        if (ping >= badThreshold.getValue()) {
+        double medium = Math.min(
+            mediumThreshold.getValue(),
+            badThreshold.getValue()
+        );
+        double bad = Math.max(
+            mediumThreshold.getValue(),
+            badThreshold.getValue()
+        );
+        if (ping >= bad) {
             return badPingColor.getColor();
         }
-        if (ping >= mediumThreshold.getValue()) {
+        if (ping >= medium) {
             return mediumPingColor.getColor();
         }
         return goodPingColor.getColor();

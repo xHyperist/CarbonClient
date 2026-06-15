@@ -8,6 +8,7 @@ import com.carbonclient.setting.impl.KeybindSetting;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.lwjgl.input.Keyboard;
 
 public abstract class Module {
 
@@ -47,8 +48,8 @@ public abstract class Module {
         this.description = description;
         this.category = category;
         this.defaultEnabled = defaultEnabled;
-        this.defaultKeyCode = defaultKeyCode;
-        this.keyCode = defaultKeyCode;
+        this.defaultKeyCode = normalizeKeyCode(defaultKeyCode);
+        this.keyCode = this.defaultKeyCode;
     }
 
     public final void toggle() {
@@ -177,9 +178,9 @@ public abstract class Module {
     }
 
     public final void setKeyCode(int keyCode) {
-        this.keyCode = keyCode;
+        this.keyCode = normalizeKeyCode(keyCode);
         if (primaryKeybindSetting != null) {
-            primaryKeybindSetting.setValue(keyCode);
+            primaryKeybindSetting.setValue(this.keyCode);
         }
     }
 
@@ -202,5 +203,11 @@ public abstract class Module {
 
         keyCode = defaultKeyCode;
         setEnabled(defaultEnabled);
+    }
+
+    private static int normalizeKeyCode(int keyCode) {
+        return keyCode >= Keyboard.KEY_NONE && keyCode < Keyboard.KEYBOARD_SIZE
+            ? keyCode
+            : Keyboard.KEY_NONE;
     }
 }

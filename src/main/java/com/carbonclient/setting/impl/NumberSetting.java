@@ -34,6 +34,10 @@ public final class NumberSetting extends Setting<Double> {
 
     @Override
     protected Double validate(Double value) {
+        if (value == null || value.isNaN() || value.isInfinite()) {
+            return getDefaultValue();
+        }
+
         double clamped = Math.max(minimum, Math.min(maximum, value));
         double stepped = minimum
             + Math.round((clamped - minimum) / increment) * increment;

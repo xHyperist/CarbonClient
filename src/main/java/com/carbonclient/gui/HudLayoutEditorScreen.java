@@ -4,6 +4,7 @@ import com.carbonclient.config.ConfigManager;
 import com.carbonclient.module.DraggableHudModule;
 import com.carbonclient.module.Module;
 import com.carbonclient.module.ModuleManager;
+import com.carbonclient.ui.theme.CarbonTheme;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +13,6 @@ import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
 
 public final class HudLayoutEditorScreen extends GuiScreen {
-
-    private static final int OVERLAY_COLOR = 0x70080B14;
-    private static final int CYAN_OUTLINE = 0xFF6EE7FF;
-    private static final int MAGENTA_OUTLINE = 0xFFFF4FA3;
-    private static final int TEXT_COLOR = 0xFFFFFFFF;
 
     private final ModuleManager moduleManager;
     private final ConfigManager configManager;
@@ -34,13 +30,13 @@ public final class HudLayoutEditorScreen extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        Gui.drawRect(0, 0, width, height, OVERLAY_COLOR);
+        Gui.drawRect(0, 0, width, height, CarbonTheme.OVERLAY);
         drawCenteredString(
             fontRendererObj,
             "HUD Layout Editor - Drag modules, press ESC to save and exit",
             width / 2,
             8,
-            TEXT_COLOR
+            CarbonTheme.TEXT
         );
 
         for (DraggableHudModule hud : getHudModules()) {
@@ -51,8 +47,8 @@ public final class HudLayoutEditorScreen extends GuiScreen {
             }
 
             int outlineColor = hud == selectedHud
-                ? MAGENTA_OUTLINE
-                : CYAN_OUTLINE;
+                ? CarbonTheme.PRIMARY
+                : CarbonTheme.ACCENT;
             drawOutline(
                 hud.getPositionX(),
                 hud.getPositionY(),

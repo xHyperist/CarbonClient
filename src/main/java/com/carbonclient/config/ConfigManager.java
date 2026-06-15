@@ -176,6 +176,7 @@ public final class ConfigManager {
                 ((ModeSetting) setting).setValue(value.getAsString());
             }
         } catch (Exception exception) {
+            setting.reset();
             logger.warn(
                 "Ignoring invalid setting {} for module {}",
                 setting.getName(),
