@@ -86,7 +86,7 @@ public final class CoordinatesHudModule
         super(
             "Coordinates HUD",
             "Displays coordinates, facing direction and biome.",
-            ModuleCategory.RENDER,
+            ModuleCategory.HUD,
             true,
             Keyboard.KEY_NONE
         );

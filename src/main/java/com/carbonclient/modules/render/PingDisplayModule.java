@@ -73,7 +73,7 @@ public final class PingDisplayModule
         super(
             "Ping Display",
             "Displays the current multiplayer server latency.",
-            ModuleCategory.RENDER,
+            ModuleCategory.HUD,
             true,
             Keyboard.KEY_NONE
         );

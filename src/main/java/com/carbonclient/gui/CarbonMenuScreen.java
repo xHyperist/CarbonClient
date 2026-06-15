@@ -50,6 +50,8 @@ public final class CarbonMenuScreen extends GuiScreen {
     private static final int TAB_START_OFFSET = 142;
     private static final int TAB_GAP = CarbonTheme.SPACE_4;
     private static final int SEARCH_HEIGHT = 24;
+    private static final int FILTER_HEIGHT = 20;
+    private static final int FILTER_GAP = CarbonTheme.SPACE_6;
     private static final int MODULE_SCROLL_STEP = 36;
     private static final int MAX_SEARCH_LENGTH = 64;
     private static final String[] TAB_LABELS = {
@@ -368,7 +370,8 @@ public final class CarbonMenuScreen extends GuiScreen {
         int searchX = panelX + PADDING;
         int searchY = contentTop + PADDING;
         int searchWidth = panelWidth - PADDING * 2;
-        int gridTop = searchY + SEARCH_HEIGHT + CARD_GAP;
+        int filterY = searchY + SEARCH_HEIGHT + FILTER_GAP;
+        int gridTop = getModuleGridTop(panelY);
         int gridBottom = getModuleGridBottom(panelY);
         int viewportHeight = Math.max(0, gridBottom - gridTop);
         int maximumScroll = getMaximumModuleScroll(
@@ -385,6 +388,13 @@ public final class CarbonMenuScreen extends GuiScreen {
             mouseY,
             searchX,
             searchY,
+            searchWidth
+        );
+        drawModuleFilterBar(
+            mouseX,
+            mouseY,
+            searchX,
+            filterY,
             searchWidth
         );
 
@@ -476,12 +486,7 @@ public final class CarbonMenuScreen extends GuiScreen {
         String text = moduleSearchQuery.isEmpty()
             ? "Search mods..."
             : moduleSearchQuery + (moduleSearchFocused ? "_" : "");
-        int filterWidth = fontRendererObj.getStringWidth(moduleFilter.name())
-            + CarbonTheme.SPACE_12;
-        int textWidth = width
-            - filterWidth
-            - CarbonTheme.SPACE_24
-            - CarbonTheme.SPACE_6;
+        int textWidth = width - CarbonTheme.SPACE_24;
         String visibleText = moduleSearchQuery.isEmpty()
             ? text
             : fontRendererObj.trimStringToWidth(text, textWidth, true);
@@ -494,24 +499,75 @@ public final class CarbonMenuScreen extends GuiScreen {
                 ? CarbonTheme.MUTED_TEXT
                 : CarbonTheme.TEXT
         );
+    }
 
-        String filterLabel = moduleFilter.name();
-        RenderUtils.drawPanel(
-            x + width - filterWidth - CarbonTheme.SPACE_6,
-            y + CarbonTheme.SPACE_4,
-            filterWidth,
-            SEARCH_HEIGHT - CarbonTheme.SPACE_8,
-            CarbonTheme.ROW
-        );
-        RenderUtils.drawCenteredText(
-            fontRendererObj,
-            filterLabel,
-            x + width - filterWidth - CarbonTheme.SPACE_6,
-            y + CarbonTheme.SPACE_4,
-            filterWidth,
-            SEARCH_HEIGHT - CarbonTheme.SPACE_8,
-            CarbonTheme.ACCENT
-        );
+    private void drawModuleFilterBar(
+        int mouseX,
+        int mouseY,
+        int x,
+        int y,
+        int width
+    ) {
+        int buttonX = x;
+        int remainingWidth = width;
+        ModuleFilter[] filters = ModuleFilter.values();
+
+        for (int index = 0; index < filters.length; index++) {
+            ModuleFilter filter = filters[index];
+            int buttonWidth = getModuleFilterWidth(filter);
+            if (index == filters.length - 1) {
+                buttonWidth = Math.min(buttonWidth, remainingWidth);
+            }
+            boolean active = moduleFilter == filter;
+            boolean hovered = isInside(
+                mouseX,
+                mouseY,
+                buttonX,
+                y,
+                buttonWidth,
+                FILTER_HEIGHT
+            );
+
+            RenderUtils.drawPanel(
+                buttonX,
+                y,
+                buttonWidth,
+                FILTER_HEIGHT,
+                active
+                    ? CarbonTheme.ROW
+                    : hovered
+                        ? CarbonTheme.BUTTON_HOVER
+                        : CarbonTheme.TRACK
+            );
+            RenderUtils.drawOutline(
+                buttonX,
+                y,
+                buttonWidth,
+                FILTER_HEIGHT,
+                active
+                    ? CarbonTheme.ACCENT
+                    : hovered
+                        ? CarbonTheme.BORDER_HOVER
+                        : CarbonTheme.BORDER
+            );
+            RenderUtils.drawCenteredText(
+                fontRendererObj,
+                filter.name(),
+                buttonX,
+                y,
+                buttonWidth,
+                FILTER_HEIGHT,
+                active
+                    ? CarbonTheme.TEXT
+                    : hovered
+                        ? CarbonTheme.ACCENT
+                        : CarbonTheme.MUTED_TEXT
+            );
+
+            int consumed = buttonWidth + FILTER_GAP;
+            buttonX += consumed;
+            remainingWidth -= consumed;
+        }
     }
 
     private void drawModuleScrollbar(
@@ -1764,6 +1820,26 @@ public final class CarbonMenuScreen extends GuiScreen {
         }
 
         moduleSearchFocused = false;
+        int filterY = searchY + SEARCH_HEIGHT + FILTER_GAP;
+        int buttonX = searchX;
+        for (ModuleFilter filter : ModuleFilter.values()) {
+            int buttonWidth = getModuleFilterWidth(filter);
+            if (isInside(
+                mouseX,
+                mouseY,
+                buttonX,
+                filterY,
+                buttonWidth,
+                FILTER_HEIGHT
+            )) {
+                if (moduleFilter != filter) {
+                    moduleFilter = filter;
+                    moduleScrollOffset = 0;
+                }
+                return true;
+            }
+            buttonX += buttonWidth + FILTER_GAP;
+        }
         return false;
     }
 
@@ -1772,13 +1848,9 @@ public final class CarbonMenuScreen extends GuiScreen {
         int panelHeight = getPanelHeight();
         int panelX = getPanelX(panelWidth);
         int panelY = getPanelY(panelHeight);
-        int contentTop = panelY + HEADER_HEIGHT;
         int gridWidth = panelWidth - PADDING * 2;
         int cardWidth = (gridWidth - CARD_GAP * (GRID_COLUMNS - 1)) / GRID_COLUMNS;
-        int gridTop = contentTop
-            + PADDING
-            + SEARCH_HEIGHT
-            + CARD_GAP;
+        int gridTop = getModuleGridTop(panelY);
         int gridBottom = getModuleGridBottom(panelY);
         List<Module> modules = getFilteredModules();
 
@@ -1945,11 +2017,7 @@ public final class CarbonMenuScreen extends GuiScreen {
         if (selectedModule == null && activeTab == MainTab.MODS) {
             List<Module> modules = getFilteredModules();
             int panelY = getPanelY(getPanelHeight());
-            int contentTop = panelY + HEADER_HEIGHT;
-            int gridTop = contentTop
-                + PADDING
-                + SEARCH_HEIGHT
-                + CARD_GAP;
+            int gridTop = getModuleGridTop(panelY);
             int viewportHeight = Math.max(
                 0,
                 getModuleGridBottom(panelY) - gridTop
@@ -2323,6 +2391,21 @@ public final class CarbonMenuScreen extends GuiScreen {
         return panelY + getPanelHeight() - FOOTER_HEIGHT - PADDING;
     }
 
+    private int getModuleGridTop(int panelY) {
+        return panelY
+            + HEADER_HEIGHT
+            + PADDING
+            + SEARCH_HEIGHT
+            + FILTER_GAP
+            + FILTER_HEIGHT
+            + CARD_GAP;
+    }
+
+    private int getModuleFilterWidth(ModuleFilter filter) {
+        return fontRendererObj.getStringWidth(filter.name())
+            + CarbonTheme.SPACE_16;
+    }
+
     private int getModuleRowCount(int moduleCount) {
         return (moduleCount + GRID_COLUMNS - 1) / GRID_COLUMNS;
     }
@@ -2371,7 +2454,9 @@ public final class CarbonMenuScreen extends GuiScreen {
     private boolean isMenuModule(Module module) {
         return module.getCategory() == ModuleCategory.RENDER
             || module.getCategory() == ModuleCategory.HUD
-            || module.getCategory() == ModuleCategory.MOVEMENT;
+            || module.getCategory() == ModuleCategory.MOVEMENT
+            || module.getCategory() == ModuleCategory.PVP
+            || module.getCategory() == ModuleCategory.UTILITY;
     }
 
     private boolean matchesModuleFilter(Module module) {
@@ -2383,8 +2468,9 @@ public final class CarbonMenuScreen extends GuiScreen {
             case MOVEMENT:
                 return module.getCategory() == ModuleCategory.MOVEMENT;
             case PVP:
+                return module.getCategory() == ModuleCategory.PVP;
             case UTILITY:
-                return false;
+                return module.getCategory() == ModuleCategory.UTILITY;
             case ALL:
             default:
                 return true;

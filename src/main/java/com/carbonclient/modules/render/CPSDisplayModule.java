@@ -58,7 +58,7 @@ public final class CPSDisplayModule extends Module implements DraggableHudModule
         super(
             "CPS Display",
             "Displays left mouse clicks per second.",
-            ModuleCategory.RENDER,
+            ModuleCategory.HUD,
             true,
             Keyboard.KEY_C
         );

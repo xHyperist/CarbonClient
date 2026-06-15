@@ -4,5 +4,7 @@ public enum ModuleCategory {
     HUD,
     MOVEMENT,
     RENDER,
+    PVP,
+    UTILITY,
     MISCELLANEOUS
 }

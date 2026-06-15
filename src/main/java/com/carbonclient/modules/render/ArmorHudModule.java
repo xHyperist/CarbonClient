@@ -77,7 +77,7 @@ public final class ArmorHudModule extends Module implements DraggableHudModule {
         super(
             "Armor HUD",
             "Displays equipped armor and the held item with durability.",
-            ModuleCategory.RENDER,
+            ModuleCategory.HUD,
             true,
             Keyboard.KEY_NONE
         );

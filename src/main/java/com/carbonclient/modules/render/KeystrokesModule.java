@@ -55,7 +55,7 @@ public final class KeystrokesModule extends Module implements DraggableHudModule
         super(
             "Keystrokes",
             "Displays movement keys and mouse button states.",
-            ModuleCategory.RENDER,
+            ModuleCategory.HUD,
             true,
             Keyboard.KEY_K
         );

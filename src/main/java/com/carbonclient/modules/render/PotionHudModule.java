@@ -83,7 +83,7 @@ public final class PotionHudModule extends Module implements DraggableHudModule 
         super(
             "Potion HUD",
             "Displays active potion effects, levels and remaining time.",
-            ModuleCategory.RENDER,
+            ModuleCategory.HUD,
             true,
             Keyboard.KEY_NONE
         );
