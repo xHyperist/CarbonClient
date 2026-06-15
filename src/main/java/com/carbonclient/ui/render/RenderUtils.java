@@ -21,7 +21,6 @@ public final class RenderUtils {
         boolean hovered,
         int accent
     ) {
-        drawOutline(x, y, width, height, CarbonTheme.BORDER);
         Gui.drawRect(
             x,
             y,
@@ -29,7 +28,20 @@ public final class RenderUtils {
             y + height,
             hovered ? CarbonTheme.CARD_HOVER : CarbonTheme.CARD
         );
-        Gui.drawRect(x, y, x + 3, y + height, accent);
+        drawOutline(
+            x,
+            y,
+            width,
+            height,
+            hovered ? accent : CarbonTheme.BORDER
+        );
+        Gui.drawRect(
+            x,
+            y,
+            x + CarbonTheme.ACCENT_BAR_WIDTH,
+            y + height,
+            accent
+        );
     }
 
     public static void drawButton(
@@ -47,6 +59,13 @@ public final class RenderUtils {
             y + height,
             hovered ? CarbonTheme.BUTTON_HOVER : CarbonTheme.BUTTON
         );
+        drawOutline(
+            x,
+            y,
+            width,
+            height,
+            hovered ? accent : CarbonTheme.BORDER
+        );
         Gui.drawRect(x, y + height - 2, x + width, y + height, accent);
     }
 
@@ -58,14 +77,57 @@ public final class RenderUtils {
         boolean enabled,
         boolean hovered
     ) {
-        drawButton(
+        int accent = enabled ? CarbonTheme.ACCENT : CarbonTheme.PRIMARY;
+        Gui.drawRect(
+            x,
+            y,
+            x + width,
+            y + height,
+            hovered ? CarbonTheme.BUTTON_HOVER : CarbonTheme.TRACK
+        );
+        drawOutline(
             x,
             y,
             width,
             height,
-            hovered,
-            enabled ? CarbonTheme.ACCENT : CarbonTheme.PRIMARY
+            hovered ? accent : CarbonTheme.BORDER
         );
+        Gui.drawRect(x, y, x + 3, y + height, accent);
+    }
+
+    public static void drawRow(
+        int x,
+        int y,
+        int width,
+        int height,
+        boolean hovered,
+        int accent
+    ) {
+        Gui.drawRect(
+            x,
+            y,
+            x + width,
+            y + height,
+            hovered ? CarbonTheme.ROW_HOVER : CarbonTheme.ROW
+        );
+        drawOutline(
+            x,
+            y,
+            width,
+            height,
+            hovered ? accent : CarbonTheme.BORDER
+        );
+        Gui.drawRect(
+            x,
+            y,
+            x + CarbonTheme.SPACE_2,
+            y + height,
+            accent
+        );
+    }
+
+    public static void drawDivider(int x, int y, int width) {
+        Gui.drawRect(x, y, x + width, y + 1, CarbonTheme.DIVIDER);
     }
 
     public static void drawOutline(

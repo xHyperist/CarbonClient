@@ -4,11 +4,11 @@ import com.carbonclient.config.ConfigManager;
 import com.carbonclient.module.DraggableHudModule;
 import com.carbonclient.module.Module;
 import com.carbonclient.module.ModuleManager;
+import com.carbonclient.ui.render.RenderUtils;
 import com.carbonclient.ui.theme.CarbonTheme;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
 
@@ -30,12 +30,30 @@ public final class HudLayoutEditorScreen extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        Gui.drawRect(0, 0, width, height, CarbonTheme.OVERLAY);
-        drawCenteredString(
+        RenderUtils.drawPanel(0, 0, width, height, CarbonTheme.OVERLAY);
+        int toolbarWidth = Math.min(360, width - CarbonTheme.SPACE_24);
+        int toolbarX = (width - toolbarWidth) / 2;
+        RenderUtils.drawPanel(
+            toolbarX,
+            CarbonTheme.SPACE_4,
+            toolbarWidth,
+            24,
+            CarbonTheme.PANEL
+        );
+        RenderUtils.drawOutline(
+            toolbarX,
+            CarbonTheme.SPACE_4,
+            toolbarWidth,
+            24,
+            CarbonTheme.BORDER
+        );
+        RenderUtils.drawCenteredText(
             fontRendererObj,
-            "HUD Layout Editor - Drag modules, press ESC to save and exit",
-            width / 2,
-            8,
+            getToolbarText(),
+            toolbarX,
+            CarbonTheme.SPACE_4,
+            toolbarWidth,
+            24,
             CarbonTheme.TEXT
         );
 
@@ -49,13 +67,22 @@ public final class HudLayoutEditorScreen extends GuiScreen {
             int outlineColor = hud == selectedHud
                 ? CarbonTheme.PRIMARY
                 : CarbonTheme.ACCENT;
-            drawOutline(
+            RenderUtils.drawOutline(
                 hud.getPositionX(),
                 hud.getPositionY(),
                 hud.getHudWidth(),
                 hud.getHudHeight(),
                 outlineColor
             );
+            if (hud == selectedHud) {
+                RenderUtils.drawOutline(
+                    hud.getPositionX() - CarbonTheme.SPACE_2,
+                    hud.getPositionY() - CarbonTheme.SPACE_2,
+                    hud.getHudWidth() + CarbonTheme.SPACE_4,
+                    hud.getHudHeight() + CarbonTheme.SPACE_4,
+                    CarbonTheme.ACCENT
+                );
+            }
         }
 
         super.drawScreen(mouseX, mouseY, partialTicks);
@@ -76,6 +103,7 @@ public final class HudLayoutEditorScreen extends GuiScreen {
                     return;
                 }
             }
+            selectedHud = null;
         }
 
         super.mouseClicked(mouseX, mouseY, mouseButton);
@@ -101,7 +129,6 @@ public final class HudLayoutEditorScreen extends GuiScreen {
 
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int state) {
-        selectedHud = null;
         super.mouseReleased(mouseX, mouseY, state);
     }
 
@@ -140,10 +167,12 @@ public final class HudLayoutEditorScreen extends GuiScreen {
             && mouseY < hud.getPositionY() + hud.getHudHeight();
     }
 
-    private void drawOutline(int x, int y, int width, int height, int color) {
-        Gui.drawRect(x - 1, y - 1, x + width + 1, y, color);
-        Gui.drawRect(x - 1, y + height, x + width + 1, y + height + 1, color);
-        Gui.drawRect(x - 1, y, x, y + height, color);
-        Gui.drawRect(x + width, y, x + width + 1, y + height, color);
+    private String getToolbarText() {
+        if (selectedHud instanceof Module) {
+            return "Selected: "
+                + ((Module) selectedHud).getName()
+                + "  |  ESC to save";
+        }
+        return "HUD Editor  |  Drag a module  |  ESC to save";
     }
 }

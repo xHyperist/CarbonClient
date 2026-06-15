@@ -30,17 +30,26 @@ import org.lwjgl.input.Mouse;
 
 public final class CarbonMenuScreen extends GuiScreen {
 
-    private static final int PANEL_WIDTH = 500;
-    private static final int PANEL_HEIGHT = 410;
-    private static final int HEADER_HEIGHT = 46;
-    private static final int FOOTER_HEIGHT = 28;
-    private static final int PADDING = 16;
-    private static final int GRID_COLUMNS = 3;
-    private static final int CARD_GAP = 10;
-    private static final int CARD_HEIGHT = 126;
-    private static final int BUTTON_HEIGHT = 18;
-    private static final int SETTING_ROW_HEIGHT = 31;
-    private static final int CONTROL_WIDTH = 150;
+    private static final int PANEL_WIDTH = CarbonTheme.MENU_WIDTH;
+    private static final int PANEL_HEIGHT = CarbonTheme.MENU_HEIGHT;
+    private static final int HEADER_HEIGHT = CarbonTheme.HEADER_HEIGHT;
+    private static final int FOOTER_HEIGHT = CarbonTheme.FOOTER_HEIGHT;
+    private static final int PADDING = CarbonTheme.CONTENT_PADDING;
+    private static final int GRID_COLUMNS = CarbonTheme.GRID_COLUMNS;
+    private static final int CARD_GAP = CarbonTheme.CARD_GAP;
+    private static final int CARD_HEIGHT = CarbonTheme.CARD_HEIGHT;
+    private static final int BUTTON_HEIGHT = CarbonTheme.BUTTON_HEIGHT;
+    private static final int SETTING_ROW_HEIGHT =
+        CarbonTheme.SETTING_ROW_HEIGHT;
+    private static final int CONTROL_WIDTH = CarbonTheme.CONTROL_WIDTH;
+    private static final int TAB_START_OFFSET = 142;
+    private static final int TAB_GAP = CarbonTheme.SPACE_4;
+    private static final String[] TAB_LABELS = {
+        "Mods",
+        "Settings",
+        "Profiles",
+        "HUD Editor"
+    };
     private final ModuleManager moduleManager;
     private final ConfigManager configManager;
     private final ButtonComponent buttonComponent = new ButtonComponent();
@@ -86,7 +95,6 @@ public final class CarbonMenuScreen extends GuiScreen {
         int panelHeight = getPanelHeight();
         int panelX = getPanelX(panelWidth);
         int panelY = getPanelY(panelHeight);
-        int panelRight = panelX + panelWidth;
         int panelBottom = panelY + panelHeight;
         int headerBottom = panelY + HEADER_HEIGHT;
         int footerTop = panelBottom - FOOTER_HEIGHT;
@@ -122,25 +130,40 @@ public final class CarbonMenuScreen extends GuiScreen {
         RenderUtils.drawPanel(
             panelX,
             panelY,
-            3,
-            HEADER_HEIGHT,
+            CarbonTheme.ACCENT_BAR_WIDTH,
+            HEADER_HEIGHT / 2,
             CarbonTheme.PRIMARY
         );
+        RenderUtils.drawPanel(
+            panelX,
+            panelY + HEADER_HEIGHT / 2,
+            CarbonTheme.ACCENT_BAR_WIDTH,
+            HEADER_HEIGHT - HEADER_HEIGHT / 2,
+            CarbonTheme.SECONDARY
+        );
+        RenderUtils.drawDivider(panelX, headerBottom, panelWidth);
+        RenderUtils.drawDivider(panelX, footerTop, panelWidth);
 
         RenderUtils.drawText(
             fontRendererObj,
             "CARBON CLIENT",
             panelX + PADDING,
-            panelY + 18,
+            panelY + 12,
             CarbonTheme.TEXT
+        );
+        RenderUtils.drawText(
+            fontRendererObj,
+            "PVP CLIENT",
+            panelX + PADDING,
+            panelY + 27,
+            CarbonTheme.MUTED_TEXT
         );
 
         if (selectedModule == null) {
-            int tabsX = panelX + 150;
-            drawTab("Mods", tabsX, panelY, !settingsTab);
-            drawTab("Settings", tabsX + 55, panelY, settingsTab);
-            drawTab("Profiles", tabsX + 130, panelY, false);
-            drawTab("HUD Editor", tabsX + 205, panelY, false);
+            drawTab(0, panelX, panelY, !settingsTab, true, mouseX, mouseY);
+            drawTab(1, panelX, panelY, settingsTab, true, mouseX, mouseY);
+            drawTab(2, panelX, panelY, false, false, mouseX, mouseY);
+            drawTab(3, panelX, panelY, false, true, mouseX, mouseY);
             if (settingsTab) {
                 drawSettingsView(
                     mouseX,
@@ -176,8 +199,17 @@ public final class CarbonMenuScreen extends GuiScreen {
 
         RenderUtils.drawText(
             fontRendererObj,
-            "Version: " + Reference.VERSION,
+            "Carbon Client v" + Reference.VERSION,
             panelX + PADDING,
+            footerTop + 10,
+            CarbonTheme.MUTED_TEXT
+        );
+        String platform = "Minecraft 1.8.9 Forge";
+        RenderUtils.drawText(
+            fontRendererObj,
+            platform,
+            panelX + panelWidth - PADDING
+                - fontRendererObj.getStringWidth(platform),
             footerTop + 10,
             CarbonTheme.MUTED_TEXT
         );
@@ -185,20 +217,61 @@ public final class CarbonMenuScreen extends GuiScreen {
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
-    private void drawTab(String label, int x, int panelY, boolean selected) {
-        int color = selected ? CarbonTheme.TEXT : CarbonTheme.MUTED_TEXT;
-        int textY = panelY + 18;
+    private void drawTab(
+        int index,
+        int panelX,
+        int panelY,
+        boolean selected,
+        boolean enabled,
+        int mouseX,
+        int mouseY
+    ) {
+        String label = TAB_LABELS[index];
+        int x = getTabX(panelX, index);
+        int y = panelY + CarbonTheme.SPACE_8;
+        int width = getTabWidth(label);
+        int height = HEADER_HEIGHT - CarbonTheme.SPACE_16;
+        boolean hovered = enabled
+            && isInside(mouseX, mouseY, x, y, width, height);
 
-        RenderUtils.drawText(fontRendererObj, label, x, textY, color);
-
-        if (selected) {
-            int underlineY = panelY + HEADER_HEIGHT - 3;
+        if (selected || hovered) {
             RenderUtils.drawPanel(
                 x,
-                underlineY,
-                fontRendererObj.getStringWidth(label),
-                2,
-                CarbonTheme.PRIMARY
+                y,
+                width,
+                height,
+                selected ? CarbonTheme.ROW : CarbonTheme.BUTTON_HOVER
+            );
+            RenderUtils.drawOutline(
+                x,
+                y,
+                width,
+                height,
+                selected ? CarbonTheme.ACCENT : CarbonTheme.BORDER_HOVER
+            );
+        }
+
+        RenderUtils.drawCenteredText(
+            fontRendererObj,
+            label,
+            x,
+            y,
+            width,
+            height,
+            selected
+                ? CarbonTheme.TEXT
+                : enabled
+                    ? hovered ? CarbonTheme.ACCENT : CarbonTheme.MUTED_TEXT
+                    : CarbonTheme.BORDER_HOVER
+        );
+
+        if (selected) {
+            RenderUtils.drawPanel(
+                x + CarbonTheme.SPACE_6,
+                panelY + HEADER_HEIGHT - CarbonTheme.SPACE_4,
+                width - CarbonTheme.SPACE_12,
+                CarbonTheme.SPACE_2,
+                CarbonTheme.ACCENT
             );
         }
     }
@@ -273,20 +346,54 @@ public final class CarbonMenuScreen extends GuiScreen {
         RenderUtils.drawText(
             fontRendererObj,
             module.getName(),
-            x + 10,
-            y + 12,
+            x + CarbonTheme.SPACE_12,
+            y + CarbonTheme.SPACE_12,
             CarbonTheme.TEXT
         );
         RenderUtils.drawText(
             fontRendererObj,
             module.getCategory().name(),
-            x + 10,
+            x + CarbonTheme.SPACE_12,
             y + 30,
             CarbonTheme.MUTED_TEXT
         );
 
         String status = module.isEnabled() ? "ENABLED" : "DISABLED";
-        RenderUtils.drawText(fontRendererObj, status, x + 10, y + 50, accent);
+        int statusWidth = fontRendererObj.getStringWidth(status)
+            + CarbonTheme.SPACE_12;
+        RenderUtils.drawPanel(
+            x + CarbonTheme.SPACE_12,
+            y + 46,
+            statusWidth,
+            16,
+            CarbonTheme.TRACK
+        );
+        RenderUtils.drawOutline(
+            x + CarbonTheme.SPACE_12,
+            y + 46,
+            statusWidth,
+            16,
+            accent
+        );
+        RenderUtils.drawCenteredText(
+            fontRendererObj,
+            status,
+            x + CarbonTheme.SPACE_12,
+            y + 46,
+            statusWidth,
+            16,
+            accent
+        );
+        RenderUtils.drawText(
+            fontRendererObj,
+            fontRendererObj.trimStringToWidth(
+                module.getDescription(),
+                width - CarbonTheme.SPACE_24
+            ),
+            x + CarbonTheme.SPACE_12,
+            y + 70,
+            CarbonTheme.MUTED_TEXT
+        );
 
         int buttonY = y + CARD_HEIGHT - BUTTON_HEIGHT - 10;
         int buttonGap = 6;
@@ -349,9 +456,16 @@ public final class CarbonMenuScreen extends GuiScreen {
         RenderUtils.drawText(
             fontRendererObj,
             selectedModule.getName() + " Options",
-            panelX + PADDING,
+            panelX + PADDING + CarbonTheme.SPACE_8,
             contentTop + 12,
             CarbonTheme.TEXT
+        );
+        RenderUtils.drawPanel(
+            panelX + PADDING,
+            contentTop + CarbonTheme.SPACE_8,
+            CarbonTheme.ACCENT_BAR_WIDTH,
+            18,
+            CarbonTheme.ACCENT
         );
         drawButton(
             "Reset to Defaults",
@@ -360,7 +474,7 @@ public final class CarbonMenuScreen extends GuiScreen {
             130,
             mouseX,
             mouseY,
-            CarbonTheme.PRIMARY
+            CarbonTheme.DANGER
         );
 
         List<Setting<?>> settings = getVisibleSettings();
@@ -516,7 +630,7 @@ public final class CarbonMenuScreen extends GuiScreen {
             180,
             mouseX,
             mouseY,
-            CarbonTheme.PRIMARY
+            CarbonTheme.DANGER
         );
 
         List<Module> modules = getKeybindModules();
@@ -571,9 +685,9 @@ public final class CarbonMenuScreen extends GuiScreen {
         boolean conflict = hasKeybindConflict(module);
         int accent = conflict ? CarbonTheme.DANGER : CarbonTheme.SECONDARY;
         int rowHeight = SETTING_ROW_HEIGHT - 4;
+        boolean hovered = isInside(mouseX, mouseY, x, y, width, rowHeight);
 
-        RenderUtils.drawPanel(x, y, width, rowHeight, CarbonTheme.CARD);
-        RenderUtils.drawOutline(x, y, width, rowHeight, accent);
+        RenderUtils.drawRow(x, y, width, rowHeight, hovered, accent);
         RenderUtils.drawText(
             fontRendererObj,
             module.getName(),
@@ -585,12 +699,29 @@ public final class CarbonMenuScreen extends GuiScreen {
         String keyName = listeningModuleKeybind == module
             ? "Press a key..."
             : getKeyName(module.getKeyCode());
-        int keyX = x + width - 205;
-        RenderUtils.drawText(
+        int keyX = x + width - 210;
+        int keyWidth = 72;
+        RenderUtils.drawPanel(
+            keyX,
+            y + 5,
+            keyWidth,
+            BUTTON_HEIGHT,
+            CarbonTheme.TRACK
+        );
+        RenderUtils.drawOutline(
+            keyX,
+            y + 5,
+            keyWidth,
+            BUTTON_HEIGHT,
+            conflict ? CarbonTheme.DANGER : CarbonTheme.BORDER
+        );
+        RenderUtils.drawCenteredText(
             fontRendererObj,
             keyName,
             keyX,
-            y + 10,
+            y + 5,
+            keyWidth,
+            BUTTON_HEIGHT,
             conflict ? CarbonTheme.DANGER : CarbonTheme.MUTED_TEXT
         );
         drawButton(
@@ -609,7 +740,7 @@ public final class CarbonMenuScreen extends GuiScreen {
             52,
             mouseX,
             mouseY,
-            CarbonTheme.PRIMARY
+            CarbonTheme.SECONDARY
         );
     }
 
@@ -621,7 +752,7 @@ public final class CarbonMenuScreen extends GuiScreen {
             60,
             mouseX,
             mouseY,
-            CarbonTheme.PRIMARY
+            CarbonTheme.SECONDARY
         );
     }
 
@@ -633,18 +764,13 @@ public final class CarbonMenuScreen extends GuiScreen {
         int y,
         int width
     ) {
-        RenderUtils.drawPanel(
+        int rowHeight = SETTING_ROW_HEIGHT - CarbonTheme.SPACE_4;
+        RenderUtils.drawRow(
             x,
             y,
             width,
-            SETTING_ROW_HEIGHT - 4,
-            CarbonTheme.CARD
-        );
-        RenderUtils.drawPanel(
-            x,
-            y,
-            2,
-            SETTING_ROW_HEIGHT - 4,
+            rowHeight,
+            isInside(mouseX, mouseY, x, y, width, rowHeight),
             CarbonTheme.SECONDARY
         );
         RenderUtils.drawText(
@@ -815,28 +941,13 @@ public final class CarbonMenuScreen extends GuiScreen {
         int panelHeight = getPanelHeight();
         int panelX = getPanelX(panelWidth);
         int panelY = getPanelY(panelHeight);
-        int tabsX = panelX + 150;
 
-        if (isInside(
-            mouseX,
-            mouseY,
-            tabsX,
-            panelY + 12,
-            fontRendererObj.getStringWidth("Mods"),
-            22
-        )) {
+        if (isInsideTab(mouseX, mouseY, panelX, panelY, 0)) {
             settingsTab = false;
             resetAllConfirmation = false;
             return true;
         }
-        if (isInside(
-            mouseX,
-            mouseY,
-            tabsX + 55,
-            panelY + 12,
-            fontRendererObj.getStringWidth("Settings"),
-            22
-        )) {
+        if (isInsideTab(mouseX, mouseY, panelX, panelY, 1)) {
             settingsTab = true;
             resetAllConfirmation = false;
             return true;
@@ -930,17 +1041,8 @@ public final class CarbonMenuScreen extends GuiScreen {
         int panelHeight = getPanelHeight();
         int panelX = getPanelX(panelWidth);
         int panelY = getPanelY(panelHeight);
-        int tabsX = panelX + 150;
-        int hudEditorX = tabsX + 205;
 
-        if (isInside(
-            mouseX,
-            mouseY,
-            hudEditorX,
-            panelY + 12,
-            fontRendererObj.getStringWidth("HUD Editor"),
-            22
-        )) {
+        if (isInsideTab(mouseX, mouseY, panelX, panelY, 3)) {
             mc.displayGuiScreen(
                 new HudLayoutEditorScreen(moduleManager, configManager)
             );
@@ -1514,6 +1616,35 @@ public final class CarbonMenuScreen extends GuiScreen {
 
         String name = Keyboard.getKeyName(keyCode);
         return name == null ? "UNKNOWN" : name;
+    }
+
+    private int getTabX(int panelX, int index) {
+        int x = panelX + TAB_START_OFFSET;
+        for (int current = 0; current < index; current++) {
+            x += getTabWidth(TAB_LABELS[current]) + TAB_GAP;
+        }
+        return x;
+    }
+
+    private int getTabWidth(String label) {
+        return fontRendererObj.getStringWidth(label) + CarbonTheme.SPACE_16;
+    }
+
+    private boolean isInsideTab(
+        int mouseX,
+        int mouseY,
+        int panelX,
+        int panelY,
+        int index
+    ) {
+        return isInside(
+            mouseX,
+            mouseY,
+            getTabX(panelX, index),
+            panelY + CarbonTheme.SPACE_8,
+            getTabWidth(TAB_LABELS[index]),
+            HEADER_HEIGHT - CarbonTheme.SPACE_16
+        );
     }
 
     private boolean isInside(

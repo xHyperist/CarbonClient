@@ -20,7 +20,7 @@ public final class ColorPickerComponent {
     private static final int BAR_WIDTH = 12;
     private static final int BAR_HEIGHT = 105;
     private static final int SWATCH_SIZE = 18;
-    private static final int SWATCH_GAP = 7;
+    private static final int SWATCH_GAP = CarbonTheme.SPACE_6;
     private static final int[] PRESETS = {
         0xFFFFFFFF,
         0xFF000000,
@@ -44,12 +44,18 @@ public final class ColorPickerComponent {
     ) {
         RenderUtils.drawPanel(x, y, WIDTH, HEIGHT, CarbonTheme.PANEL);
         RenderUtils.drawOutline(x, y, WIDTH, HEIGHT, CarbonTheme.BORDER);
-        RenderUtils.drawPanel(x, y, 3, HEIGHT, CarbonTheme.PRIMARY);
+        RenderUtils.drawPanel(
+            x,
+            y,
+            CarbonTheme.ACCENT_BAR_WIDTH,
+            HEIGHT,
+            CarbonTheme.PRIMARY
+        );
         RenderUtils.drawText(
             fontRenderer,
             setting.getName(),
-            x + 10,
-            y + 9,
+            x + CarbonTheme.SPACE_12,
+            y + CarbonTheme.SPACE_10,
             CarbonTheme.TEXT
         );
 

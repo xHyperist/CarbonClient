@@ -3,7 +3,6 @@ package com.carbonclient.ui.component;
 import com.carbonclient.ui.render.RenderUtils;
 import com.carbonclient.ui.theme.CarbonTheme;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
 
 public final class SliderComponent {
 
@@ -17,16 +16,28 @@ public final class SliderComponent {
         int controlWidth
     ) {
         double clampedProgress = Math.max(0.0D, Math.min(1.0D, progress));
-        int sliderY = y + 8;
+        int sliderY = y + CarbonTheme.SPACE_8;
         int fillWidth = (int) Math.round(width * clampedProgress);
 
-        Gui.drawRect(x, sliderY, x + width, sliderY + 4, CarbonTheme.BUTTON);
-        Gui.drawRect(x, sliderY, x + fillWidth, sliderY + 4, CarbonTheme.ACCENT);
-        Gui.drawRect(
+        RenderUtils.drawPanel(
+            x,
+            sliderY,
+            width,
+            CarbonTheme.SPACE_4,
+            CarbonTheme.TRACK
+        );
+        RenderUtils.drawPanel(
+            x,
+            sliderY,
+            fillWidth,
+            CarbonTheme.SPACE_4,
+            CarbonTheme.ACCENT
+        );
+        RenderUtils.drawPanel(
             x + fillWidth - 2,
             sliderY - 3,
-            x + fillWidth + 2,
-            sliderY + 7,
+            4,
+            10,
             CarbonTheme.TEXT
         );
         RenderUtils.drawText(
