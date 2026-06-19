@@ -218,16 +218,18 @@ public final class ProfileManager {
             return false;
         }
 
+        JsonObject previousSnapshot = configManager.createSnapshot();
+        String previousActiveProfileName = activeProfileName;
         try {
             JsonObject snapshot = storage.readProfile(profile);
             configManager.applySnapshot(snapshot);
-            configManager.save();
             storage.writeProfile(
                 profile.getName(),
                 configManager.createSnapshot()
             );
             activeProfileName = profile.getName();
             storage.writeActiveProfileName(activeProfileName);
+            configManager.save();
             if (notify) {
                 notificationManager.success(
                     "Profile Loaded",
@@ -236,8 +238,28 @@ public final class ProfileManager {
             }
             return true;
         } catch (Exception exception) {
+            restorePreviousRuntime(
+                previousSnapshot,
+                previousActiveProfileName
+            );
             reportFailure("load", profile.getName(), exception);
             return false;
+        }
+    }
+
+    private void restorePreviousRuntime(
+        JsonObject previousSnapshot,
+        String previousActiveProfileName
+    ) {
+        try {
+            configManager.applySnapshot(previousSnapshot);
+            activeProfileName = previousActiveProfileName;
+            configManager.save();
+        } catch (Exception rollbackException) {
+            logger.error(
+                "Could not restore the previous Carbon profile state.",
+                rollbackException
+            );
         }
     }
 

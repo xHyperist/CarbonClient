@@ -3,6 +3,8 @@ package com.carbonclient.notification;
 import com.carbonclient.event.EventBus;
 import com.carbonclient.event.EventListener;
 import com.carbonclient.event.impl.Render2DEvent;
+import com.carbonclient.gui.CarbonMenuScreen;
+import com.carbonclient.gui.HudLayoutEditorScreen;
 import com.carbonclient.ui.render.RenderUtils;
 import com.carbonclient.ui.theme.CarbonTheme;
 import java.util.List;
@@ -45,6 +47,10 @@ public final class NotificationRenderer {
     }
 
     public void render() {
+        if (minecraft.currentScreen instanceof CarbonMenuScreen
+            || minecraft.currentScreen instanceof HudLayoutEditorScreen) {
+            return;
+        }
         if (minecraft.fontRendererObj == null) {
             return;
         }
@@ -62,7 +68,22 @@ public final class NotificationRenderer {
         long now = System.currentTimeMillis();
         List<Notification> notifications =
             notificationManager.getActiveNotifications(now);
-        int firstIndex = Math.max(0, notifications.size() - MAX_VISIBLE);
+        int availableHeight = Math.max(HEIGHT, screenHeight - MARGIN * 2);
+        int visibleCapacity = Math.max(
+            1,
+            Math.min(
+                MAX_VISIBLE,
+                (availableHeight + GAP) / (HEIGHT + GAP)
+            )
+        );
+        int renderWidth = Math.max(
+            1,
+            Math.min(WIDTH, screenWidth - MARGIN * 2)
+        );
+        int firstIndex = Math.max(
+            0,
+            notifications.size() - visibleCapacity
+        );
         int stackIndex = 0;
 
         for (int index = notifications.size() - 1; index >= firstIndex; index--) {
@@ -73,7 +94,7 @@ public final class NotificationRenderer {
             }
 
             int slide = Math.round((1.0F - visibility) * 22.0F);
-            int x = screenWidth - MARGIN - WIDTH + slide;
+            int x = screenWidth - MARGIN - renderWidth + slide;
             int y = screenHeight
                 - MARGIN
                 - HEIGHT
@@ -83,6 +104,7 @@ public final class NotificationRenderer {
                 notification,
                 x,
                 y,
+                renderWidth,
                 visibility
             );
             stackIndex++;
@@ -94,6 +116,7 @@ public final class NotificationRenderer {
         Notification notification,
         int x,
         int y,
+        int width,
         float visibility
     ) {
         int accent = withAlpha(
@@ -103,14 +126,14 @@ public final class NotificationRenderer {
         RenderUtils.drawPanel(
             x,
             y,
-            WIDTH,
+            width,
             HEIGHT,
             withAlpha(0xEE121A2E, visibility)
         );
         RenderUtils.drawOutline(
             x,
             y,
-            WIDTH,
+            width,
             HEIGHT,
             withAlpha(CarbonTheme.BORDER, visibility)
         );
@@ -124,11 +147,11 @@ public final class NotificationRenderer {
 
         String title = fontRenderer.trimStringToWidth(
             notification.getTitle(),
-            WIDTH - 20
+            width - 20
         );
         String message = fontRenderer.trimStringToWidth(
             notification.getMessage(),
-            WIDTH - 20
+            width - 20
         );
         RenderUtils.drawText(
             fontRenderer,

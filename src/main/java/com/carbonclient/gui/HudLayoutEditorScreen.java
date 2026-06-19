@@ -76,6 +76,7 @@ public final class HudLayoutEditorScreen extends GuiScreen {
 
         for (DraggableHudModule hud : getHudModules()) {
             Module module = (Module) hud;
+            clampToScreen(hud);
 
             if (!module.isEnabled()) {
                 hud.renderHud();
@@ -187,6 +188,19 @@ public final class HudLayoutEditorScreen extends GuiScreen {
             && mouseX < hud.getPositionX() + hud.getHudWidth()
             && mouseY >= hud.getPositionY()
             && mouseY < hud.getPositionY() + hud.getHudHeight();
+    }
+
+    private void clampToScreen(DraggableHudModule hud) {
+        int hudWidth = Math.max(1, hud.getHudWidth());
+        int hudHeight = Math.max(1, hud.getHudHeight());
+        int maxX = Math.max(0, width - hudWidth);
+        int maxY = Math.max(0, height - hudHeight);
+        int x = Math.max(0, Math.min(maxX, hud.getPositionX()));
+        int y = Math.max(0, Math.min(maxY, hud.getPositionY()));
+
+        if (x != hud.getPositionX() || y != hud.getPositionY()) {
+            hud.setPosition(x, y);
+        }
     }
 
     private String getToolbarText() {
