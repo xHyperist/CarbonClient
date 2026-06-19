@@ -2487,9 +2487,7 @@ public final class CarbonMenuScreen extends GuiScreen {
         List<Module> modules = new ArrayList<Module>();
 
         for (Module module : moduleManager.getModules()) {
-            if (!"Example Module".equalsIgnoreCase(module.getName())) {
-                modules.add(module);
-            }
+            modules.add(module);
         }
 
         return modules;

@@ -6,12 +6,11 @@ import com.carbonclient.client.service.ServiceRegistry;
 import com.carbonclient.event.EventBus;
 import com.carbonclient.event.bridge.ForgeEventBridge;
 import com.carbonclient.input.KeyInputHandler;
-import com.carbonclient.module.ModuleManager;
-import com.carbonclient.module.impl.ExampleModule;
 import com.carbonclient.notification.NotificationManager;
 import com.carbonclient.notification.NotificationRenderer;
 import com.carbonclient.profile.ProfileManager;
 import com.carbonclient.profile.ProfileStorage;
+import com.carbonclient.module.ModuleManager;
 import com.carbonclient.modules.movement.ToggleSprintModule;
 import com.carbonclient.modules.render.ArmorHudModule;
 import com.carbonclient.modules.render.CPSDisplayModule;
@@ -70,7 +69,6 @@ public final class Client {
     }
 
     public void initialize(FMLInitializationEvent event) {
-        moduleManager.register(new ExampleModule());
         FPSDisplayModule fpsDisplay = new FPSDisplayModule();
         moduleManager.register(fpsDisplay);
         CPSDisplayModule cpsDisplay = new CPSDisplayModule();
