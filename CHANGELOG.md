@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.5.1 - Safe Bridge Preparation
+
+- Added bridge API skeleton for future game, render, input, event, entity, world, and config abstractions.
+- Added `BridgeRegistry` as a future coordination point for bridge instances.
+- Added 1.8.9 bridge version info placeholder with status `PLANNED`.
+- No active runtime migration yet; existing 1.8.9 systems still use the current direct implementation.
+- No 1.7.10 code, dependency, source-set, or build.gradle changes were introduced.
+- Kept the existing 1.8.9 build stable.
+
 ## v0.5.0 - Multi-Version Architecture Planning
 
 - 1.7.10 implementation has not started yet.

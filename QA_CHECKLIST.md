@@ -3,7 +3,7 @@
 ## Client Launch
 
 - [ ] `.\gradlew.bat runClient` ile client aciliyor.
-- [ ] Loglarda `Carbon Client v0.5.0 is starting.` gorunuyor.
+- [ ] Loglarda `Carbon Client v0.5.1 is starting.` gorunuyor.
 - [ ] Loglarda `Carbon Client initialized successfully.` gorunuyor.
 - [ ] Carbon kaynakli crash yok.
 
@@ -173,3 +173,16 @@
 - [ ] `MULTI_VERSION_ARCHITECTURE_PLAN.md` mevcut.
 - [ ] README multi-version plan dokumanina referans veriyor.
 - [ ] Reference.java ve gradle.properties surumu `0.5.0`.
+
+## v0.5.1 Safe Bridge Preparation QA
+
+- [ ] Bridge packages `com.carbonclient.bridge` altinda mevcut.
+- [ ] Bridge interfaces compile oluyor.
+- [ ] `BridgeRegistry` compile oluyor.
+- [ ] `BridgeVersionInfo` 1.8.9 icin `PLANNED` durumunu tasiyor.
+- [ ] Mevcut 1.8.9 modulleri hala calisiyor.
+- [ ] Henuz hicbir modul bridge sistemine tasinmadi.
+- [ ] 1.7.10 kodu veya dependency eklenmedi.
+- [ ] `build.gradle` ve source-set yapisi degistirilmedi.
+- [ ] Jar `build/libs/carbon-client-0.5.1.jar` olarak uretiliyor.
+- [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.

@@ -6,6 +6,17 @@ Carbon Client v0.5.0 starts planning for a future multi-version client that can 
 
 This document is intentionally planning-only. It does not start the 1.7.10 port, does not convert Gradle into a multi-project build, and does not move the working 1.8.9 code.
 
+## v0.5.1 Safe Bridge Preparation
+
+- Bridge package skeleton added under `com.carbonclient.bridge`.
+- Interfaces added for future Game, Render, Input, Event, Entity, World, and Config abstraction.
+- `BridgeRegistry` added as a future coordination point; the current runtime does not depend on it.
+- `BridgeVersionInfo` marks the future 1.8.9 bridge implementation as `PLANNED`.
+- Existing 1.8.9 runtime still uses the current direct implementation.
+- No 1.7.10 implementation yet.
+- No `build.gradle` or source-set changes.
+- No module migration yet.
+
 ## 2. Current 1.8.9 Status
 
 The 1.8.9 Forge client has a stable Release Candidate baseline:
@@ -248,8 +259,9 @@ Planning interfaces:
 ## 13. v0.5.x Roadmap
 
 - v0.5.0: Multi-version architecture planning.
-- v0.5.1: Identify direct Minecraft/Forge coupling hotspots.
-- v0.5.2: Add minimal bridge contracts if needed.
-- v0.5.3: Move one low-risk HUD render path behind a bridge as a proof of concept.
-- v0.5.4: Validate config/profile compatibility for version-specific modules.
+- v0.5.1: Safe bridge API skeleton and registry preparation.
+- v0.5.2: Identify direct Minecraft/Forge coupling hotspots against the new bridge boundaries.
+- v0.5.3: Add minimal inactive adapter stubs if needed.
+- v0.5.4: Move one low-risk HUD render path behind a bridge as a proof of concept.
+- v0.5.5: Validate config/profile compatibility for version-specific modules.
 - Later: create the separate 1.7.10 environment only after 1.8.9 remains stable through bridge proof of concept.
