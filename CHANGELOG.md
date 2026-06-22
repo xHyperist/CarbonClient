@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.4.3 - Visuals / Time Changer
+
+- Visuals sekmesine Time Changer eklendi.
+- Time Changer klasik ModuleManager modulu degildir; Mods Tab ve HUD Editor'da gorunmez.
+- Day, Night, Sunset, Sunrise ve Custom client-side time modlari eklendi.
+- Time Changer ayarlari config/profile snapshot'larina `visuals.timeChanger` olarak kaydedilir.
+
 ## v0.4.2 - Visuals / Fullbright
 
 - Carbon Menu icine Visuals sekmesi eklendi.

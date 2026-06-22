@@ -25,6 +25,7 @@ import com.carbonclient.ui.render.RenderUtils;
 import com.carbonclient.ui.theme.CarbonTheme;
 import com.carbonclient.visual.VisualManager;
 import com.carbonclient.visual.impl.FullbrightVisual;
+import com.carbonclient.visual.impl.TimeChangerVisual;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,6 +56,7 @@ public final class CarbonMenuScreen extends GuiScreen {
     private static final int FILTER_HEIGHT = 20;
     private static final int FILTER_GAP = CarbonTheme.SPACE_6;
     private static final int MODULE_SCROLL_STEP = 36;
+    private static final int VISUAL_SCROLL_STEP = 34;
     private static final int MAX_SEARCH_LENGTH = 64;
     private static final String[] TAB_LABELS = {
         "Mods",
@@ -80,12 +82,14 @@ public final class CarbonMenuScreen extends GuiScreen {
     private NumberSetting draggingSlider;
     private KeybindSetting listeningKeybind;
     private boolean draggingFullbrightBrightness;
+    private boolean draggingTimeChangerCustomTime;
     private ColorSetting openColorSetting;
     private String colorHexInput = "";
     private boolean colorHexFocused;
     private int colorPickerDrag;
     private int optionsScrollIndex;
     private int moduleScrollOffset;
+    private int visualScrollOffset;
     private int keybindScrollIndex;
     private int profileScrollIndex;
     private String moduleSearchQuery = "";
@@ -908,20 +912,6 @@ public final class CarbonMenuScreen extends GuiScreen {
         int contentTop,
         int panelWidth
     ) {
-        FullbrightVisual fullbright = visualManager.getFullbright();
-        int cardX = panelX + PADDING;
-        int cardY = contentTop + 64;
-        int cardWidth = panelWidth - PADDING * 2;
-        int cardHeight = 132;
-        int toggleX = cardX + cardWidth - 74;
-        int sliderX = cardX + cardWidth - CONTROL_WIDTH - 20;
-        double progress = (
-            fullbright.getBrightnessLevel() - fullbright.getMinimumBrightness()
-        ) / (
-            fullbright.getMaximumBrightness()
-                - fullbright.getMinimumBrightness()
-        );
-
         RenderUtils.drawText(
             fontRendererObj,
             "Visuals",
@@ -935,6 +925,68 @@ public final class CarbonMenuScreen extends GuiScreen {
             panelX + PADDING,
             contentTop + 38,
             CarbonTheme.MUTED_TEXT
+        );
+
+        int cardX = panelX + PADDING;
+        int cardWidth = panelWidth - PADDING * 2;
+        int listTop = contentTop + 64;
+        int listBottom = contentTop
+            - HEADER_HEIGHT
+            + getPanelHeight()
+            - FOOTER_HEIGHT
+            - PADDING;
+        int viewportHeight = Math.max(0, listBottom - listTop);
+        int contentHeight = getVisualsContentHeight();
+        int maximumScroll = Math.max(0, contentHeight - viewportHeight);
+        visualScrollOffset = Math.max(
+            0,
+            Math.min(visualScrollOffset, maximumScroll)
+        );
+
+        RenderUtils.beginScissor(cardX - 2, listTop, cardWidth + 4, viewportHeight);
+        int fullbrightY = listTop - visualScrollOffset;
+        int timeChangerY = fullbrightY + getFullbrightCardHeight() + CARD_GAP;
+        drawFullbrightVisualCard(
+            mouseX,
+            mouseY,
+            cardX,
+            fullbrightY,
+            cardWidth
+        );
+        drawTimeChangerVisualCard(
+            mouseX,
+            mouseY,
+            cardX,
+            timeChangerY,
+            cardWidth
+        );
+        RenderUtils.endScissor();
+
+        drawModuleScrollbar(
+            panelX + panelWidth - CarbonTheme.SPACE_6,
+            listTop,
+            viewportHeight,
+            visualScrollOffset,
+            maximumScroll
+        );
+    }
+
+    private void drawFullbrightVisualCard(
+        int mouseX,
+        int mouseY,
+        int cardX,
+        int cardY,
+        int cardWidth
+    ) {
+        FullbrightVisual fullbright = visualManager.getFullbright();
+        int cardHeight = getFullbrightCardHeight();
+        int toggleX = cardX + cardWidth - 74;
+        int sliderX = cardX + cardWidth - CONTROL_WIDTH - 20;
+        double progress = (
+            fullbright.getBrightnessLevel() - fullbright.getMinimumBrightness()
+        ) / (
+            fullbright.getMaximumBrightness()
+                - fullbright.getMinimumBrightness()
         );
 
         RenderUtils.drawCard(
@@ -1003,6 +1055,135 @@ public final class CarbonMenuScreen extends GuiScreen {
             BUTTON_HEIGHT,
             mouseX,
             mouseY
+        );
+    }
+
+    private void drawTimeChangerVisualCard(
+        int mouseX,
+        int mouseY,
+        int cardX,
+        int cardY,
+        int cardWidth
+    ) {
+        TimeChangerVisual timeChanger = visualManager.getTimeChanger();
+        int cardHeight = getTimeChangerCardHeight();
+        int toggleX = cardX + cardWidth - 74;
+        int controlX = cardX + cardWidth - CONTROL_WIDTH - 20;
+        double progress = (
+            timeChanger.getCustomTime() - timeChanger.getMinimumTime()
+        ) / (timeChanger.getMaximumTime() - timeChanger.getMinimumTime());
+
+        RenderUtils.drawCard(
+            cardX,
+            cardY,
+            cardWidth,
+            cardHeight,
+            isInside(mouseX, mouseY, cardX, cardY, cardWidth, cardHeight),
+            timeChanger.isEnabled() ? CarbonTheme.ACCENT : CarbonTheme.PRIMARY
+        );
+        RenderUtils.drawText(
+            fontRendererObj,
+            "Time Changer",
+            cardX + CarbonTheme.SPACE_16,
+            cardY + 16,
+            CarbonTheme.TEXT
+        );
+        RenderUtils.drawText(
+            fontRendererObj,
+            "Change client-side world time",
+            cardX + CarbonTheme.SPACE_16,
+            cardY + 32,
+            CarbonTheme.MUTED_TEXT
+        );
+        toggleComponent.render(
+            fontRendererObj,
+            timeChanger.isEnabled(),
+            toggleX,
+            cardY + 16,
+            56,
+            BUTTON_HEIGHT,
+            mouseX,
+            mouseY
+        );
+
+        RenderUtils.drawText(
+            fontRendererObj,
+            "Mode",
+            cardX + CarbonTheme.SPACE_16,
+            cardY + 68,
+            CarbonTheme.TEXT
+        );
+        drawButton(
+            timeChanger.getMode(),
+            controlX,
+            cardY + 61,
+            CONTROL_WIDTH,
+            mouseX,
+            mouseY,
+            CarbonTheme.SECONDARY
+        );
+
+        if (timeChanger.isCustomMode()) {
+            RenderUtils.drawText(
+                fontRendererObj,
+                "Custom Time",
+                cardX + CarbonTheme.SPACE_16,
+                cardY + 104,
+                CarbonTheme.TEXT
+            );
+            sliderComponent.render(
+                fontRendererObj,
+                Integer.toString((int) timeChanger.getCustomTime()),
+                progress,
+                controlX,
+                cardY + 97,
+                105,
+                CONTROL_WIDTH
+            );
+        }
+
+        int smoothY = timeChanger.isCustomMode() ? cardY + 140 : cardY + 104;
+        RenderUtils.drawText(
+            fontRendererObj,
+            "Smooth Transition",
+            cardX + CarbonTheme.SPACE_16,
+            smoothY + 8,
+            CarbonTheme.TEXT
+        );
+        toggleComponent.render(
+            fontRendererObj,
+            timeChanger.isSmoothTransition(),
+            toggleX,
+            smoothY,
+            56,
+            BUTTON_HEIGHT,
+            mouseX,
+            mouseY
+        );
+    }
+
+    private int getFullbrightCardHeight() {
+        return 132;
+    }
+
+    private int getTimeChangerCardHeight() {
+        return visualManager.getTimeChanger().isCustomMode() ? 176 : 140;
+    }
+
+    private int getVisualsContentHeight() {
+        return getFullbrightCardHeight()
+            + CARD_GAP
+            + getTimeChangerCardHeight();
+    }
+
+    private int getVisualsViewportHeight() {
+        return Math.max(
+            0,
+            getPanelHeight()
+                - HEADER_HEIGHT
+                - FOOTER_HEIGHT
+                - PADDING
+                - 64
         );
     }
 
@@ -1640,13 +1821,21 @@ public final class CarbonMenuScreen extends GuiScreen {
         int panelX = getPanelX(panelWidth);
         int contentTop = getPanelY(panelHeight) + HEADER_HEIGHT;
         int cardX = panelX + PADDING;
-        int cardY = contentTop + 64;
         int cardWidth = panelWidth - PADDING * 2;
+        int listTop = contentTop + 64;
+        int viewportHeight = getVisualsViewportHeight();
+        int fullbrightY = listTop - visualScrollOffset;
+        int timeChangerY = fullbrightY + getFullbrightCardHeight() + CARD_GAP;
         int toggleX = cardX + cardWidth - 74;
-        int sliderX = cardX + cardWidth - CONTROL_WIDTH - 20;
+        int controlX = cardX + cardWidth - CONTROL_WIDTH - 20;
         FullbrightVisual fullbright = visualManager.getFullbright();
+        TimeChangerVisual timeChanger = visualManager.getTimeChanger();
 
-        if (isInside(mouseX, mouseY, toggleX, cardY + 16, 56, BUTTON_HEIGHT)) {
+        if (!isInside(mouseX, mouseY, cardX, listTop, cardWidth, viewportHeight)) {
+            return false;
+        }
+
+        if (isInside(mouseX, mouseY, toggleX, fullbrightY + 16, 56, BUTTON_HEIGHT)) {
             fullbright.setEnabled(!fullbright.isEnabled());
             configManager.save();
             notificationManager.success(
@@ -1659,17 +1848,63 @@ public final class CarbonMenuScreen extends GuiScreen {
             );
             return true;
         }
-        if (isInside(mouseX, mouseY, sliderX, cardY + 55, 105, 26)) {
-            updateFullbrightBrightness(mouseX, sliderX, 105);
+        if (isInside(mouseX, mouseY, controlX, fullbrightY + 55, 105, 26)) {
+            updateFullbrightBrightness(mouseX, controlX, 105);
             draggingFullbrightBrightness = true;
             return true;
         }
-        if (isInside(mouseX, mouseY, toggleX, cardY + 96, 56, BUTTON_HEIGHT)) {
+        if (isInside(mouseX, mouseY, toggleX, fullbrightY + 96, 56, BUTTON_HEIGHT)) {
             fullbright.setSmoothTransition(!fullbright.isSmoothTransition());
             configManager.save();
             notificationManager.success(
                 "Visual Settings Saved",
                 "Fullbright transition setting updated."
+            );
+            return true;
+        }
+
+        if (isInside(mouseX, mouseY, toggleX, timeChangerY + 16, 56, BUTTON_HEIGHT)) {
+            timeChanger.setEnabled(!timeChanger.isEnabled());
+            configManager.save();
+            notificationManager.success(
+                timeChanger.isEnabled()
+                    ? "Time Changer Enabled"
+                    : "Time Changer Disabled",
+                timeChanger.isEnabled()
+                    ? "Client-side world time override active."
+                    : "Vanilla world time restored."
+            );
+            return true;
+        }
+        if (isInside(mouseX, mouseY, controlX, timeChangerY + 61, CONTROL_WIDTH, BUTTON_HEIGHT)) {
+            timeChanger.cycleMode();
+            visualScrollOffset = Math.min(
+                visualScrollOffset,
+                Math.max(0, getVisualsContentHeight() - getVisualsViewportHeight())
+            );
+            configManager.save();
+            notificationManager.success(
+                "Visual Settings Saved",
+                "Time Changer mode: " + timeChanger.getMode()
+            );
+            return true;
+        }
+        if (timeChanger.isCustomMode()
+            && isInside(mouseX, mouseY, controlX, timeChangerY + 91, 105, 26)) {
+            updateTimeChangerCustomTime(mouseX, controlX, 105);
+            draggingTimeChangerCustomTime = true;
+            return true;
+        }
+
+        int smoothY = timeChanger.isCustomMode()
+            ? timeChangerY + 140
+            : timeChangerY + 104;
+        if (isInside(mouseX, mouseY, toggleX, smoothY, 56, BUTTON_HEIGHT)) {
+            timeChanger.setSmoothTransition(!timeChanger.isSmoothTransition());
+            configManager.save();
+            notificationManager.success(
+                "Visual Settings Saved",
+                "Time Changer transition setting updated."
             );
             return true;
         }
@@ -2228,6 +2463,24 @@ public final class CarbonMenuScreen extends GuiScreen {
             }
             return;
         }
+        if (selectedModule == null && activeTab == MainTab.VISUALS) {
+            int maximumScroll = Math.max(
+                0,
+                getVisualsContentHeight() - getVisualsViewportHeight()
+            );
+            if (wheel < 0) {
+                visualScrollOffset = Math.min(
+                    maximumScroll,
+                    visualScrollOffset + VISUAL_SCROLL_STEP
+                );
+            } else {
+                visualScrollOffset = Math.max(
+                    0,
+                    visualScrollOffset - VISUAL_SCROLL_STEP
+                );
+            }
+            return;
+        }
         if (selectedModule == null && activeTab == MainTab.SETTINGS) {
             List<Module> modules = getKeybindModules();
             int panelY = getPanelY(getPanelHeight());
@@ -2334,6 +2587,16 @@ public final class CarbonMenuScreen extends GuiScreen {
             return;
         }
 
+        if (clickedMouseButton == 0 && draggingTimeChangerCustomTime) {
+            int panelWidth = getPanelWidth();
+            int panelX = getPanelX(panelWidth);
+            int cardX = panelX + PADDING;
+            int cardWidth = panelWidth - PADDING * 2;
+            int sliderX = cardX + cardWidth - CONTROL_WIDTH - 20;
+            updateTimeChangerCustomTime(mouseX, sliderX, 105);
+            return;
+        }
+
         if (clickedMouseButton == 0 && draggingSlider != null && selectedModule != null) {
             int panelWidth = getPanelWidth();
             int panelX = getPanelX(panelWidth);
@@ -2349,7 +2612,8 @@ public final class CarbonMenuScreen extends GuiScreen {
     protected void mouseReleased(int mouseX, int mouseY, int state) {
         if (draggingSlider != null
             || colorPickerDrag != 0
-            || draggingFullbrightBrightness) {
+            || draggingFullbrightBrightness
+            || draggingTimeChangerCustomTime) {
             configManager.save();
         }
         if (draggingFullbrightBrightness) {
@@ -2358,8 +2622,15 @@ public final class CarbonMenuScreen extends GuiScreen {
                 "Fullbright brightness updated."
             );
         }
+        if (draggingTimeChangerCustomTime) {
+            notificationManager.success(
+                "Visual Settings Saved",
+                "Time Changer custom time updated."
+            );
+        }
         draggingSlider = null;
         draggingFullbrightBrightness = false;
+        draggingTimeChangerCustomTime = false;
         colorPickerDrag = 0;
         super.mouseReleased(mouseX, mouseY, state);
     }
@@ -2389,6 +2660,20 @@ public final class CarbonMenuScreen extends GuiScreen {
             + (fullbright.getMaximumBrightness()
                 - fullbright.getMinimumBrightness()) * progress;
         fullbright.setBrightnessLevel(value);
+    }
+
+    private void updateTimeChangerCustomTime(
+        int mouseX,
+        int sliderX,
+        int sliderWidth
+    ) {
+        TimeChangerVisual timeChanger = visualManager.getTimeChanger();
+        double progress = (mouseX - sliderX) / (double) sliderWidth;
+        progress = Math.max(0.0D, Math.min(1.0D, progress));
+        double value = timeChanger.getMinimumTime()
+            + (timeChanger.getMaximumTime()
+                - timeChanger.getMinimumTime()) * progress;
+        timeChanger.setCustomTime(value);
     }
 
     private void cycleMode(ModeSetting setting) {

@@ -31,7 +31,7 @@ Jar uretmek:
 Cikti jar dosyasi:
 
 ```text
-build/libs/carbon-client-0.4.2.jar
+build/libs/carbon-client-0.4.3.jar
 ```
 
 ## Mevcut Ozellikler
@@ -43,7 +43,7 @@ build/libs/carbon-client-0.4.2.jar
 - Profiles system
 - Notification / Toast system
 - Carbon Menu
-- Visuals tab ve Fullbright quick setting
+- Visuals tab, Fullbright ve Time Changer quick settings
 - Mods Tab search, scroll ve category filters
 - Options screen
 - Keybinds panel ve conflict warning
@@ -79,7 +79,7 @@ Onemli dosyalar:
 2. Minecraft ana menusu acildiginda Carbon Client loglarini kontrol et.
 3. Oyun icinde `RSHIFT` ile Carbon Menu'yu ac.
 4. Mods Tab, Options, Keybinds, Profiles, Color Picker ve HUD Editor akislarini test et.
-5. Jar ile test etmek icin `build/libs/carbon-client-0.4.2.jar` dosyasini Minecraft 1.8.9 Forge `mods` klasorune koy.
+5. Jar ile test etmek icin `build/libs/carbon-client-0.4.3.jar` dosyasini Minecraft 1.8.9 Forge `mods` klasorune koy.
 
 ## Yasak / Istenmeyen Yon
 

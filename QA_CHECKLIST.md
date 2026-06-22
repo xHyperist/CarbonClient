@@ -24,6 +24,15 @@
 - [ ] Smooth Transition toggle calisiyor.
 - [ ] Config/Profile degisimlerinde Fullbright ayarlari korunuyor.
 - [ ] Reset All Settings Fullbright'i default false durumuna donduruyor.
+- [ ] Time Changer Visuals sekmesinde gorunuyor.
+- [ ] Time Changer Mods Tab'da mod karti olarak gorunmuyor.
+- [ ] Time Changer HUD Editor'da gorunmuyor.
+- [ ] Time Changer ON/OFF toggle calisiyor.
+- [ ] Day, Night, Sunset, Sunrise modlari client-side zamani degistiriyor.
+- [ ] Custom mode icinde Custom Time slider calisiyor.
+- [ ] Time Changer kapaninca vanilla/server time akisina geri donuyor.
+- [ ] Config/Profile degisimlerinde Time Changer ayarlari korunuyor.
+- [ ] Reset All Settings Time Changer'i default false durumuna donduruyor.
 
 ## Mods Tab
 
