@@ -1,5 +1,28 @@
 # Changelog
 
+## v0.4.10 - Final 1.8.9 Release Candidate QA
+
+- Yeni ozellik eklenmedi.
+- Multi-version architecture planning oncesi final 1.8.9 Release Candidate QA yapildi.
+- README, QA checklist ve release notes dokumantasyonu temizlendi.
+- Config/profile backward compatibility akisi kontrol edildi.
+- HUD modules QA, Visuals QA ve PvP info HUD safety check tamamlandi.
+- Scoreboard, BlockOverlay, Chat, Weather, Zoom veya Capture sistemi geri eklenmedi.
+- Build verification `clean build` ile dogrulanacak sekilde surum `0.4.10` yapildi.
+
+## v0.4.x Summary
+
+- v0.4.0 Stable Core: Module, Event, Setting, Config/Profile, Carbon Menu ve HUD Editor stabilize edildi.
+- v0.4.2 Fullbright Visual: Visuals sekmesine Fullbright eklendi.
+- v0.4.3 Time Changer Visual: Client-side time visual ayari eklendi.
+- v0.4.4 HUD polish: FPS/CPS polish ve Keystrokes Space eklendi.
+- v0.4.5 Reach Display: Son hit mesafesi bilgi HUD'u eklendi.
+- v0.4.6 Combo Display: Combo bilgi HUD'u eklendi.
+- v0.4.7 PvP HUD QA: Reach + Combo event zinciri ve runtime state kontrol edildi.
+- v0.4.8 Clock HUD: Local time bilgi HUD'u eklendi.
+- v0.4.9 HUD Modules QA: HUD modules, Options ve Config/Profile akislari tekrar kontrol edildi.
+- v0.4.10 Release Candidate QA: 1.8.9 final RC dokumantasyon ve build dogrulamasi yapildi.
+
 ## v0.4.9 - HUD Modules QA Pass
 
 - HUD Editor, Options, Config/Profile/Reset ve Mods Tab akislari mevcut HUD modulleriyle tekrar kontrol edildi.

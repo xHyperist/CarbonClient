@@ -1,6 +1,8 @@
 # Carbon Client
 
-Carbon Client, Minecraft 1.8.9 Forge tabanli, PvP odakli ve moduler bir client projesidir. v0.4.x serisi stable core release hattidir: module, setting, config, profile, notification, menu ve HUD altyapilari 1.8.9 tarafinda birlikte calisacak sekilde toparlanmistir.
+Carbon Client, Minecraft 1.8.9 Forge uzerine gelistirilmis premium PvP/HUD client altyapisidir. v0.4.10, 1.8.9 tarafi icin Release Candidate QA noktasidir: module, setting, config, profile, notification, menu, visuals ve HUD altyapilari birlikte calisacak sekilde toparlanmistir.
+
+Carbon Client bir cheat/hile client degildir. Fly, speed, reach, velocity, autoclicker, aim assist veya combat avantaji saglayan ozellikler hedeflenmez.
 
 ## Hedef Surumler
 
@@ -31,7 +33,13 @@ Jar uretmek:
 Cikti jar dosyasi:
 
 ```text
-build/libs/carbon-client-0.4.9.jar
+build/libs/carbon-client-0.4.10.jar
+```
+
+Temiz build almak:
+
+```powershell
+.\gradlew.bat clean build
 ```
 
 ## Mevcut Ozellikler
@@ -62,6 +70,14 @@ build/libs/carbon-client-0.4.9.jar
 - Clock HUD
 - Crosshair Editor ve preview
 
+## Auth / Account Karari
+
+- Carbon register sistemi olmayacak.
+- Ileride launcher tarafinda Premium Minecraft Account baglantisi olacak.
+- Guest Mode olacak.
+- Premium hesap baglantisi Microsoft/Mojang uyumlu resmi hesap akisi mantigiyla planlanacak.
+- Rank ve cosmetic sistemleri bu auth yapisina gore ileride kurgulanacak.
+
 ## Projeyi Nasil Takip Ederim?
 
 Bu asamada proje launcher degil, Forge 1.8.9 mod/client olarak calisir. Ana gelistirme akisi `runClient` ile test etmek ve `build` ile jar uretmektir.
@@ -82,7 +98,7 @@ Onemli dosyalar:
 2. Minecraft ana menusu acildiginda Carbon Client loglarini kontrol et.
 3. Oyun icinde `RSHIFT` ile Carbon Menu'yu ac.
 4. Mods Tab, Options, Keybinds, Profiles, Color Picker ve HUD Editor akislarini test et.
-5. Jar ile test etmek icin `build/libs/carbon-client-0.4.9.jar` dosyasini Minecraft 1.8.9 Forge `mods` klasorune koy.
+5. Jar ile test etmek icin `build/libs/carbon-client-0.4.10.jar` dosyasini Minecraft 1.8.9 Forge `mods` klasorune koy.
 
 ## Yasak / Istenmeyen Yon
 
@@ -99,7 +115,11 @@ Carbon Client bir cheat/hile client degildir. Asagidaki ozellikler hedeflenmez:
 ## Roadmap
 
 - v0.4.x: 1.8.9 polish, stabilite ve UX iyilestirmeleri
-- v0.5.x: 1.7.10 port architecture hazirligi
+- v0.5.x: Multi-version architecture planning ve 1.7.10 port hazirligi
 - v0.6.x: 1.7.10 first boot ve feature parity
 - Later / research required: Scoreboard customization after safe vanilla render hook research
+- Later / research required: Zoom after OptiFine/launcher compatibility planning
+- Later: Block Overlay
+- Later: Chat Mod
+- Later: Weather Changer
 - Sonraki asama: Carbon Launcher ve version selector

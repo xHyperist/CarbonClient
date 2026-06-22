@@ -3,7 +3,7 @@
 ## Client Launch
 
 - [ ] `.\gradlew.bat runClient` ile client aciliyor.
-- [ ] Loglarda `Carbon Client v0.4.9 is starting.` gorunuyor.
+- [ ] Loglarda `Carbon Client v0.4.10 is starting.` gorunuyor.
 - [ ] Loglarda `Carbon Client initialized successfully.` gorunuyor.
 - [ ] Carbon kaynakli crash yok.
 
@@ -135,3 +135,28 @@
 ## Later / Research Required
 
 - [ ] Scoreboard customization guvenli vanilla render hook arastirmasindan sonra yeniden degerlendirilecek.
+
+## v0.4.10 Final Release Candidate QA
+
+- [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
+- [ ] Jar `build/libs/carbon-client-0.4.10.jar` olarak uretiliyor.
+- [ ] `RSHIFT` Carbon Menu'yu aciyor.
+- [ ] Mods Tab search/category/scroll duplicate kart gostermiyor.
+- [ ] Options ekraninda Position X/Y hicbir modda gorunmuyor.
+- [ ] Keybinds panel ve conflict warning calisiyor.
+- [ ] Profiles create/duplicate/load/save/delete akislari calisiyor.
+- [ ] Visuals sekmesinde Fullbright ve Time Changer calisiyor.
+- [ ] Fullbright ve Time Changer Mods Tab/HUD Editor'da gorunmuyor.
+- [ ] Notification stack mod toggle, reset, profile ve HUD save akislariyla calisiyor.
+- [ ] HUD Editor tum draggable HUD modullerini tasiyabiliyor.
+- [ ] Crosshair HUD Editor'da gorunmuyor ve center-fixed kaliyor.
+- [ ] Color Picker aciliyor, drag/scroll davranisi bozulmuyor.
+- [ ] Eski Scoreboard/Zoom/Reach config alanlari crash atmadan yok sayiliyor.
+- [ ] Save sonrasi kaldirilmis eski mod/ayar alanlari tekrar yazilmiyor.
+- [ ] Reach/Combo/Clock runtime degerleri config/profile'a kalici yazilmiyor.
+- [ ] Singleplayer acilista crash yok.
+- [ ] Multiplayer baglantida crash yok.
+- [ ] Restart sonrasi config/profile persistence korunuyor.
+- [ ] PvP HUD modulleri attack/damage event cancel etmiyor.
+- [ ] Packet/reach/hitbox/aim assist/autoclicker/aura/triggerbot davranisi yok.
+- [ ] Scoreboard, BlockOverlay, Chat, Weather, Zoom ve Capture aktif mod olarak geri gelmedi.
