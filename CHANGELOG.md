@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.4.8 - Clock HUD
+
+- HUD kategorisine Clock HUD bilgi modulu eklendi.
+- Local sistem saati 24H/12H, seconds ve prefix secenekleriyle gosterilebilir.
+- Clock HUD Minecraft world time veya Time Changer ile baglantili degildir; sadece client-side local time render eder.
+- Clock HUD, HUD Editor, Config, Profiles ve Reset sistemleriyle uyumludur.
+
 ## v0.4.7 - PvP HUD QA Pass
 
 - Reach Display ve Combo Display ortak AttackEntityEvent zinciri uzerinden birlikte kontrol edildi.

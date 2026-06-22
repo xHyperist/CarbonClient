@@ -3,7 +3,7 @@
 ## Client Launch
 
 - [ ] `.\gradlew.bat runClient` ile client aciliyor.
-- [ ] Loglarda `Carbon Client v0.4.7 is starting.` gorunuyor.
+- [ ] Loglarda `Carbon Client v0.4.8 is starting.` gorunuyor.
 - [ ] Loglarda `Carbon Client initialized successfully.` gorunuyor.
 - [ ] Carbon kaynakli crash yok.
 
@@ -101,6 +101,11 @@
 - [ ] Reset Delay suresi gecince Combo Display sayaci 0'a donuyor.
 - [ ] Local player entity kaynakli hasar alinca Combo Display sayaci 0'a donuyor.
 - [ ] Combo Display hit/damage eventlerini cancel etmiyor ve runtime combo count config/profile'a kaydedilmiyor.
+- [ ] Clock HUD HUD kategorisinde gorunuyor ve HUD Editor'da tasinabiliyor.
+- [ ] Clock HUD default disabled geliyor.
+- [ ] Clock HUD local sistem saatini gosteriyor ve Time Changer ile karismiyor.
+- [ ] Clock HUD Show Seconds, 24H/12H, Show Prefix ve Prefix Text ayarlari calisiyor.
+- [ ] Clock HUD Options icinde Position X/Y gorunmuyor.
 - [ ] FPS/CPS background acik ve kapali iken bounds/padding dogru.
 - [ ] FPS/CPS Style Mode Modern, Classic ve Minimal calisiyor.
 - [ ] Keystrokes icinde SPACE satiri gorunuyor.

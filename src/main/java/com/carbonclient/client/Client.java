@@ -18,6 +18,7 @@ import com.carbonclient.modules.render.CPSDisplayModule;
 import com.carbonclient.modules.render.ComboDisplayModule;
 import com.carbonclient.modules.render.CoordinatesHudModule;
 import com.carbonclient.modules.render.CrosshairModule;
+import com.carbonclient.modules.render.ClockHudModule;
 import com.carbonclient.modules.render.FPSDisplayModule;
 import com.carbonclient.modules.render.KeystrokesModule;
 import com.carbonclient.modules.render.PingDisplayModule;
@@ -97,6 +98,8 @@ public final class Client {
         moduleManager.register(reachDisplay);
         ComboDisplayModule comboDisplay = new ComboDisplayModule();
         moduleManager.register(comboDisplay);
+        ClockHudModule clockHud = new ClockHudModule();
+        moduleManager.register(clockHud);
         configManager.load();
         profileManager.initialize();
         registerConfigShutdownHook();
@@ -167,6 +170,12 @@ public final class Client {
             comboDisplay.getName(),
             comboDisplay.isEnabled(),
             comboDisplay.getKeyCode()
+        );
+        logger.info(
+            "Registered module: {} (enabled: {}, keyCode: {})",
+            clockHud.getName(),
+            clockHud.isEnabled(),
+            clockHud.getKeyCode()
         );
         logger.info("{} initialized successfully.", Reference.MOD_NAME);
     }
