@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.4.5 - Reach Display
+
+- PVP kategorisine Reach Display bilgi HUD'u eklendi.
+- Son basarili hit mesafesi client-side olarak gosterilir.
+- Reach artırma, hitbox degistirme, packet gonderme veya combat davranisina mudahale yoktur.
+- Reach Display HUD Editor, Config, Profiles ve Reset sistemleriyle uyumludur.
+
 ## v0.4.4 - HUD Polish
 
 - FPS Display ve CPS Display icin Style Mode ayari eklendi.

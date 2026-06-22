@@ -8,6 +8,7 @@ import com.carbonclient.event.impl.Render2DEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.MouseInputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -57,6 +58,16 @@ public final class ForgeEventBridge {
         if (button == 0 || button == 1) {
             eventBus.post(new MouseButtonEvent(button));
         }
+    }
+
+    @SubscribeEvent
+    public void onAttackEntity(AttackEntityEvent event) {
+        eventBus.post(
+            new com.carbonclient.event.impl.AttackEntityEvent(
+                event.entityPlayer,
+                event.target
+            )
+        );
     }
 
     @SubscribeEvent

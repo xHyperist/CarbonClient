@@ -21,6 +21,7 @@ import com.carbonclient.modules.render.FPSDisplayModule;
 import com.carbonclient.modules.render.KeystrokesModule;
 import com.carbonclient.modules.render.PingDisplayModule;
 import com.carbonclient.modules.render.PotionHudModule;
+import com.carbonclient.modules.render.ReachDisplayModule;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -91,6 +92,8 @@ public final class Client {
         moduleManager.register(pingDisplay);
         CrosshairModule crosshair = new CrosshairModule();
         moduleManager.register(crosshair);
+        ReachDisplayModule reachDisplay = new ReachDisplayModule();
+        moduleManager.register(reachDisplay);
         configManager.load();
         profileManager.initialize();
         registerConfigShutdownHook();
@@ -149,6 +152,12 @@ public final class Client {
             crosshair.getName(),
             crosshair.isEnabled(),
             crosshair.getKeyCode()
+        );
+        logger.info(
+            "Registered module: {} (enabled: {}, keyCode: {})",
+            reachDisplay.getName(),
+            reachDisplay.isEnabled(),
+            reachDisplay.getKeyCode()
         );
         logger.info("{} initialized successfully.", Reference.MOD_NAME);
     }
