@@ -1,6 +1,7 @@
 package com.carbonclient.client;
 
 import com.carbonclient.common.Reference;
+import com.carbonclient.bridge.impl.v1_8_9.V189BridgeBootstrap;
 import com.carbonclient.config.ConfigManager;
 import com.carbonclient.client.service.ServiceRegistry;
 import com.carbonclient.event.EventBus;
@@ -72,6 +73,7 @@ public final class Client {
         );
         keyInputHandler.setConfigManager(configManager);
         keyInputHandler.setProfileManager(profileManager);
+        bootstrapBridge();
         logger.info("{} v{} is starting.", Reference.MOD_NAME, Reference.VERSION);
     }
 
@@ -229,5 +231,14 @@ public final class Client {
                 "Carbon Client Config Saver"
             )
         );
+    }
+
+    private void bootstrapBridge() {
+        try {
+            V189BridgeBootstrap.bootstrap();
+            logger.info("Passive 1.8.9 bridge registered.");
+        } catch (RuntimeException exception) {
+            logger.warn("Passive 1.8.9 bridge registration failed.", exception);
+        }
     }
 }

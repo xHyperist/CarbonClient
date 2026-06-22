@@ -27,6 +27,15 @@ This document is intentionally planning-only. It does not start the 1.7.10 port,
 - Bridge API remains an inactive skeleton.
 - Next safe step should be low-risk bridge implementation, starting with Game/Input/Render basics.
 
+## v0.5.3 Passive 1.8.9 Bridge Implementation
+
+- Basic 1.8.9 `GameBridge`, `InputBridge`, and `RenderBridge` implementations were added.
+- `V189BridgeBootstrap` registers the passive bridges through `BridgeRegistry`.
+- Existing modules still use direct 1.8.9 code.
+- `RenderUtils`, `CarbonMenuScreen`, `HudLayoutEditorScreen`, `ForgeEventBridge`, and HUD modules were not migrated.
+- No runtime behavior migration yet.
+- No 1.7.10 implementation yet.
+
 ## 2. Current 1.8.9 Status
 
 The 1.8.9 Forge client has a stable Release Candidate baseline:
@@ -271,7 +280,7 @@ Planning interfaces:
 - v0.5.0: Multi-version architecture planning.
 - v0.5.1: Safe bridge API skeleton and registry preparation.
 - v0.5.2: Bridge dependency mapping and migration order documentation.
-- v0.5.3: Add low-risk inactive 1.8.9 bridge implementations if needed.
+- v0.5.3: Passive 1.8.9 Game/Input/Render bridge implementation.
 - v0.5.4: Move one low-risk HUD render path behind a bridge as a proof of concept.
 - v0.5.5: Validate config/profile compatibility for version-specific modules.
 - Later: create the separate 1.7.10 environment only after 1.8.9 remains stable through bridge proof of concept.

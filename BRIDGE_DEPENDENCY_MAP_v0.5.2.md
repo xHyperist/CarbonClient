@@ -288,11 +288,13 @@ Responsibilities:
 
 ### Phase B - Low-Risk Bridge Implementation
 
-- Add inactive 1.8.9 implementations for:
-  - `GameBridge` basic info
-  - `InputBridge` key name/key state
-  - `RenderBridge` text/rect/string width/font height
-- Register them only after proving they do not change runtime behavior.
+- Started in v0.5.3 with passive 1.8.9 implementations:
+  - `V189GameBridge`
+  - `V189InputBridge`
+  - `V189RenderBridge`
+  - `V189BridgeBootstrap`
+- These bridges are registered through `BridgeRegistry`.
+- Existing modules are not migrated yet and still use the direct 1.8.9 path.
 
 ### Phase C - Low-Risk HUD Modules
 

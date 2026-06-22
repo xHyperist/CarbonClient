@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.5.3 - Passive 1.8.9 Bridge Implementation
+
+- Added `V189GameBridge`.
+- Added `V189InputBridge`.
+- Added `V189RenderBridge`.
+- Added `V189BridgeBootstrap`.
+- Registered passive Game/Input/Render bridges through `BridgeRegistry`.
+- Updated `BridgeVersionInfo` status to `PASSIVE_IMPLEMENTATION`.
+- No modules were migrated to bridge APIs yet.
+- Existing 1.8.9 build remains stable.
+
 ## v0.5.2 - Bridge Documentation + Dependency Mapping
 
 - Added `BRIDGE_DEPENDENCY_MAP_v0.5.2.md`.
