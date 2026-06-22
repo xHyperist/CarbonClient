@@ -114,7 +114,11 @@ public final class ComboDisplayModule
 
     @Override
     public void renderHud() {
-        updateTimedReset();
+        if (minecraft.theWorld == null || minecraft.thePlayer == null) {
+            resetCombo();
+        } else {
+            updateTimedReset();
+        }
 
         String text = getDisplayText();
         int padding = getPadding();

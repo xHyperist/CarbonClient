@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.4.7 - PvP HUD QA Pass
+
+- Reach Display ve Combo Display ortak AttackEntityEvent zinciri uzerinden birlikte kontrol edildi.
+- Reach Display eye-to-bounding-box mesafe hesabini korur ve world/player yokken runtime mesafeyi guvenli sifirlar.
+- Combo Display pending hit, hurtTime confirmation ve debounce mantigini korur; world/player yokken runtime combo state guvenli temizlenir.
+- Runtime PvP HUD degerleri config/profile snapshot'larina yazilmaz; sadece ayarlar ve HUD pozisyonlari kalici tutulur.
+- Attack/damage eventleri cancel edilmez; packet, reach, hitbox veya combat davranisina mudahale yoktur.
+
 ## v0.4.6 - Combo Display
 
 - PVP kategorisine Combo Display bilgi HUD'u eklendi.

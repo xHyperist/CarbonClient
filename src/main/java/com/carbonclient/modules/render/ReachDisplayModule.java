@@ -84,6 +84,10 @@ public final class ReachDisplayModule
 
     @Override
     public void renderHud() {
+        if (minecraft.theWorld == null || minecraft.thePlayer == null) {
+            lastReach = 0.0D;
+        }
+
         String text = getDisplayText();
         int padding = getPadding();
         int textWidth = minecraft.fontRendererObj.getStringWidth(text);
