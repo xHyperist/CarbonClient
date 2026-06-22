@@ -8,6 +8,7 @@ import com.carbonclient.module.Module;
 import com.carbonclient.module.ModuleCategory;
 import com.carbonclient.setting.impl.BooleanSetting;
 import com.carbonclient.setting.impl.ColorSetting;
+import com.carbonclient.setting.impl.ModeSetting;
 import com.carbonclient.setting.impl.NumberSetting;
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -20,10 +21,23 @@ public final class CPSDisplayModule extends Module implements DraggableHudModule
 
     private static final long CPS_WINDOW_MILLIS = 1000L;
     private static final int PADDING = 3;
+    private static final String STYLE_MODERN = "Modern";
+    private static final String STYLE_CLASSIC = "Classic";
+    private static final String STYLE_MINIMAL = "Minimal";
 
     private final Minecraft minecraft = Minecraft.getMinecraft();
     private final BooleanSetting showBackground =
         addSetting(new BooleanSetting("Show Background", true));
+    private final ModeSetting styleMode =
+        addSetting(
+            new ModeSetting(
+                "Style Mode",
+                STYLE_MODERN,
+                STYLE_MODERN,
+                STYLE_CLASSIC,
+                STYLE_MINIMAL
+            )
+        );
     private final NumberSetting scale =
         addSetting(new NumberSetting("Scale", 1.0D, 0.5D, 2.0D, 0.1D));
     private final NumberSetting positionX =
@@ -94,7 +108,7 @@ public final class CPSDisplayModule extends Module implements DraggableHudModule
         float renderScale = scale.getValue().floatValue();
         int renderX = Math.round(getPositionX() / renderScale);
         int renderY = Math.round(getPositionY() / renderScale);
-        int padding = showBackground.isEnabled() ? PADDING : 0;
+        int padding = getPadding();
 
         GlStateManager.pushMatrix();
         GlStateManager.scale(renderScale, renderScale, 1.0F);
@@ -137,7 +151,7 @@ public final class CPSDisplayModule extends Module implements DraggableHudModule
     @Override
     public int getHudWidth() {
         String text = leftClicks.size() + " CPS";
-        int padding = showBackground.isEnabled() ? PADDING : 0;
+        int padding = getPadding();
         return Math.round(
             (minecraft.fontRendererObj.getStringWidth(text) + padding * 2)
                 * scale.getValue().floatValue()
@@ -146,11 +160,24 @@ public final class CPSDisplayModule extends Module implements DraggableHudModule
 
     @Override
     public int getHudHeight() {
-        int padding = showBackground.isEnabled() ? PADDING : 0;
+        int padding = getPadding();
         return Math.round(
             (minecraft.fontRendererObj.FONT_HEIGHT + padding * 2)
                 * scale.getValue().floatValue()
         );
+    }
+
+    private int getPadding() {
+        if (!showBackground.isEnabled()) {
+            return 0;
+        }
+        if (STYLE_MINIMAL.equals(styleMode.getValue())) {
+            return 1;
+        }
+        if (STYLE_CLASSIC.equals(styleMode.getValue())) {
+            return PADDING;
+        }
+        return 4;
     }
 
     private void removeExpiredClicks(Deque<Long> clicks, long now) {

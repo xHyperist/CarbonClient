@@ -87,6 +87,12 @@
 ## HUD Editor
 
 - [ ] FPS, CPS, Keystrokes, ToggleSprint, Armor HUD, Potion HUD, Coordinates HUD ve Ping Display tasinabiliyor.
+- [ ] FPS/CPS background acik ve kapali iken bounds/padding dogru.
+- [ ] FPS/CPS Style Mode Modern, Classic ve Minimal calisiyor.
+- [ ] Keystrokes icinde SPACE satiri gorunuyor.
+- [ ] Space basili iken SPACE satiri Pressed Color ile highlight oluyor.
+- [ ] Show Space false iken Keystrokes bounds kuculuyor.
+- [ ] Keystrokes Style Mode Modern, Classic ve Minimal calisiyor.
 - [ ] Crosshair HUD Editor'da gorunmuyor.
 - [ ] Secili HUD ogesi vurgulaniyor.
 - [ ] Ekran disina tasan HUD pozisyonlari guvenli sekilde clamp ediliyor.

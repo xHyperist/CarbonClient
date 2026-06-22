@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.4.4 - HUD Polish
+
+- FPS Display ve CPS Display icin Style Mode ayari eklendi.
+- FPS/CPS background acik/kapali bounds ve padding davranisi daha tutarli hale getirildi.
+- Keystrokes icin Style Mode, Show Background ve Show Space ayarlari eklendi.
+- Keystrokes HUD'a genis SPACE satiri eklendi; basili durumda Pressed Color ile highlight olur.
+
 ## v0.4.3 - Visuals / Time Changer
 
 - Visuals sekmesine Time Changer eklendi.
