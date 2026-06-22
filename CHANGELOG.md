@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.4.9 - HUD Modules QA Pass
+
+- HUD Editor, Options, Config/Profile/Reset ve Mods Tab akislari mevcut HUD modulleriyle tekrar kontrol edildi.
+- Reach Display, Combo Display ve Clock HUD runtime state davranislari kalici config/profile snapshot'larindan ayri tutulur.
+- Crosshair center-fixed kalir; HUD Editor'a dahil edilmez.
+- Fullbright ve Time Changer Visuals sekmesinde kalir; Mods Tab ve HUD Editor'a dahil edilmez.
+- Scoreboard, BlockOverlay, Chat, Weather, Zoom veya Capture sistemi eklenmedi.
+
 ## v0.4.8 - Clock HUD
 
 - HUD kategorisine Clock HUD bilgi modulu eklendi.
