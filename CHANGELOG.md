@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.5.0 - Multi-Version Architecture Planning
+
+- 1.7.10 implementation has not started yet.
+- Added `MULTI_VERSION_ARCHITECTURE_PLAN.md`.
+- Mapped common systems vs version-specific systems.
+- Added compatibility layer proposal for game, render, input, event, entity, world, and config boundaries.
+- Added module portability matrix and 1.7.10 port risk notes.
+- Added migration phases for safe future bridge work.
+- Kept the existing 1.8.9 build stable.
+
 ## v0.4.10 - Final 1.8.9 Release Candidate QA
 
 - Yeni ozellik eklenmedi.

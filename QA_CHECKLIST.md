@@ -3,7 +3,7 @@
 ## Client Launch
 
 - [ ] `.\gradlew.bat runClient` ile client aciliyor.
-- [ ] Loglarda `Carbon Client v0.4.10 is starting.` gorunuyor.
+- [ ] Loglarda `Carbon Client v0.5.0 is starting.` gorunuyor.
 - [ ] Loglarda `Carbon Client initialized successfully.` gorunuyor.
 - [ ] Carbon kaynakli crash yok.
 
@@ -160,3 +160,16 @@
 - [ ] PvP HUD modulleri attack/damage event cancel etmiyor.
 - [ ] Packet/reach/hitbox/aim assist/autoclicker/aura/triggerbot davranisi yok.
 - [ ] Scoreboard, BlockOverlay, Chat, Weather, Zoom ve Capture aktif mod olarak geri gelmedi.
+
+## v0.5.0 Multi-Version Architecture Planning QA
+
+- [ ] 1.8.9 `.\gradlew.bat clean build` hala BUILD SUCCESSFUL veriyor.
+- [ ] Jar `build/libs/carbon-client-0.5.0.jar` olarak uretiliyor.
+- [ ] 1.7.10 kodu henuz eklenmedi.
+- [ ] `build.gradle` multi-project yapisina cevrilmedi.
+- [ ] Mevcut source set yapisi degistirilmedi.
+- [ ] Launcher/auth/cosmetic kodu eklenmedi.
+- [ ] Scoreboard/Zoom/BlockOverlay/Chat/Weather/Capture aktif mod olarak geri gelmedi.
+- [ ] `MULTI_VERSION_ARCHITECTURE_PLAN.md` mevcut.
+- [ ] README multi-version plan dokumanina referans veriyor.
+- [ ] Reference.java ve gradle.properties surumu `0.5.0`.

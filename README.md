@@ -1,6 +1,6 @@
 # Carbon Client
 
-Carbon Client, Minecraft 1.8.9 Forge uzerine gelistirilmis premium PvP/HUD client altyapisidir. v0.4.10, 1.8.9 tarafi icin Release Candidate QA noktasidir: module, setting, config, profile, notification, menu, visuals ve HUD altyapilari birlikte calisacak sekilde toparlanmistir.
+Carbon Client, Minecraft 1.8.9 Forge uzerine gelistirilmis premium PvP/HUD client altyapisidir. v0.5.0, 1.8.9 stable core uzerinden multi-version architecture planning asamasini baslatir.
 
 Carbon Client bir cheat/hile client degildir. Fly, speed, reach, velocity, autoclicker, aim assist veya combat avantaji saglayan ozellikler hedeflenmez.
 
@@ -33,7 +33,7 @@ Jar uretmek:
 Cikti jar dosyasi:
 
 ```text
-build/libs/carbon-client-0.4.10.jar
+build/libs/carbon-client-0.5.0.jar
 ```
 
 Temiz build almak:
@@ -98,7 +98,15 @@ Onemli dosyalar:
 2. Minecraft ana menusu acildiginda Carbon Client loglarini kontrol et.
 3. Oyun icinde `RSHIFT` ile Carbon Menu'yu ac.
 4. Mods Tab, Options, Keybinds, Profiles, Color Picker ve HUD Editor akislarini test et.
-5. Jar ile test etmek icin `build/libs/carbon-client-0.4.10.jar` dosyasini Minecraft 1.8.9 Forge `mods` klasorune koy.
+5. Jar ile test etmek icin `build/libs/carbon-client-0.5.0.jar` dosyasini Minecraft 1.8.9 Forge `mods` klasorune koy.
+
+## Multi-Version Plan
+
+- Current main version: Minecraft 1.8.9 Forge
+- Next target: Minecraft 1.7.10
+- v0.5.0 starts architecture planning only; it does not start actual 1.7.10 coding.
+- No 1.12.2, 1.16.5, or 1.20.x target is planned right now.
+- See `MULTI_VERSION_ARCHITECTURE_PLAN.md` for common/version-specific system boundaries and migration phases.
 
 ## Yasak / Istenmeyen Yon
 
