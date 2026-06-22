@@ -3,7 +3,7 @@
 ## Client Launch
 
 - [ ] `.\gradlew.bat runClient` ile client aciliyor.
-- [ ] Loglarda `Carbon Client v0.4.0 is starting.` gorunuyor.
+- [ ] Loglarda `Carbon Client v0.4.6 is starting.` gorunuyor.
 - [ ] Loglarda `Carbon Client initialized successfully.` gorunuyor.
 - [ ] Carbon kaynakli crash yok.
 
@@ -93,6 +93,14 @@
 - [ ] Reach Display entity hit sonrasi mesafeyi her zaman iki ondalikli `%BLOCK% Blocks` formatinda guncelliyor.
 - [ ] Reach Display Options icinde sadece Show Background, Scale, Text Color ve Background Color gorunuyor.
 - [ ] Reach Display eski config/profile alanlari crash atmadan yok sayiliyor ve sonraki save'de tekrar yazilmiyor.
+- [ ] Combo Display PVP kategorisinde gorunuyor ve HUD Editor'da tasinabiliyor.
+- [ ] Combo Display default disabled geliyor.
+- [ ] Combo Display acikken `Combo: 0` gosteriyor.
+- [ ] Entity hit sonrasi Combo Display sayaci artiyor.
+- [ ] Reset Delay minimum 10 saniye ve 10 saniyenin altina indirilemiyor.
+- [ ] Reset Delay suresi gecince Combo Display sayaci 0'a donuyor.
+- [ ] Local player entity kaynakli hasar alinca Combo Display sayaci 0'a donuyor.
+- [ ] Combo Display hit/damage eventlerini cancel etmiyor ve runtime combo count config/profile'a kaydedilmiyor.
 - [ ] FPS/CPS background acik ve kapali iken bounds/padding dogru.
 - [ ] FPS/CPS Style Mode Modern, Classic ve Minimal calisiyor.
 - [ ] Keystrokes icinde SPACE satiri gorunuyor.

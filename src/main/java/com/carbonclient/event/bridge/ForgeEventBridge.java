@@ -4,10 +4,12 @@ import com.carbonclient.event.EventBus;
 import com.carbonclient.event.impl.ClientTickEvent;
 import com.carbonclient.event.impl.CrosshairRenderEvent;
 import com.carbonclient.event.impl.MouseButtonEvent;
+import com.carbonclient.event.impl.PlayerDamageEvent;
 import com.carbonclient.event.impl.Render2DEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.MouseInputEvent;
@@ -66,6 +68,22 @@ public final class ForgeEventBridge {
             new com.carbonclient.event.impl.AttackEntityEvent(
                 event.entityPlayer,
                 event.target
+            )
+        );
+    }
+
+    @SubscribeEvent
+    public void onLivingHurt(LivingHurtEvent event) {
+        Minecraft minecraft = Minecraft.getMinecraft();
+        if (minecraft.thePlayer == null || event.entityLiving != minecraft.thePlayer) {
+            return;
+        }
+
+        eventBus.post(
+            new PlayerDamageEvent(
+                minecraft.thePlayer,
+                event.source,
+                event.source == null ? null : event.source.getEntity()
             )
         );
     }

@@ -15,6 +15,7 @@ import com.carbonclient.module.ModuleManager;
 import com.carbonclient.modules.movement.ToggleSprintModule;
 import com.carbonclient.modules.render.ArmorHudModule;
 import com.carbonclient.modules.render.CPSDisplayModule;
+import com.carbonclient.modules.render.ComboDisplayModule;
 import com.carbonclient.modules.render.CoordinatesHudModule;
 import com.carbonclient.modules.render.CrosshairModule;
 import com.carbonclient.modules.render.FPSDisplayModule;
@@ -94,6 +95,8 @@ public final class Client {
         moduleManager.register(crosshair);
         ReachDisplayModule reachDisplay = new ReachDisplayModule();
         moduleManager.register(reachDisplay);
+        ComboDisplayModule comboDisplay = new ComboDisplayModule();
+        moduleManager.register(comboDisplay);
         configManager.load();
         profileManager.initialize();
         registerConfigShutdownHook();
@@ -158,6 +161,12 @@ public final class Client {
             reachDisplay.getName(),
             reachDisplay.isEnabled(),
             reachDisplay.getKeyCode()
+        );
+        logger.info(
+            "Registered module: {} (enabled: {}, keyCode: {})",
+            comboDisplay.getName(),
+            comboDisplay.isEnabled(),
+            comboDisplay.getKeyCode()
         );
         logger.info("{} initialized successfully.", Reference.MOD_NAME);
     }

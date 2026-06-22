@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.4.6 - Combo Display
+
+- PVP kategorisine Combo Display bilgi HUD'u eklendi.
+- Basarili hitlerde combo sayisi artar, local player entity kaynakli hasar alinca sifirlanir.
+- Reset Delay ayariyla yeni hit gelmezse combo client-side olarak sifirlanir.
+- Attack veya damage eventleri cancel edilmez; packet, hitbox, reach veya combat davranisina mudahale yoktur.
+- Combo Display HUD Editor, Config, Profiles ve Reset sistemleriyle uyumludur.
+
 ## v0.4.5 - Reach Display
 
 - PVP kategorisine Reach Display bilgi HUD'u eklendi.
