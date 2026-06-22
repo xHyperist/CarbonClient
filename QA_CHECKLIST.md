@@ -3,7 +3,7 @@
 ## Client Launch
 
 - [ ] `.\gradlew.bat runClient` ile client aciliyor.
-- [ ] Loglarda `Carbon Client v0.5.1 is starting.` gorunuyor.
+- [ ] Loglarda `Carbon Client v0.5.2 is starting.` gorunuyor.
 - [ ] Loglarda `Carbon Client initialized successfully.` gorunuyor.
 - [ ] Carbon kaynakli crash yok.
 
@@ -185,4 +185,18 @@
 - [ ] 1.7.10 kodu veya dependency eklenmedi.
 - [ ] `build.gradle` ve source-set yapisi degistirilmedi.
 - [ ] Jar `build/libs/carbon-client-0.5.1.jar` olarak uretiliyor.
+- [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
+
+## v0.5.2 Bridge Documentation + Dependency Mapping QA
+
+- [ ] `BRIDGE_DEPENDENCY_MAP_v0.5.2.md` mevcut.
+- [ ] Existing bridge interfaces hala compile oluyor.
+- [ ] `BridgeRegistry` hala compile oluyor.
+- [ ] Henuz hicbir modul bridge sistemine tasinmadi.
+- [ ] Bridge implementasyonu yazilmadi.
+- [ ] 1.7.10 kodu veya dependency eklenmedi.
+- [ ] `build.gradle` degistirilmedi.
+- [ ] Source set / multi-project yapisina gecilmedi.
+- [ ] Scoreboard/Zoom/BlockOverlay/Chat/Weather/Capture aktif mod olarak geri gelmedi.
+- [ ] Jar `build/libs/carbon-client-0.5.2.jar` olarak uretiliyor.
 - [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.

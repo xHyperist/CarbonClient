@@ -17,6 +17,16 @@ This document is intentionally planning-only. It does not start the 1.7.10 port,
 - No `build.gradle` or source-set changes.
 - No module migration yet.
 
+## v0.5.2 Bridge Dependency Mapping
+
+- Added `BRIDGE_DEPENDENCY_MAP_v0.5.2.md`.
+- Current 1.8.9 Minecraft/Forge dependencies are classified as common-ready, common with minor adapter, version-specific, or risky to port.
+- Modules are mapped to future Game, Render, Input, Event, Entity, World, and Config bridge needs.
+- No runtime migration yet.
+- No 1.7.10 implementation yet.
+- Bridge API remains an inactive skeleton.
+- Next safe step should be low-risk bridge implementation, starting with Game/Input/Render basics.
+
 ## 2. Current 1.8.9 Status
 
 The 1.8.9 Forge client has a stable Release Candidate baseline:
@@ -260,8 +270,8 @@ Planning interfaces:
 
 - v0.5.0: Multi-version architecture planning.
 - v0.5.1: Safe bridge API skeleton and registry preparation.
-- v0.5.2: Identify direct Minecraft/Forge coupling hotspots against the new bridge boundaries.
-- v0.5.3: Add minimal inactive adapter stubs if needed.
+- v0.5.2: Bridge dependency mapping and migration order documentation.
+- v0.5.3: Add low-risk inactive 1.8.9 bridge implementations if needed.
 - v0.5.4: Move one low-risk HUD render path behind a bridge as a proof of concept.
 - v0.5.5: Validate config/profile compatibility for version-specific modules.
 - Later: create the separate 1.7.10 environment only after 1.8.9 remains stable through bridge proof of concept.

@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.5.2 - Bridge Documentation + Dependency Mapping
+
+- Added `BRIDGE_DEPENDENCY_MAP_v0.5.2.md`.
+- Classified common-ready, adapter-needed, version-specific, and risky port systems.
+- Mapped current modules and UI/event systems to future bridge needs.
+- Added a migration order for low-risk bridge implementation, HUD migration, UI abstraction, medium-risk modules, and risky modules.
+- No runtime bridge migration yet.
+- No 1.7.10 code, dependency, source-set, or build.gradle changes were introduced.
+- Kept the existing 1.8.9 build stable.
+
 ## v0.5.1 - Safe Bridge Preparation
 
 - Added bridge API skeleton for future game, render, input, event, entity, world, and config abstractions.
