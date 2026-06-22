@@ -23,6 +23,8 @@ import com.carbonclient.ui.component.SliderComponent;
 import com.carbonclient.ui.component.ToggleComponent;
 import com.carbonclient.ui.render.RenderUtils;
 import com.carbonclient.ui.theme.CarbonTheme;
+import com.carbonclient.visual.VisualManager;
+import com.carbonclient.visual.impl.FullbrightVisual;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,11 +58,13 @@ public final class CarbonMenuScreen extends GuiScreen {
     private static final int MAX_SEARCH_LENGTH = 64;
     private static final String[] TAB_LABELS = {
         "Mods",
+        "Visuals",
         "Settings",
         "Profiles",
         "HUD Editor"
     };
     private final ModuleManager moduleManager;
+    private final VisualManager visualManager;
     private final ConfigManager configManager;
     private final ProfileManager profileManager;
     private final NotificationManager notificationManager;
@@ -75,6 +79,7 @@ public final class CarbonMenuScreen extends GuiScreen {
     private Module listeningModuleKeybind;
     private NumberSetting draggingSlider;
     private KeybindSetting listeningKeybind;
+    private boolean draggingFullbrightBrightness;
     private ColorSetting openColorSetting;
     private String colorHexInput = "";
     private boolean colorHexFocused;
@@ -105,18 +110,21 @@ public final class CarbonMenuScreen extends GuiScreen {
 
     private enum MainTab {
         MODS,
+        VISUALS,
         SETTINGS,
         PROFILES
     }
 
     public CarbonMenuScreen(
         ModuleManager moduleManager,
+        VisualManager visualManager,
         ConfigManager configManager,
         ProfileManager profileManager,
         NotificationManager notificationManager,
         NotificationRenderer notificationRenderer
     ) {
         if (moduleManager == null
+            || visualManager == null
             || configManager == null
             || profileManager == null
             || notificationManager == null
@@ -127,6 +135,7 @@ public final class CarbonMenuScreen extends GuiScreen {
         }
 
         this.moduleManager = moduleManager;
+        this.visualManager = visualManager;
         this.configManager = configManager;
         this.profileManager = profileManager;
         this.notificationManager = notificationManager;
@@ -220,7 +229,7 @@ public final class CarbonMenuScreen extends GuiScreen {
                 1,
                 panelX,
                 panelY,
-                activeTab == MainTab.SETTINGS,
+                activeTab == MainTab.VISUALS,
                 true,
                 mouseX,
                 mouseY
@@ -229,13 +238,30 @@ public final class CarbonMenuScreen extends GuiScreen {
                 2,
                 panelX,
                 panelY,
+                activeTab == MainTab.SETTINGS,
+                true,
+                mouseX,
+                mouseY
+            );
+            drawTab(
+                3,
+                panelX,
+                panelY,
                 activeTab == MainTab.PROFILES,
                 true,
                 mouseX,
                 mouseY
             );
-            drawTab(3, panelX, panelY, false, true, mouseX, mouseY);
-            if (activeTab == MainTab.SETTINGS) {
+            drawTab(4, panelX, panelY, false, true, mouseX, mouseY);
+            if (activeTab == MainTab.VISUALS) {
+                drawVisualsView(
+                    mouseX,
+                    mouseY,
+                    panelX,
+                    headerBottom,
+                    panelWidth
+                );
+            } else if (activeTab == MainTab.SETTINGS) {
                 drawSettingsView(
                     mouseX,
                     mouseY,
@@ -875,6 +901,111 @@ public final class CarbonMenuScreen extends GuiScreen {
         RenderUtils.drawPanel(x, y, width, height, CarbonTheme.PANEL);
     }
 
+    private void drawVisualsView(
+        int mouseX,
+        int mouseY,
+        int panelX,
+        int contentTop,
+        int panelWidth
+    ) {
+        FullbrightVisual fullbright = visualManager.getFullbright();
+        int cardX = panelX + PADDING;
+        int cardY = contentTop + 64;
+        int cardWidth = panelWidth - PADDING * 2;
+        int cardHeight = 132;
+        int toggleX = cardX + cardWidth - 74;
+        int sliderX = cardX + cardWidth - CONTROL_WIDTH - 20;
+        double progress = (
+            fullbright.getBrightnessLevel() - fullbright.getMinimumBrightness()
+        ) / (
+            fullbright.getMaximumBrightness()
+                - fullbright.getMinimumBrightness()
+        );
+
+        RenderUtils.drawText(
+            fontRendererObj,
+            "Visuals",
+            panelX + PADDING,
+            contentTop + 18,
+            CarbonTheme.TEXT
+        );
+        RenderUtils.drawText(
+            fontRendererObj,
+            "Quick client-side visual settings.",
+            panelX + PADDING,
+            contentTop + 38,
+            CarbonTheme.MUTED_TEXT
+        );
+
+        RenderUtils.drawCard(
+            cardX,
+            cardY,
+            cardWidth,
+            cardHeight,
+            isInside(mouseX, mouseY, cardX, cardY, cardWidth, cardHeight),
+            fullbright.isEnabled() ? CarbonTheme.ACCENT : CarbonTheme.PRIMARY
+        );
+        RenderUtils.drawText(
+            fontRendererObj,
+            "Fullbright",
+            cardX + CarbonTheme.SPACE_16,
+            cardY + 16,
+            CarbonTheme.TEXT
+        );
+        RenderUtils.drawText(
+            fontRendererObj,
+            "Increase client-side brightness",
+            cardX + CarbonTheme.SPACE_16,
+            cardY + 32,
+            CarbonTheme.MUTED_TEXT
+        );
+        toggleComponent.render(
+            fontRendererObj,
+            fullbright.isEnabled(),
+            toggleX,
+            cardY + 16,
+            56,
+            BUTTON_HEIGHT,
+            mouseX,
+            mouseY
+        );
+
+        RenderUtils.drawText(
+            fontRendererObj,
+            "Brightness Level",
+            cardX + CarbonTheme.SPACE_16,
+            cardY + 68,
+            CarbonTheme.TEXT
+        );
+        sliderComponent.render(
+            fontRendererObj,
+            formatNumber(fullbright.getBrightnessLevel()),
+            progress,
+            sliderX,
+            cardY + 61,
+            105,
+            CONTROL_WIDTH
+        );
+
+        RenderUtils.drawText(
+            fontRendererObj,
+            "Smooth Transition",
+            cardX + CarbonTheme.SPACE_16,
+            cardY + 104,
+            CarbonTheme.TEXT
+        );
+        toggleComponent.render(
+            fontRendererObj,
+            fullbright.isSmoothTransition(),
+            toggleX,
+            cardY + 96,
+            56,
+            BUTTON_HEIGHT,
+            mouseX,
+            mouseY
+        );
+    }
+
     private void drawSettingsView(
         int mouseX,
         int mouseY,
@@ -1428,6 +1559,11 @@ public final class CarbonMenuScreen extends GuiScreen {
                 return;
             }
             if (selectedModule == null
+                && activeTab == MainTab.VISUALS
+                && handleVisualsClick(mouseX, mouseY)) {
+                return;
+            }
+            if (selectedModule == null
                 && activeTab == MainTab.SETTINGS
                 && handleResetAllClick(mouseX, mouseY)) {
                 return;
@@ -1470,7 +1606,7 @@ public final class CarbonMenuScreen extends GuiScreen {
             return true;
         }
         if (isInsideTab(mouseX, mouseY, panelX, panelY, 1)) {
-            activeTab = MainTab.SETTINGS;
+            activeTab = MainTab.VISUALS;
             moduleSearchFocused = false;
             profileNameFocused = false;
             resetAllConfirmation = false;
@@ -1478,12 +1614,63 @@ public final class CarbonMenuScreen extends GuiScreen {
             return true;
         }
         if (isInsideTab(mouseX, mouseY, panelX, panelY, 2)) {
+            activeTab = MainTab.SETTINGS;
+            moduleSearchFocused = false;
+            profileNameFocused = false;
+            resetAllConfirmation = false;
+            deleteConfirmationProfile = null;
+            return true;
+        }
+        if (isInsideTab(mouseX, mouseY, panelX, panelY, 3)) {
             activeTab = MainTab.PROFILES;
             moduleSearchFocused = false;
             profileNameFocused = false;
             resetAllConfirmation = false;
             deleteConfirmationProfile = null;
             selectedProfileName = profileManager.getActiveProfileName();
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean handleVisualsClick(int mouseX, int mouseY) {
+        int panelWidth = getPanelWidth();
+        int panelHeight = getPanelHeight();
+        int panelX = getPanelX(panelWidth);
+        int contentTop = getPanelY(panelHeight) + HEADER_HEIGHT;
+        int cardX = panelX + PADDING;
+        int cardY = contentTop + 64;
+        int cardWidth = panelWidth - PADDING * 2;
+        int toggleX = cardX + cardWidth - 74;
+        int sliderX = cardX + cardWidth - CONTROL_WIDTH - 20;
+        FullbrightVisual fullbright = visualManager.getFullbright();
+
+        if (isInside(mouseX, mouseY, toggleX, cardY + 16, 56, BUTTON_HEIGHT)) {
+            fullbright.setEnabled(!fullbright.isEnabled());
+            configManager.save();
+            notificationManager.success(
+                fullbright.isEnabled()
+                    ? "Fullbright Enabled"
+                    : "Fullbright Disabled",
+                fullbright.isEnabled()
+                    ? "Client-side brightness increased."
+                    : "Original brightness will be restored."
+            );
+            return true;
+        }
+        if (isInside(mouseX, mouseY, sliderX, cardY + 55, 105, 26)) {
+            updateFullbrightBrightness(mouseX, sliderX, 105);
+            draggingFullbrightBrightness = true;
+            return true;
+        }
+        if (isInside(mouseX, mouseY, toggleX, cardY + 96, 56, BUTTON_HEIGHT)) {
+            fullbright.setSmoothTransition(!fullbright.isSmoothTransition());
+            configManager.save();
+            notificationManager.success(
+                "Visual Settings Saved",
+                "Fullbright transition setting updated."
+            );
             return true;
         }
 
@@ -1711,6 +1898,7 @@ public final class CarbonMenuScreen extends GuiScreen {
         }
 
         moduleManager.resetAllToDefaults();
+        visualManager.resetAllToDefaults();
         configManager.save();
         notificationManager.success(
             "Settings Reset",
@@ -1779,7 +1967,7 @@ public final class CarbonMenuScreen extends GuiScreen {
         int panelX = getPanelX(panelWidth);
         int panelY = getPanelY(panelHeight);
 
-        if (isInsideTab(mouseX, mouseY, panelX, panelY, 3)) {
+        if (isInsideTab(mouseX, mouseY, panelX, panelY, 4)) {
             mc.displayGuiScreen(
                 new HudLayoutEditorScreen(
                     moduleManager,
@@ -2136,6 +2324,16 @@ public final class CarbonMenuScreen extends GuiScreen {
             return;
         }
 
+        if (clickedMouseButton == 0 && draggingFullbrightBrightness) {
+            int panelWidth = getPanelWidth();
+            int panelX = getPanelX(panelWidth);
+            int cardX = panelX + PADDING;
+            int cardWidth = panelWidth - PADDING * 2;
+            int sliderX = cardX + cardWidth - CONTROL_WIDTH - 20;
+            updateFullbrightBrightness(mouseX, sliderX, 105);
+            return;
+        }
+
         if (clickedMouseButton == 0 && draggingSlider != null && selectedModule != null) {
             int panelWidth = getPanelWidth();
             int panelX = getPanelX(panelWidth);
@@ -2149,10 +2347,19 @@ public final class CarbonMenuScreen extends GuiScreen {
 
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int state) {
-        if (draggingSlider != null || colorPickerDrag != 0) {
+        if (draggingSlider != null
+            || colorPickerDrag != 0
+            || draggingFullbrightBrightness) {
             configManager.save();
         }
+        if (draggingFullbrightBrightness) {
+            notificationManager.success(
+                "Visual Settings Saved",
+                "Fullbright brightness updated."
+            );
+        }
         draggingSlider = null;
+        draggingFullbrightBrightness = false;
         colorPickerDrag = 0;
         super.mouseReleased(mouseX, mouseY, state);
     }
@@ -2168,6 +2375,20 @@ public final class CarbonMenuScreen extends GuiScreen {
         double value = setting.getMinimum()
             + (setting.getMaximum() - setting.getMinimum()) * progress;
         setting.setValue(value);
+    }
+
+    private void updateFullbrightBrightness(
+        int mouseX,
+        int sliderX,
+        int sliderWidth
+    ) {
+        FullbrightVisual fullbright = visualManager.getFullbright();
+        double progress = (mouseX - sliderX) / (double) sliderWidth;
+        progress = Math.max(0.0D, Math.min(1.0D, progress));
+        double value = fullbright.getMinimumBrightness()
+            + (fullbright.getMaximumBrightness()
+                - fullbright.getMinimumBrightness()) * progress;
+        fullbright.setBrightnessLevel(value);
     }
 
     private void cycleMode(ModeSetting setting) {

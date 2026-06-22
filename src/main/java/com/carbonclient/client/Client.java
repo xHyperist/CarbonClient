@@ -10,6 +10,7 @@ import com.carbonclient.notification.NotificationManager;
 import com.carbonclient.notification.NotificationRenderer;
 import com.carbonclient.profile.ProfileManager;
 import com.carbonclient.profile.ProfileStorage;
+import com.carbonclient.visual.VisualManager;
 import com.carbonclient.module.ModuleManager;
 import com.carbonclient.modules.movement.ToggleSprintModule;
 import com.carbonclient.modules.render.ArmorHudModule;
@@ -31,6 +32,7 @@ public final class Client {
 
     private final ServiceRegistry serviceRegistry = new ServiceRegistry();
     private final EventBus eventBus = new EventBus();
+    private final VisualManager visualManager = new VisualManager(eventBus);
     private final NotificationManager notificationManager =
         new NotificationManager();
     private final NotificationRenderer notificationRenderer =
@@ -38,6 +40,7 @@ public final class Client {
     private final ModuleManager moduleManager = new ModuleManager(eventBus);
     private final KeyInputHandler keyInputHandler = new KeyInputHandler(
         moduleManager,
+        visualManager,
         notificationManager,
         notificationRenderer
     );
@@ -52,6 +55,7 @@ public final class Client {
         configManager = new ConfigManager(
             event.getModConfigurationDirectory().getParentFile(),
             moduleManager,
+            visualManager,
             logger,
             notificationManager
         );
@@ -191,6 +195,7 @@ public final class Client {
                 new Runnable() {
                     @Override
                     public void run() {
+                        visualManager.shutdown();
                         configManager.save();
                     }
                 },

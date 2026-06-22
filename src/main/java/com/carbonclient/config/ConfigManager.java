@@ -9,6 +9,7 @@ import com.carbonclient.setting.impl.ColorSetting;
 import com.carbonclient.setting.impl.KeybindSetting;
 import com.carbonclient.setting.impl.ModeSetting;
 import com.carbonclient.setting.impl.NumberSetting;
+import com.carbonclient.visual.VisualManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -33,6 +34,7 @@ public final class ConfigManager {
         .create();
 
     private final ModuleManager moduleManager;
+    private final VisualManager visualManager;
     private final File configDirectory;
     private final File configFile;
     private final Logger logger;
@@ -41,11 +43,13 @@ public final class ConfigManager {
     public ConfigManager(
         File gameDirectory,
         ModuleManager moduleManager,
+        VisualManager visualManager,
         Logger logger,
         NotificationManager notificationManager
     ) {
         if (gameDirectory == null
             || moduleManager == null
+            || visualManager == null
             || logger == null
             || notificationManager == null) {
             throw new IllegalArgumentException(
@@ -54,6 +58,7 @@ public final class ConfigManager {
         }
 
         this.moduleManager = moduleManager;
+        this.visualManager = visualManager;
         this.configDirectory = new File(gameDirectory, "carbon");
         this.configFile = new File(configDirectory, "config.json");
         this.logger = logger;
@@ -62,6 +67,7 @@ public final class ConfigManager {
 
     public void load() {
         moduleManager.resetAllToDefaults();
+        visualManager.resetAllToDefaults();
 
         if (!configFile.isFile()) {
             logger.info("No Carbon config found. Using default values.");
@@ -104,6 +110,9 @@ public final class ConfigManager {
                             getObject(modulesObject, module.getName())
                         );
                     }
+                    visualManager.applySnapshot(
+                        getObject(rootElement.getAsJsonObject(), "visuals")
+                    );
                     logger.info(
                         "Loaded Carbon config from {}",
                         configFile.getAbsolutePath()
@@ -116,6 +125,7 @@ public final class ConfigManager {
                 exception
             );
             moduleManager.resetAllToDefaults();
+            visualManager.resetAllToDefaults();
             notificationManager.error(
                 "Config Load Failed",
                 "Defaults were restored safely."
@@ -153,6 +163,7 @@ public final class ConfigManager {
         }
 
         root.add("modules", modulesObject);
+        root.add("visuals", visualManager.createSnapshot());
         return root;
     }
 
@@ -165,6 +176,7 @@ public final class ConfigManager {
         }
 
         root.add("modules", modulesObject);
+        root.add("visuals", visualManager.createDefaultSnapshot());
         return root;
     }
 
@@ -181,9 +193,11 @@ public final class ConfigManager {
         }
 
         moduleManager.resetAllToDefaults();
+        visualManager.resetAllToDefaults();
         for (Module module : moduleManager.getModules()) {
             loadModule(module, getObject(modulesObject, module.getName()));
         }
+        visualManager.applySnapshot(getObject(root, "visuals"));
     }
 
     private void loadModule(Module module, JsonObject moduleObject) {

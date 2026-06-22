@@ -6,6 +6,7 @@ import com.carbonclient.module.ModuleManager;
 import com.carbonclient.notification.NotificationManager;
 import com.carbonclient.notification.NotificationRenderer;
 import com.carbonclient.profile.ProfileManager;
+import com.carbonclient.visual.VisualManager;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
@@ -14,6 +15,7 @@ import org.lwjgl.input.Keyboard;
 public final class KeyInputHandler {
 
     private final ModuleManager moduleManager;
+    private final VisualManager visualManager;
     private final NotificationManager notificationManager;
     private final NotificationRenderer notificationRenderer;
     private ConfigManager configManager;
@@ -21,10 +23,12 @@ public final class KeyInputHandler {
 
     public KeyInputHandler(
         ModuleManager moduleManager,
+        VisualManager visualManager,
         NotificationManager notificationManager,
         NotificationRenderer notificationRenderer
     ) {
         this.moduleManager = moduleManager;
+        this.visualManager = visualManager;
         this.notificationManager = notificationManager;
         this.notificationRenderer = notificationRenderer;
     }
@@ -53,6 +57,7 @@ public final class KeyInputHandler {
                 minecraft.displayGuiScreen(
                     new CarbonMenuScreen(
                         moduleManager,
+                        visualManager,
                         configManager,
                         profileManager,
                         notificationManager,

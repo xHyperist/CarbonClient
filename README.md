@@ -1,6 +1,6 @@
 # Carbon Client
 
-Carbon Client, Minecraft 1.8.9 Forge tabanli, PvP odakli ve moduler bir client projesidir. v0.4.0 ilk stable core release hazirligidir: module, setting, config, profile, notification, menu ve HUD altyapilari 1.8.9 tarafinda birlikte calisacak sekilde toparlanmistir.
+Carbon Client, Minecraft 1.8.9 Forge tabanli, PvP odakli ve moduler bir client projesidir. v0.4.x serisi stable core release hattidir: module, setting, config, profile, notification, menu ve HUD altyapilari 1.8.9 tarafinda birlikte calisacak sekilde toparlanmistir.
 
 ## Hedef Surumler
 
@@ -31,7 +31,7 @@ Jar uretmek:
 Cikti jar dosyasi:
 
 ```text
-build/libs/carbon-client-0.4.0.jar
+build/libs/carbon-client-0.4.2.jar
 ```
 
 ## Mevcut Ozellikler
@@ -43,6 +43,7 @@ build/libs/carbon-client-0.4.0.jar
 - Profiles system
 - Notification / Toast system
 - Carbon Menu
+- Visuals tab ve Fullbright quick setting
 - Mods Tab search, scroll ve category filters
 - Options screen
 - Keybinds panel ve conflict warning
@@ -78,7 +79,7 @@ Onemli dosyalar:
 2. Minecraft ana menusu acildiginda Carbon Client loglarini kontrol et.
 3. Oyun icinde `RSHIFT` ile Carbon Menu'yu ac.
 4. Mods Tab, Options, Keybinds, Profiles, Color Picker ve HUD Editor akislarini test et.
-5. Jar ile test etmek icin `build/libs/carbon-client-0.4.0.jar` dosyasini Minecraft 1.8.9 Forge `mods` klasorune koy.
+5. Jar ile test etmek icin `build/libs/carbon-client-0.4.2.jar` dosyasini Minecraft 1.8.9 Forge `mods` klasorune koy.
 
 ## Yasak / Istenmeyen Yon
 
@@ -97,4 +98,5 @@ Carbon Client bir cheat/hile client degildir. Asagidaki ozellikler hedeflenmez:
 - v0.4.x: 1.8.9 polish, stabilite ve UX iyilestirmeleri
 - v0.5.x: 1.7.10 port architecture hazirligi
 - v0.6.x: 1.7.10 first boot ve feature parity
+- Later / research required: Scoreboard customization after safe vanilla render hook research
 - Sonraki asama: Carbon Launcher ve version selector

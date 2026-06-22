@@ -1,5 +1,19 @@
 # Changelog
 
+## v0.4.2 - Visuals / Fullbright
+
+- Carbon Menu icine Visuals sekmesi eklendi.
+- Fullbright klasik mod karti olmadan Visuals altinda yonetilir.
+- Fullbright ayarlari config/profile snapshot'larina `visuals.fullbright` olarak kaydedilir.
+- Runtime gamma restore akisi eklendi; kullanicinin orijinal brightness ayari kalici olarak ezilmez.
+
+## v0.4.1 - Scoreboard Removal
+
+- Scoreboard module tamamen kaldirildi.
+- Vanilla sidebar render/cancel override ve ilgili event/hook denemeleri temizlendi.
+- Eski Scoreboard config/profile verileri kayitli mod listesinde olmadigi icin yok sayilir ve sonraki save'de tekrar yazilmaz.
+- Scoreboard customization daha sonra guvenli vanilla render hook arastirmasindan sonra ele alinacak.
+
 ## v0.4.0 - Stable Core Release
 
 - 1.8.9 Forge tarafi icin ilk stable core release hazirligi yapildi.

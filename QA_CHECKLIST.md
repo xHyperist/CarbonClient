@@ -13,6 +13,18 @@
 - [ ] `RSHIFT` veya `ESC` menuyu kapatiyor.
 - [ ] Oyun menu acikken pause olmuyor.
 
+## Visuals
+
+- [ ] Visuals sekmesi gorunuyor.
+- [ ] Fullbright Mods Tab'da mod karti olarak gorunmuyor.
+- [ ] Fullbright ON/OFF toggle calisiyor.
+- [ ] Fullbright acilinca client-side brightness artiyor.
+- [ ] Fullbright kapaninca eski gamma degeri geri geliyor.
+- [ ] Brightness Level slider calisiyor.
+- [ ] Smooth Transition toggle calisiyor.
+- [ ] Config/Profile degisimlerinde Fullbright ayarlari korunuyor.
+- [ ] Reset All Settings Fullbright'i default false durumuna donduruyor.
+
 ## Mods Tab
 
 - [ ] ALL filtresi tum modlari gosteriyor.
@@ -85,3 +97,7 @@
 - [ ] Multiplayer'da crash yok.
 - [ ] Ping alinamazsa `N/A` gosteriliyor.
 - [ ] World/player null durumlarinda HUD render crash atmiyor.
+
+## Later / Research Required
+
+- [ ] Scoreboard customization guvenli vanilla render hook arastirmasindan sonra yeniden degerlendirilecek.
