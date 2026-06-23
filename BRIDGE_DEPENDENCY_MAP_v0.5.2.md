@@ -300,13 +300,18 @@ Responsibilities:
   - `BridgeRegistry` ignores null registrations.
   - Game/Input/Render bridge null-safety was checked.
   - API packages remain free of Minecraft/Forge imports.
+- v0.5.5 added passive diagnostics validation:
+  - `BridgeDiagnostics` can inspect core bridge readiness.
+  - `BridgeDiagnosticsReport` captures bridge availability without user-facing UI.
+  - Core passive bridges can be checked before consumer migration.
+  - Event, Entity, World, and Config bridges may remain unavailable at this phase.
 
 ### Phase C - Low-Risk HUD Modules
 
 - Move one low-risk module at a time:
-  - Clock HUD
   - FPS Display
   - CPS Display
+  - Clock HUD
   - Coordinates HUD
   - Keystrokes partially
 - Build after each module.

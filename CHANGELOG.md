@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.5.5 - Bridge Diagnostics / Internal Validation
+
+- Added `BridgeDiagnostics`.
+- Added `BridgeDiagnosticsReport`.
+- Added core bridge readiness checks for Game/Input/Render bridge availability.
+- Added one init-time diagnostics summary log after passive bridge bootstrap.
+- Kept diagnostics internal with no user-facing UI, HUD, command, keybind, or notification.
+- No modules were migrated to bridge APIs yet.
+- No 1.7.10 code, dependency, source-set, or build.gradle changes were introduced.
+- Existing 1.8.9 build remains stable.
+
 ## v0.5.4 - Passive Bridge Runtime QA
 
 - Verified passive bridge bootstrap behavior and kept it idempotent.

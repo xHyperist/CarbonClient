@@ -1,6 +1,7 @@
 package com.carbonclient.client;
 
 import com.carbonclient.common.Reference;
+import com.carbonclient.bridge.diagnostics.BridgeDiagnostics;
 import com.carbonclient.bridge.impl.v1_8_9.V189BridgeBootstrap;
 import com.carbonclient.config.ConfigManager;
 import com.carbonclient.client.service.ServiceRegistry;
@@ -237,6 +238,7 @@ public final class Client {
         try {
             V189BridgeBootstrap.bootstrap();
             logger.info("Passive 1.8.9 bridge registered.");
+            logger.info("Bridge diagnostics: {}", BridgeDiagnostics.getSummaryLine());
         } catch (RuntimeException exception) {
             logger.warn("Passive 1.8.9 bridge registration failed.", exception);
         }

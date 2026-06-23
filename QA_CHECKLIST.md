@@ -3,7 +3,7 @@
 ## Client Launch
 
 - [ ] `.\gradlew.bat runClient` ile client aciliyor.
-- [ ] Loglarda `Carbon Client v0.5.4 is starting.` gorunuyor.
+- [ ] Loglarda `Carbon Client v0.5.5 is starting.` gorunuyor.
 - [ ] Loglarda `Carbon Client initialized successfully.` gorunuyor.
 - [ ] Carbon kaynakli crash yok.
 
@@ -234,4 +234,19 @@
 - [ ] 1.7.10 kodu veya dependency eklenmedi.
 - [ ] `build.gradle` degistirilmedi.
 - [ ] Jar `build/libs/carbon-client-0.5.4.jar` olarak uretiliyor.
+- [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
+
+## v0.5.5 Bridge Diagnostics / Internal Validation QA
+
+- [ ] `BridgeDiagnostics` compile oluyor.
+- [ ] `BridgeDiagnosticsReport` compile oluyor.
+- [ ] Diagnostics package Minecraft/Forge/LWJGL importu icermiyor.
+- [ ] Core passive bridges available raporlanabiliyor.
+- [ ] Event/Entity/World/Config bridge unavailable kalabilir ve bu hata degil.
+- [ ] Diagnostics user-facing UI, HUD, chat command, keybind veya notification eklemiyor.
+- [ ] Existing modules hala direct 1.8.9 path ile calisiyor.
+- [ ] `RenderUtils`, `CarbonMenuScreen`, `HudLayoutEditorScreen`, `ForgeEventBridge`, `KeyInputHandler` bridge'e tasinmadi.
+- [ ] 1.7.10 kodu veya dependency eklenmedi.
+- [ ] `build.gradle` degistirilmedi.
+- [ ] Jar `build/libs/carbon-client-0.5.5.jar` olarak uretiliyor.
 - [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.

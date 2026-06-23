@@ -46,6 +46,16 @@ This document is intentionally planning-only. It does not start the 1.7.10 port,
 - No 1.7.10 implementation yet.
 - Next safe step can be a low-risk bridge consumer prototype.
 
+## v0.5.5 Bridge Diagnostics / Internal Validation
+
+- Added internal `BridgeDiagnostics` helper.
+- Added `BridgeDiagnosticsReport` data object.
+- Passive Game/Input/Render bridge readiness can now be inspected safely.
+- Existing modules still use the direct 1.8.9 path.
+- No module migration yet.
+- No 1.7.10 implementation yet.
+- Diagnostics is internal only; no user-facing UI, HUD, command, keybind, or notification was added.
+
 ## 2. Current 1.8.9 Status
 
 The 1.8.9 Forge client has a stable Release Candidate baseline:
@@ -292,6 +302,7 @@ Planning interfaces:
 - v0.5.2: Bridge dependency mapping and migration order documentation.
 - v0.5.3: Passive 1.8.9 Game/Input/Render bridge implementation.
 - v0.5.4: Passive bridge runtime QA and null-safety hardening.
-- v0.5.5: Move one low-risk HUD render path behind a bridge as a proof of concept.
-- v0.5.6: Validate config/profile compatibility for version-specific modules.
+- v0.5.5: Internal bridge diagnostics and readiness validation.
+- v0.5.6: Move one low-risk HUD render path behind a bridge as a proof of concept.
+- v0.5.7: Validate config/profile compatibility for version-specific modules.
 - Later: create the separate 1.7.10 environment only after 1.8.9 remains stable through bridge proof of concept.
