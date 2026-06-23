@@ -13,6 +13,9 @@ public final class V189InputBridge implements InputBridge {
         }
 
         try {
+            if (!Keyboard.isCreated()) {
+                return false;
+            }
             return Keyboard.isKeyDown(keyCode);
         } catch (RuntimeException exception) {
             return false;
@@ -26,6 +29,9 @@ public final class V189InputBridge implements InputBridge {
         }
 
         try {
+            if (!Mouse.isCreated()) {
+                return false;
+            }
             return Mouse.isButtonDown(button);
         } catch (RuntimeException exception) {
             return false;
@@ -39,6 +45,9 @@ public final class V189InputBridge implements InputBridge {
         }
 
         try {
+            if (!Keyboard.isCreated()) {
+                return "UNKNOWN";
+            }
             String keyName = Keyboard.getKeyName(keyCode);
             return keyName != null ? keyName : "UNKNOWN";
         } catch (RuntimeException exception) {

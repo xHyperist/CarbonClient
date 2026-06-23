@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.5.4 - Passive Bridge Runtime QA
+
+- Verified passive bridge bootstrap behavior and kept it idempotent.
+- Hardened `BridgeRegistry` so null registrations are ignored instead of clearing existing bridges.
+- Hardened `V189InputBridge` for uncreated LWJGL keyboard/mouse state.
+- Verified Game/Input/Render bridge package boundaries.
+- Confirmed no module migration yet.
+- Confirmed no 1.7.10 dependency, source-set, or build.gradle changes.
+- Existing 1.8.9 build remains stable.
+
 ## v0.5.3 - Passive 1.8.9 Bridge Implementation
 
 - Added `V189GameBridge`.

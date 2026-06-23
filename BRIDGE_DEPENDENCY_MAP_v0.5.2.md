@@ -295,6 +295,11 @@ Responsibilities:
   - `V189BridgeBootstrap`
 - These bridges are registered through `BridgeRegistry`.
 - Existing modules are not migrated yet and still use the direct 1.8.9 path.
+- v0.5.4 validated passive bridge runtime safety:
+  - Bridge bootstrap remains idempotent.
+  - `BridgeRegistry` ignores null registrations.
+  - Game/Input/Render bridge null-safety was checked.
+  - API packages remain free of Minecraft/Forge imports.
 
 ### Phase C - Low-Risk HUD Modules
 

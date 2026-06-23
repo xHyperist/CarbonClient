@@ -24,9 +24,14 @@ public final class BridgeRegistry {
     /*
      * Bridge getters may return null until a version-specific implementation is
      * registered. Runtime code should check the matching has*Bridge() method first.
+     * Null registrations are ignored so an existing bridge is not accidentally
+     * cleared by a failed or optional bootstrap path.
      */
 
     public static void registerGameBridge(GameBridge bridge) {
+        if (bridge == null) {
+            return;
+        }
         gameBridge = bridge;
     }
 
@@ -39,6 +44,9 @@ public final class BridgeRegistry {
     }
 
     public static void registerRenderBridge(RenderBridge bridge) {
+        if (bridge == null) {
+            return;
+        }
         renderBridge = bridge;
     }
 
@@ -51,6 +59,9 @@ public final class BridgeRegistry {
     }
 
     public static void registerInputBridge(InputBridge bridge) {
+        if (bridge == null) {
+            return;
+        }
         inputBridge = bridge;
     }
 
@@ -63,6 +74,9 @@ public final class BridgeRegistry {
     }
 
     public static void registerEventBridge(EventBridge bridge) {
+        if (bridge == null) {
+            return;
+        }
         eventBridge = bridge;
     }
 
@@ -75,6 +89,9 @@ public final class BridgeRegistry {
     }
 
     public static void registerEntityBridge(EntityBridge bridge) {
+        if (bridge == null) {
+            return;
+        }
         entityBridge = bridge;
     }
 
@@ -87,6 +104,9 @@ public final class BridgeRegistry {
     }
 
     public static void registerWorldBridge(WorldBridge bridge) {
+        if (bridge == null) {
+            return;
+        }
         worldBridge = bridge;
     }
 
@@ -99,6 +119,9 @@ public final class BridgeRegistry {
     }
 
     public static void registerConfigBridge(ConfigBridge bridge) {
+        if (bridge == null) {
+            return;
+        }
         configBridge = bridge;
     }
 

@@ -36,6 +36,16 @@ This document is intentionally planning-only. It does not start the 1.7.10 port,
 - No runtime behavior migration yet.
 - No 1.7.10 implementation yet.
 
+## v0.5.4 Passive Bridge Runtime QA
+
+- Passive bridges were checked for null safety and registry safety.
+- `BridgeRegistry` ignores null registrations so existing bridges are not accidentally cleared.
+- `V189InputBridge` safely handles uncreated LWJGL keyboard/mouse state.
+- Bridge APIs remain inactive for existing modules.
+- No module migration yet.
+- No 1.7.10 implementation yet.
+- Next safe step can be a low-risk bridge consumer prototype.
+
 ## 2. Current 1.8.9 Status
 
 The 1.8.9 Forge client has a stable Release Candidate baseline:
@@ -281,6 +291,7 @@ Planning interfaces:
 - v0.5.1: Safe bridge API skeleton and registry preparation.
 - v0.5.2: Bridge dependency mapping and migration order documentation.
 - v0.5.3: Passive 1.8.9 Game/Input/Render bridge implementation.
-- v0.5.4: Move one low-risk HUD render path behind a bridge as a proof of concept.
-- v0.5.5: Validate config/profile compatibility for version-specific modules.
+- v0.5.4: Passive bridge runtime QA and null-safety hardening.
+- v0.5.5: Move one low-risk HUD render path behind a bridge as a proof of concept.
+- v0.5.6: Validate config/profile compatibility for version-specific modules.
 - Later: create the separate 1.7.10 environment only after 1.8.9 remains stable through bridge proof of concept.

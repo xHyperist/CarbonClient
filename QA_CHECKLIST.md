@@ -3,7 +3,7 @@
 ## Client Launch
 
 - [ ] `.\gradlew.bat runClient` ile client aciliyor.
-- [ ] Loglarda `Carbon Client v0.5.3 is starting.` gorunuyor.
+- [ ] Loglarda `Carbon Client v0.5.4 is starting.` gorunuyor.
 - [ ] Loglarda `Carbon Client initialized successfully.` gorunuyor.
 - [ ] Carbon kaynakli crash yok.
 
@@ -216,4 +216,22 @@
 - [ ] Source set / multi-project yapisina gecilmedi.
 - [ ] Scoreboard/Zoom/BlockOverlay/Chat/Weather/Capture aktif mod olarak geri gelmedi.
 - [ ] Jar `build/libs/carbon-client-0.5.3.jar` olarak uretiliyor.
+- [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
+
+## v0.5.4 Passive Bridge Runtime QA
+
+- [ ] Bridge bootstrap idempotent.
+- [ ] Bridge bootstrap hata durumunda client'i crash ettirmiyor.
+- [ ] `BridgeRegistry` null register isteklerini yok sayiyor.
+- [ ] `BridgeRegistry` get/has methodlari tutarli.
+- [ ] `V189GameBridge` null world/player durumunda guvenli deger donduruyor.
+- [ ] `V189InputBridge` uncreated Keyboard/Mouse durumunda guvenli deger donduruyor.
+- [ ] `V189RenderBridge` null text/font durumunda crash atmiyor.
+- [ ] `com.carbonclient.bridge.api.*` altinda Minecraft/Forge importu yok.
+- [ ] `BridgeRegistry` Minecraft/Forge importu icermiyor.
+- [ ] Mevcut moduller hala direct 1.8.9 path ile calisiyor.
+- [ ] `RenderUtils`, `CarbonMenuScreen`, `HudLayoutEditorScreen`, `ForgeEventBridge`, `KeyInputHandler` bridge'e tasinmadi.
+- [ ] 1.7.10 kodu veya dependency eklenmedi.
+- [ ] `build.gradle` degistirilmedi.
+- [ ] Jar `build/libs/carbon-client-0.5.4.jar` olarak uretiliyor.
 - [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
