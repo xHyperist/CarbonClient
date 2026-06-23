@@ -3,7 +3,7 @@
 ## Client Launch
 
 - [ ] `.\gradlew.bat runClient` ile client aciliyor.
-- [ ] Loglarda `Carbon Client v0.5.10 is starting.` gorunuyor.
+- [ ] Loglarda `Carbon Client v0.5.11 is starting.` gorunuyor.
 - [ ] Loglarda `Carbon Client initialized successfully.` gorunuyor.
 - [ ] Carbon kaynakli crash yok.
 
@@ -349,4 +349,31 @@
 - [ ] `bridge.api`, `bridge.diagnostics`, `bridge.registry` import boundary bozulmadi.
 - [ ] `build.gradle` degistirilmedi.
 - [ ] Jar `build/libs/carbon-client-0.5.10.jar` olarak uretiliyor.
+- [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
+
+## v0.5.11 Clock HUD Bridge Consumer QA
+
+- [ ] Clock HUD bridge-assisted render path kontrol edildi.
+- [ ] Clock HUD legacy fallback kontrol edildi.
+- [ ] Clock local/system-time mantigi degismedi.
+- [ ] Minecraft world time kullanilmiyor.
+- [ ] Time Changer Visual ile karismiyor.
+- [ ] Clock runtime saat degeri config/profile'a yazilmiyor.
+- [ ] Clock 24H format mantigi degismedi.
+- [ ] Clock 12H format mantigi degismedi.
+- [ ] Show Seconds mantigi degismedi.
+- [ ] Show Prefix ve Prefix Text mantigi degismedi.
+- [ ] Clock settings degismedi.
+- [ ] Clock config/profile icin yeni alan eklenmedi.
+- [ ] Clock HUD Editor bounds degismedi.
+- [ ] FPS, CPS ve Clock disinda yeni bridge consumer eklenmedi.
+- [ ] Coordinates HUD bridge'e tasinmadi.
+- [ ] Keystrokes bridge'e tasinmadi.
+- [ ] Armor/Potion/Ping/Reach/Combo bridge'e tasinmadi.
+- [ ] RenderUtils bridge'e tasinmadi.
+- [ ] CarbonMenuScreen bridge'e tasinmadi.
+- [ ] ForgeEventBridge bridge'e tasinmadi.
+- [ ] `bridge.api`, `bridge.diagnostics`, `bridge.registry` import boundary bozulmadi.
+- [ ] `build.gradle` degistirilmedi.
+- [ ] Jar `build/libs/carbon-client-0.5.11.jar` olarak uretiliyor.
 - [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.

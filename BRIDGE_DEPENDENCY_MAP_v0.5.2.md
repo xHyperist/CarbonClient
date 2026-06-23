@@ -314,7 +314,8 @@ Responsibilities:
 - v0.5.8 continued Phase C with CPS Display bridge-assisted render prototype.
 - v0.5.9 completed CPS Display bridge consumer QA.
 - v0.5.10 continues Phase C with Clock HUD bridge-assisted render prototype.
-- FPS Display, CPS Display, and Clock HUD are now fallback-safe bridge-assisted consumers.
+- v0.5.11 completed Clock HUD bridge consumer QA.
+- FPS Display, CPS Display, and Clock HUD remain fallback-safe bridge-assisted consumers.
 - Continue moving one low-risk module at a time:
   - Coordinates HUD
   - Keystrokes partial render

@@ -105,6 +105,17 @@ This document is intentionally planning-only. It does not start the 1.7.10 port,
 - No other modules were migrated.
 - No 1.7.10 implementation yet.
 
+## v0.5.11 Clock HUD Bridge Consumer QA
+
+- Clock HUD bridge-assisted render prototype was validated.
+- Legacy fallback remains mandatory and still protects the HUD if the passive bridge is unavailable or returns invalid font metrics.
+- Clock local/system-time formatting remains unchanged.
+- Show Seconds, 12H/24H format, Show Prefix, and Prefix Text behavior remain unchanged.
+- Clock HUD options, config/profile format, HUD Editor bounds, and visual behavior remain unchanged.
+- FPS Display, CPS Display, and Clock HUD are the only bridge-assisted module consumers.
+- No other modules were migrated.
+- No 1.7.10 implementation yet.
+
 ## 2. Current 1.8.9 Status
 
 The 1.8.9 Forge client has a stable Release Candidate baseline:
@@ -357,5 +368,6 @@ Planning interfaces:
 - v0.5.8: CPS Display bridge-assisted render prototype with legacy fallback.
 - v0.5.9: CPS bridge consumer QA with LMB-only counting and fallback validation.
 - v0.5.10: Clock HUD bridge-assisted render prototype with legacy fallback.
-- v0.5.11: Validate config/profile compatibility for version-specific modules.
+- v0.5.11: Clock HUD bridge consumer QA with local/system-time formatting and fallback validation.
+- v0.5.12: Validate config/profile compatibility for version-specific modules.
 - Later: create the separate 1.7.10 environment only after 1.8.9 remains stable through bridge proof of concept.

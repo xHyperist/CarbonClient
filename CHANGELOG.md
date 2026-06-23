@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.5.11 - Clock HUD Bridge Consumer QA
+
+- Validated Clock HUD bridge-assisted render path.
+- Confirmed Clock HUD legacy fallback remains in place.
+- Confirmed local/system-time formatting remains unchanged.
+- Confirmed Show Seconds, 12H/24H format, Show Prefix, and Prefix Text behavior remain unchanged.
+- Confirmed Clock HUD settings, config/profile format, HUD Editor bounds, and visual behavior remain unchanged.
+- Confirmed FPS, CPS, and Clock HUD are the only bridge-assisted module consumers.
+- Confirmed no 1.7.10 code, dependency, source-set, or build.gradle changes were introduced.
+- Existing 1.8.9 build remains stable.
+
 ## v0.5.10 - Clock HUD Bridge-Assisted Render Prototype
 
 - Added fallback-safe `RenderBridge` usage in Clock HUD.
