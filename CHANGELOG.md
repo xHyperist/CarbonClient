@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.5.6 - FPS Display Bridge-Assisted Render Prototype
+
+- Added fallback-safe `RenderBridge` usage in FPS Display.
+- Kept the legacy FPS render path.
+- Kept FPS Display settings, config/profile format, HUD Editor bounds, and visual behavior unchanged.
+- No user-facing render backend setting was added.
+- No other modules were migrated to bridge APIs.
+- No 1.7.10 code, dependency, source-set, or build.gradle changes were introduced.
+
 ## v0.5.5 - Bridge Diagnostics / Internal Validation
 
 - Added `BridgeDiagnostics`.

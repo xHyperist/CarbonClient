@@ -3,7 +3,7 @@
 ## Client Launch
 
 - [ ] `.\gradlew.bat runClient` ile client aciliyor.
-- [ ] Loglarda `Carbon Client v0.5.5 is starting.` gorunuyor.
+- [ ] Loglarda `Carbon Client v0.5.6 is starting.` gorunuyor.
 - [ ] Loglarda `Carbon Client initialized successfully.` gorunuyor.
 - [ ] Carbon kaynakli crash yok.
 
@@ -249,4 +249,21 @@
 - [ ] 1.7.10 kodu veya dependency eklenmedi.
 - [ ] `build.gradle` degistirilmedi.
 - [ ] Jar `build/libs/carbon-client-0.5.5.jar` olarak uretiliyor.
+- [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
+
+## v0.5.6 FPS Display Bridge-Assisted Render Prototype QA
+
+- [ ] FPS Display bridge-assisted render path bridge available iken deneniyor.
+- [ ] FPS Display bridge yoksa legacy render path'e guvenli dusuyor.
+- [ ] Bridge render exception durumunda legacy fallback calisiyor.
+- [ ] FPS Display settings degismedi.
+- [ ] FPS Display config/profile icin yeni alan eklenmedi.
+- [ ] FPS HUD Editor bounds degismedi.
+- [ ] Show Background, Scale, Text Color, Background Color ve Style Mode calisiyor.
+- [ ] CPS/Keystrokes/ToggleSprint/Armor/Potion/Coordinates/Ping/Crosshair/Reach/Combo/Clock bridge'e tasinmadi.
+- [ ] `RenderUtils`, `CarbonMenuScreen`, `HudLayoutEditorScreen`, `ForgeEventBridge`, `KeyInputHandler` bridge'e tasinmadi.
+- [ ] `bridge.api` ve `bridge.diagnostics` import boundary bozulmadi.
+- [ ] 1.7.10 kodu veya dependency eklenmedi.
+- [ ] `build.gradle` degistirilmedi.
+- [ ] Jar `build/libs/carbon-client-0.5.6.jar` olarak uretiliyor.
 - [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.

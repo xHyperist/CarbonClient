@@ -56,6 +56,15 @@ This document is intentionally planning-only. It does not start the 1.7.10 port,
 - No 1.7.10 implementation yet.
 - Diagnostics is internal only; no user-facing UI, HUD, command, keybind, or notification was added.
 
+## v0.5.6 FPS Display Bridge-Assisted Render Prototype
+
+- FPS Display is the first low-risk bridge-assisted consumer.
+- `RenderBridge` may be used internally for FPS text, background rect, string width, and font height.
+- Legacy render fallback remains mandatory and is still present.
+- FPS settings, config/profile format, HUD Editor bounds, and visual behavior remain unchanged.
+- No other modules were migrated.
+- No 1.7.10 implementation yet.
+
 ## 2. Current 1.8.9 Status
 
 The 1.8.9 Forge client has a stable Release Candidate baseline:
@@ -303,6 +312,6 @@ Planning interfaces:
 - v0.5.3: Passive 1.8.9 Game/Input/Render bridge implementation.
 - v0.5.4: Passive bridge runtime QA and null-safety hardening.
 - v0.5.5: Internal bridge diagnostics and readiness validation.
-- v0.5.6: Move one low-risk HUD render path behind a bridge as a proof of concept.
+- v0.5.6: FPS Display bridge-assisted render prototype with legacy fallback.
 - v0.5.7: Validate config/profile compatibility for version-specific modules.
 - Later: create the separate 1.7.10 environment only after 1.8.9 remains stable through bridge proof of concept.

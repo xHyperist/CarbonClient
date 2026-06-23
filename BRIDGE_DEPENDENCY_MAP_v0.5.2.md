@@ -308,8 +308,9 @@ Responsibilities:
 
 ### Phase C - Low-Risk HUD Modules
 
-- Move one low-risk module at a time:
-  - FPS Display
+- Started in v0.5.6 with FPS Display bridge-assisted render prototype.
+- FPS Display remains fallback-safe and keeps its legacy render path.
+- Continue moving one low-risk module at a time:
   - CPS Display
   - Clock HUD
   - Coordinates HUD
