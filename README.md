@@ -1,6 +1,6 @@
 # Carbon Client
 
-Carbon Client, Minecraft 1.8.9 Forge uzerine gelistirilmis premium PvP/HUD client altyapisidir. v0.5.7, FPS Display bridge consumer QA asamasidir.
+Carbon Client, Minecraft 1.8.9 Forge uzerine gelistirilmis premium PvP/HUD client altyapisidir. v0.5.8, CPS Display bridge-assisted render prototype asamasidir.
 
 Carbon Client bir cheat/hile client degildir. Fly, speed, reach, velocity, autoclicker, aim assist veya combat avantaji saglayan ozellikler hedeflenmez.
 
@@ -33,7 +33,7 @@ Jar uretmek:
 Cikti jar dosyasi:
 
 ```text
-build/libs/carbon-client-0.5.7.jar
+build/libs/carbon-client-0.5.8.jar
 ```
 
 Temiz build almak:
@@ -98,7 +98,7 @@ Onemli dosyalar:
 2. Minecraft ana menusu acildiginda Carbon Client loglarini kontrol et.
 3. Oyun icinde `RSHIFT` ile Carbon Menu'yu ac.
 4. Mods Tab, Options, Keybinds, Profiles, Color Picker ve HUD Editor akislarini test et.
-5. Jar ile test etmek icin `build/libs/carbon-client-0.5.7.jar` dosyasini Minecraft 1.8.9 Forge `mods` klasorune koy.
+5. Jar ile test etmek icin `build/libs/carbon-client-0.5.8.jar` dosyasini Minecraft 1.8.9 Forge `mods` klasorune koy.
 
 ## Multi-Version Plan
 
@@ -112,6 +112,7 @@ Onemli dosyalar:
 - v0.5.5 adds internal bridge diagnostics; this is not a user-facing feature.
 - v0.5.6 lets FPS Display try RenderBridge internally while keeping legacy fallback and unchanged user behavior.
 - v0.5.7 QA-checks FPS bridge consumer behavior and keeps fallback mandatory.
+- v0.5.8 lets CPS Display try RenderBridge internally while keeping LMB-only counting and legacy fallback.
 - Current runtime still remains Minecraft 1.8.9 Forge and does not use the bridge yet.
 - This does not mean 1.7.10 support is active yet.
 - No 1.12.2, 1.16.5, or 1.20.x target is planned right now.

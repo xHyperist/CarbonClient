@@ -74,6 +74,16 @@ This document is intentionally planning-only. It does not start the 1.7.10 port,
 - No other modules were migrated.
 - No 1.7.10 implementation yet.
 
+## v0.5.8 CPS Display Bridge-Assisted Render Prototype
+
+- CPS Display is the second low-risk bridge-assisted consumer.
+- `RenderBridge` may be used internally for CPS text, background rect, string width, and font height.
+- Legacy render fallback remains mandatory and is still present.
+- CPS counting logic remains unchanged and LMB-only.
+- CPS settings, config/profile format, HUD Editor bounds, and visual behavior remain unchanged.
+- No other modules were migrated.
+- No 1.7.10 implementation yet.
+
 ## 2. Current 1.8.9 Status
 
 The 1.8.9 Forge client has a stable Release Candidate baseline:
@@ -323,5 +333,6 @@ Planning interfaces:
 - v0.5.5: Internal bridge diagnostics and readiness validation.
 - v0.5.6: FPS Display bridge-assisted render prototype with legacy fallback.
 - v0.5.7: FPS bridge consumer QA and fallback validation.
-- v0.5.8: Validate config/profile compatibility for version-specific modules.
+- v0.5.8: CPS Display bridge-assisted render prototype with legacy fallback.
+- v0.5.9: Validate config/profile compatibility for version-specific modules.
 - Later: create the separate 1.7.10 environment only after 1.8.9 remains stable through bridge proof of concept.

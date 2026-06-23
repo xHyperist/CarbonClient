@@ -3,7 +3,7 @@
 ## Client Launch
 
 - [ ] `.\gradlew.bat runClient` ile client aciliyor.
-- [ ] Loglarda `Carbon Client v0.5.7 is starting.` gorunuyor.
+- [ ] Loglarda `Carbon Client v0.5.8 is starting.` gorunuyor.
 - [ ] Loglarda `Carbon Client initialized successfully.` gorunuyor.
 - [ ] Carbon kaynakli crash yok.
 
@@ -283,4 +283,22 @@
 - [ ] `bridge.api`, `bridge.diagnostics`, `bridge.registry` import boundary bozulmadi.
 - [ ] `build.gradle` degistirilmedi.
 - [ ] Jar `build/libs/carbon-client-0.5.7.jar` olarak uretiliyor.
+- [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
+
+## v0.5.8 CPS Display Bridge-Assisted Render Prototype QA
+
+- [ ] CPS Display bridge-assisted render path bridge available iken deneniyor.
+- [ ] CPS Display bridge yoksa legacy render path'e guvenli dusuyor.
+- [ ] CPS Display bridge exception durumunda legacy fallback calisiyor.
+- [ ] CPS Display invalid width/height durumunda legacy fallback calisiyor.
+- [ ] CPS counting LMB-only kaldi.
+- [ ] Right CPS / Total CPS eklenmedi.
+- [ ] CPS settings degismedi.
+- [ ] CPS config/profile icin yeni alan eklenmedi.
+- [ ] CPS HUD Editor bounds degismedi.
+- [ ] FPS Display hala calisiyor.
+- [ ] CPS disinda yeni bridge consumer eklenmedi.
+- [ ] `bridge.api`, `bridge.diagnostics`, `bridge.registry` import boundary bozulmadi.
+- [ ] `build.gradle` degistirilmedi.
+- [ ] Jar `build/libs/carbon-client-0.5.8.jar` olarak uretiliyor.
 - [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
