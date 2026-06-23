@@ -3,7 +3,7 @@
 ## Client Launch
 
 - [ ] `.\gradlew.bat runClient` ile client aciliyor.
-- [ ] Loglarda `Carbon Client v0.5.9 is starting.` gorunuyor.
+- [ ] Loglarda `Carbon Client v0.5.10 is starting.` gorunuyor.
 - [ ] Loglarda `Carbon Client initialized successfully.` gorunuyor.
 - [ ] Carbon kaynakli crash yok.
 
@@ -323,4 +323,30 @@
 - [ ] `bridge.api`, `bridge.diagnostics`, `bridge.registry` import boundary bozulmadi.
 - [ ] `build.gradle` degistirilmedi.
 - [ ] Jar `build/libs/carbon-client-0.5.9.jar` olarak uretiliyor.
+- [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
+
+## v0.5.10 Clock HUD Bridge-Assisted Render Prototype QA
+
+- [ ] Clock HUD bridge-assisted render path bridge available iken deneniyor.
+- [ ] Clock HUD bridge yoksa legacy render path'e guvenli dusuyor.
+- [ ] Clock HUD bridge exception durumunda legacy fallback calisiyor.
+- [ ] Clock HUD invalid width/height durumunda legacy fallback calisiyor.
+- [ ] Clock local/system-time mantigi degismedi.
+- [ ] Clock 24H format mantigi degismedi.
+- [ ] Clock 12H format mantigi degismedi.
+- [ ] Show Seconds mantigi degismedi.
+- [ ] Show Prefix ve Prefix Text mantigi degismedi.
+- [ ] Clock settings degismedi.
+- [ ] Clock config/profile icin yeni alan eklenmedi.
+- [ ] Clock HUD Editor bounds degismedi.
+- [ ] FPS Display hala calisiyor.
+- [ ] CPS Display hala calisiyor.
+- [ ] Clock disinda yeni bridge consumer eklenmedi.
+- [ ] Coordinates HUD bridge'e tasinmadi.
+- [ ] RenderUtils bridge'e tasinmadi.
+- [ ] CarbonMenuScreen bridge'e tasinmadi.
+- [ ] ForgeEventBridge bridge'e tasinmadi.
+- [ ] `bridge.api`, `bridge.diagnostics`, `bridge.registry` import boundary bozulmadi.
+- [ ] `build.gradle` degistirilmedi.
+- [ ] Jar `build/libs/carbon-client-0.5.10.jar` olarak uretiliyor.
 - [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.

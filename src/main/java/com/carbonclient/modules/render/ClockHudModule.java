@@ -1,5 +1,8 @@
 package com.carbonclient.modules.render;
 
+import com.carbonclient.bridge.api.render.RenderBridge;
+import com.carbonclient.bridge.diagnostics.BridgeDiagnostics;
+import com.carbonclient.bridge.registry.BridgeRegistry;
 import com.carbonclient.event.EventListener;
 import com.carbonclient.event.impl.Render2DEvent;
 import com.carbonclient.module.DraggableHudModule;
@@ -92,6 +95,72 @@ public final class ClockHudModule extends Module implements DraggableHudModule {
     @Override
     public void renderHud() {
         String text = getDisplayText();
+        if (renderWithBridge(text)) {
+            return;
+        }
+        renderLegacy(text);
+    }
+
+    private boolean renderWithBridge(String text) {
+        if (!canUseRenderBridge()) {
+            return false;
+        }
+
+        RenderBridge renderBridge = BridgeRegistry.getRenderBridge();
+        if (renderBridge == null) {
+            return false;
+        }
+
+        boolean matrixPushed = false;
+        try {
+            int textWidth = renderBridge.getStringWidth(text);
+            int textHeight = renderBridge.getFontHeight();
+            if (textWidth <= 0 || textHeight <= 0) {
+                return false;
+            }
+
+            int padding = getPadding();
+            float renderScale = scale.getValue().floatValue();
+            int renderX = Math.round(getPositionX() / renderScale);
+            int renderY = Math.round(getPositionY() / renderScale);
+
+            GlStateManager.pushMatrix();
+            matrixPushed = true;
+            GlStateManager.scale(renderScale, renderScale, 1.0F);
+
+            if (showBackground.isEnabled()) {
+                renderBridge.drawRect(
+                    renderX,
+                    renderY,
+                    renderX + textWidth + padding * 2,
+                    renderY + textHeight + padding * 2,
+                    backgroundColor.getColor()
+                );
+            }
+            renderBridge.drawText(
+                text,
+                renderX + padding,
+                renderY + padding,
+                textColor.getColor(),
+                false
+            );
+            return true;
+        } catch (RuntimeException exception) {
+            return false;
+        } finally {
+            if (matrixPushed) {
+                GlStateManager.popMatrix();
+            }
+        }
+    }
+
+    private boolean canUseRenderBridge() {
+        return BridgeDiagnostics.isPassiveBridgeReady()
+            && BridgeRegistry.hasRenderBridge()
+            && BridgeRegistry.getRenderBridge() != null;
+    }
+
+    private void renderLegacy(String text) {
         int padding = getPadding();
         int textWidth = minecraft.fontRendererObj.getStringWidth(text);
         int textHeight = minecraft.fontRendererObj.FONT_HEIGHT;
