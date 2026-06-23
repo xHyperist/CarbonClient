@@ -84,6 +84,16 @@ This document is intentionally planning-only. It does not start the 1.7.10 port,
 - No other modules were migrated.
 - No 1.7.10 implementation yet.
 
+## v0.5.9 CPS Bridge Consumer QA
+
+- CPS Display bridge-assisted render prototype was validated.
+- Legacy fallback remains mandatory and still protects the HUD if the passive bridge is unavailable or returns invalid font metrics.
+- CPS counting logic remains LMB-only; no right-click CPS, total CPS, or config/profile runtime counters were added.
+- CPS options, config/profile format, HUD Editor bounds, and visual behavior remain unchanged.
+- FPS Display and CPS Display are the only bridge-assisted module consumers.
+- No other modules were migrated.
+- No 1.7.10 implementation yet.
+
 ## 2. Current 1.8.9 Status
 
 The 1.8.9 Forge client has a stable Release Candidate baseline:
@@ -334,5 +344,6 @@ Planning interfaces:
 - v0.5.6: FPS Display bridge-assisted render prototype with legacy fallback.
 - v0.5.7: FPS bridge consumer QA and fallback validation.
 - v0.5.8: CPS Display bridge-assisted render prototype with legacy fallback.
-- v0.5.9: Validate config/profile compatibility for version-specific modules.
+- v0.5.9: CPS bridge consumer QA with LMB-only counting and fallback validation.
+- v0.5.10: Validate config/profile compatibility for version-specific modules.
 - Later: create the separate 1.7.10 environment only after 1.8.9 remains stable through bridge proof of concept.

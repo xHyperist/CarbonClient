@@ -3,7 +3,7 @@
 ## Client Launch
 
 - [ ] `.\gradlew.bat runClient` ile client aciliyor.
-- [ ] Loglarda `Carbon Client v0.5.8 is starting.` gorunuyor.
+- [ ] Loglarda `Carbon Client v0.5.9 is starting.` gorunuyor.
 - [ ] Loglarda `Carbon Client initialized successfully.` gorunuyor.
 - [ ] Carbon kaynakli crash yok.
 
@@ -301,4 +301,26 @@
 - [ ] `bridge.api`, `bridge.diagnostics`, `bridge.registry` import boundary bozulmadi.
 - [ ] `build.gradle` degistirilmedi.
 - [ ] Jar `build/libs/carbon-client-0.5.8.jar` olarak uretiliyor.
+- [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
+
+## v0.5.9 CPS Bridge Consumer QA
+
+- [ ] CPS Display bridge-assisted render path kontrol edildi.
+- [ ] CPS Display legacy fallback kontrol edildi.
+- [ ] CPS counting LMB-only kaldi.
+- [ ] Right CPS / Total CPS eklenmedi.
+- [ ] CPS son 1000 ms sol tik penceresini kullanmaya devam ediyor.
+- [ ] CPS settings degismedi.
+- [ ] CPS config/profile icin yeni alan eklenmedi.
+- [ ] CPS HUD Editor bounds degismedi.
+- [ ] FPS ve CPS disinda yeni bridge consumer eklenmedi.
+- [ ] Clock HUD bridge'e tasinmadi.
+- [ ] Coordinates HUD bridge'e tasinmadi.
+- [ ] Keystrokes bridge'e tasinmadi.
+- [ ] RenderUtils bridge'e tasinmadi.
+- [ ] CarbonMenuScreen bridge'e tasinmadi.
+- [ ] ForgeEventBridge bridge'e tasinmadi.
+- [ ] `bridge.api`, `bridge.diagnostics`, `bridge.registry` import boundary bozulmadi.
+- [ ] `build.gradle` degistirilmedi.
+- [ ] Jar `build/libs/carbon-client-0.5.9.jar` olarak uretiliyor.
 - [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.

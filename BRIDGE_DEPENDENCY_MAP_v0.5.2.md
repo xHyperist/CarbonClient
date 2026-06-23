@@ -311,12 +311,12 @@ Responsibilities:
 - Started in v0.5.6 with FPS Display bridge-assisted render prototype.
 - FPS Display remains fallback-safe and keeps its legacy render path.
 - v0.5.7 completed FPS Display bridge consumer QA and fallback validation.
-- v0.5.8 continues Phase C with CPS Display bridge-assisted render prototype.
-- FPS Display and CPS Display are now fallback-safe bridge-assisted consumers.
+- v0.5.8 continued Phase C with CPS Display bridge-assisted render prototype.
+- v0.5.9 completed CPS Display bridge consumer QA.
+- FPS Display and CPS Display remain fallback-safe bridge-assisted consumers.
 - Continue moving one low-risk module at a time:
   - Clock HUD
   - Coordinates HUD
-  - Keystrokes partially
 - Build after each module.
 
 ### Phase D - UI Bridge Preparation
