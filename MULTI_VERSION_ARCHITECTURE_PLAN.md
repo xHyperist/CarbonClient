@@ -65,6 +65,15 @@ This document is intentionally planning-only. It does not start the 1.7.10 port,
 - No other modules were migrated.
 - No 1.7.10 implementation yet.
 
+## v0.5.7 FPS Bridge Consumer QA
+
+- FPS Display bridge-assisted render prototype was validated.
+- Bridge draw failures now propagate to the FPS fallback guard so the legacy render path can recover.
+- Legacy fallback remains mandatory.
+- FPS options, config/profile format, and HUD Editor bounds remain unchanged.
+- No other modules were migrated.
+- No 1.7.10 implementation yet.
+
 ## 2. Current 1.8.9 Status
 
 The 1.8.9 Forge client has a stable Release Candidate baseline:
@@ -313,5 +322,6 @@ Planning interfaces:
 - v0.5.4: Passive bridge runtime QA and null-safety hardening.
 - v0.5.5: Internal bridge diagnostics and readiness validation.
 - v0.5.6: FPS Display bridge-assisted render prototype with legacy fallback.
-- v0.5.7: Validate config/profile compatibility for version-specific modules.
+- v0.5.7: FPS bridge consumer QA and fallback validation.
+- v0.5.8: Validate config/profile compatibility for version-specific modules.
 - Later: create the separate 1.7.10 environment only after 1.8.9 remains stable through bridge proof of concept.

@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.5.7 - FPS Bridge Consumer QA
+
+- Validated FPS Display bridge-assisted render path.
+- Confirmed legacy fallback remains in place.
+- Adjusted bridge draw behavior so FPS can fall back if bridge drawing throws.
+- Confirmed FPS settings, config/profile format, and HUD Editor bounds remain unchanged.
+- Confirmed no other module migration.
+- Existing 1.8.9 build remains stable.
+
 ## v0.5.6 - FPS Display Bridge-Assisted Render Prototype
 
 - Added fallback-safe `RenderBridge` usage in FPS Display.

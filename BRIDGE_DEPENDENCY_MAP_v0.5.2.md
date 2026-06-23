@@ -310,6 +310,7 @@ Responsibilities:
 
 - Started in v0.5.6 with FPS Display bridge-assisted render prototype.
 - FPS Display remains fallback-safe and keeps its legacy render path.
+- v0.5.7 completed FPS Display bridge consumer QA and fallback validation.
 - Continue moving one low-risk module at a time:
   - CPS Display
   - Clock HUD

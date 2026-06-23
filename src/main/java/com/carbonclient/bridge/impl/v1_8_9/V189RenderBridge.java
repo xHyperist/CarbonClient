@@ -9,11 +9,7 @@ public final class V189RenderBridge implements RenderBridge {
 
     @Override
     public void drawRect(int left, int top, int right, int bottom, int color) {
-        try {
-            Gui.drawRect(left, top, right, bottom, color);
-        } catch (RuntimeException exception) {
-            // Passive bridge: rendering failures must not affect the active 1.8.9 path.
-        }
+        Gui.drawRect(left, top, right, bottom, color);
     }
 
     @Override
@@ -24,11 +20,7 @@ public final class V189RenderBridge implements RenderBridge {
         }
 
         String safeText = text != null ? text : "";
-        try {
-            fontRenderer.drawString(safeText, x, y, color, shadow);
-        } catch (RuntimeException exception) {
-            // Passive bridge: rendering failures must not affect the active 1.8.9 path.
-        }
+        fontRenderer.drawString(safeText, x, y, color, shadow);
     }
 
     @Override

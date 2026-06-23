@@ -3,7 +3,7 @@
 ## Client Launch
 
 - [ ] `.\gradlew.bat runClient` ile client aciliyor.
-- [ ] Loglarda `Carbon Client v0.5.6 is starting.` gorunuyor.
+- [ ] Loglarda `Carbon Client v0.5.7 is starting.` gorunuyor.
 - [ ] Loglarda `Carbon Client initialized successfully.` gorunuyor.
 - [ ] Carbon kaynakli crash yok.
 
@@ -266,4 +266,21 @@
 - [ ] 1.7.10 kodu veya dependency eklenmedi.
 - [ ] `build.gradle` degistirilmedi.
 - [ ] Jar `build/libs/carbon-client-0.5.6.jar` olarak uretiliyor.
+- [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
+
+## v0.5.7 FPS Bridge Consumer QA
+
+- [ ] FPS bridge path `BridgeDiagnostics.isPassiveBridgeReady()` kontrol ediyor.
+- [ ] FPS bridge path `BridgeRegistry.hasRenderBridge()` kontrol ediyor.
+- [ ] FPS bridge path null `RenderBridge` durumunda legacy fallback'e dusuyor.
+- [ ] FPS bridge path bridge exception durumunda legacy fallback'e dusuyor.
+- [ ] FPS bridge path invalid width/height durumunda legacy fallback'e dusuyor.
+- [ ] Bridge path basarili olursa duplicate FPS render olmuyor.
+- [ ] FPS options degismedi.
+- [ ] FPS config/profile icin yeni alan eklenmedi.
+- [ ] FPS HUD Editor bounds legacy hesapla kaldi.
+- [ ] FPS disinda yeni bridge consumer eklenmedi.
+- [ ] `bridge.api`, `bridge.diagnostics`, `bridge.registry` import boundary bozulmadi.
+- [ ] `build.gradle` degistirilmedi.
+- [ ] Jar `build/libs/carbon-client-0.5.7.jar` olarak uretiliyor.
 - [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
