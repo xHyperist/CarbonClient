@@ -147,6 +147,16 @@ This document is intentionally planning-only. It does not start the 1.7.10 port,
 - No additional module migration was introduced.
 - No 1.7.10 implementation yet.
 
+## v0.5.15 Low-Risk Render Bridge Consumers QA Pass II
+
+- FPS Display, CPS Display, Clock HUD, and Coordinates HUD bridge-assisted consumers were validated together.
+- Legacy fallback remains mandatory across all four consumers.
+- Coordinates remains render-only bridge-assisted; player/world data is still direct 1.8.9.
+- Config/profile format and HUD Editor bounds remain unchanged.
+- No additional module migration was introduced.
+- No 1.7.10 implementation yet.
+- Next candidate can be Keystrokes partial render, with caution due to pressed key, mouse, and space state handling.
+
 ## 2. Current 1.8.9 Status
 
 The 1.8.9 Forge client has a stable Release Candidate baseline:
@@ -403,5 +413,6 @@ Planning interfaces:
 - v0.5.12: Low-risk bridge consumers QA pass for FPS, CPS, and Clock HUD.
 - v0.5.13: Coordinates HUD bridge-assisted render prototype, render-only bridge use.
 - v0.5.14: Coordinates HUD bridge consumer QA, render-only bridge use validated.
-- v0.5.15: Validate config/profile compatibility for version-specific modules.
+- v0.5.15: Low-risk render bridge consumers QA pass II for FPS, CPS, Clock, and Coordinates.
+- v0.5.16: Validate config/profile compatibility for version-specific modules.
 - Later: create the separate 1.7.10 environment only after 1.8.9 remains stable through bridge proof of concept.

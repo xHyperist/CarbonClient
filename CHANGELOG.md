@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.5.15 - Low-Risk Render Bridge Consumers QA Pass II
+
+- Validated FPS, CPS, Clock, and Coordinates bridge-assisted render consumers together.
+- Confirmed legacy fallback behavior remains mandatory across all four consumers.
+- Confirmed no config/profile format changes were introduced.
+- Confirmed HUD Editor bounds remain on the legacy calculation path.
+- Confirmed Coordinates remains render-only bridge-assisted with direct 1.8.9 player/world data access.
+- Confirmed no additional module migration.
+- Confirmed no 1.7.10 code, dependency, source-set, or build.gradle changes were introduced.
+- Existing 1.8.9 build remains stable.
+
 ## v0.5.14 - Coordinates HUD Bridge Consumer QA
 
 - Validated Coordinates HUD bridge-assisted render path.

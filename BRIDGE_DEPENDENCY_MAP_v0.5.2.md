@@ -318,11 +318,12 @@ Responsibilities:
 - v0.5.12 completed low-risk bridge consumer QA for FPS, CPS, and Clock HUD together.
 - v0.5.13 continues Phase C with Coordinates HUD render-only bridge prototype.
 - v0.5.14 completed Coordinates HUD bridge consumer QA.
+- v0.5.15 completed low-risk render bridge consumer QA pass II for FPS, CPS, Clock, and Coordinates.
 - FPS Display, CPS Display, and Clock HUD remain fallback-safe bridge-assisted consumers.
 - Render-only bridge consumers are stable with legacy fallback.
 - Coordinates HUD remains render-only bridge-assisted; entity/world data abstraction is future work.
 - Continue moving one low-risk module at a time:
-  - Keystrokes partial render
+  - Keystrokes partial render, with caution for input state and multi-box rendering
   - HUD render utility abstraction later
   - Low-risk consumer cleanup pass
 - Build after each module.
