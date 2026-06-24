@@ -242,6 +242,18 @@ This document is intentionally planning-only. It does not start the 1.7.10 port,
 - No new bridge consumer was added.
 - No 1.7.10 implementation yet.
 
+## v0.5.24 Multi-Version Bridge Phase Review
+
+- v0.5.x bridge preparation was reviewed and checkpointed.
+- Current render-only bridge consumers are FPS Display, CPS Display, Clock HUD, Coordinates HUD, Keystrokes, and Ping Display.
+- Legacy/not migrated systems were classified with risk notes.
+- v0.6.0 entry criteria and v0.6.x roadmap were prepared.
+- Module enabled-state persistence hotfix should receive manual restart QA before v0.6 implementation work if that runtime check has not already been completed.
+- No runtime behavior changes were introduced.
+- No new bridge consumer was added.
+- No 1.7.10 implementation yet.
+- See `MULTI_VERSION_PHASE_REVIEW_v0.5.24.md`.
+
 ## 2. Current 1.8.9 Status
 
 The 1.8.9 Forge client has a stable Release Candidate baseline:
@@ -507,5 +519,11 @@ Planning interfaces:
 - v0.5.21: Ping Display render-only bridge prototype.
 - v0.5.22: Ping Display bridge consumer QA.
 - v0.5.23: Module enabled state persistence bugfix plus Armor/Potion bridge risk analysis.
-- v0.5.24: Armor/Potion bridge phase decision or multi-version bridge phase review.
+- v0.5.24: Multi-version bridge phase review and v0.6.0 planning.
+- v0.6.0: Multi-Version Runtime Preparation.
+- v0.6.1: 1.7.10 Environment Strategy / Branch or Source Layout Decision.
+- v0.6.2: Common vs Version-Specific Package Separation Plan.
+- v0.6.3: First 1.7.10 Experimental Runtime Setup in a separate branch or safe isolation.
+- v0.6.4: Low-risk module port candidate analysis: Clock/FPS/CPS.
+- v0.6.5: First low-risk 1.7.10 module prototype in isolated work only.
 - Later: create the separate 1.7.10 environment only after 1.8.9 remains stable through bridge proof of concept.

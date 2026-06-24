@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.5.24 - Multi-Version Bridge Phase Review
+
+- Added v0.5.x bridge phase review.
+- Documented current render-only bridge consumers.
+- Documented legacy/not migrated systems.
+- Added Armor/Potion and other module risk classification.
+- Added v0.6.0 entry plan and v0.6.x roadmap.
+- Confirmed no runtime behavior changes.
+- Confirmed no new bridge consumer.
+- Confirmed no 1.7.10 code/dependency added.
+
 ## v0.5.23 - Module Enabled State Persistence + Armor/Potion Risk Analysis
 
 - Hotfix audit: verified the actual git diff and completed the real persistence fix.
