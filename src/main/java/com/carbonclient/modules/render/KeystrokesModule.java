@@ -1,5 +1,8 @@
 package com.carbonclient.modules.render;
 
+import com.carbonclient.bridge.api.render.RenderBridge;
+import com.carbonclient.bridge.diagnostics.BridgeDiagnostics;
+import com.carbonclient.bridge.registry.BridgeRegistry;
 import com.carbonclient.event.EventListener;
 import com.carbonclient.event.impl.Render2DEvent;
 import com.carbonclient.module.DraggableHudModule;
@@ -91,6 +94,130 @@ public final class KeystrokesModule extends Module implements DraggableHudModule
 
     @Override
     public void renderHud() {
+        if (renderWithBridge()) {
+            return;
+        }
+        renderLegacy();
+    }
+
+    private boolean renderWithBridge() {
+        if (!canUseRenderBridge()) {
+            return false;
+        }
+
+        RenderBridge renderBridge = BridgeRegistry.getRenderBridge();
+        if (renderBridge == null || !hasValidBridgeMetrics(renderBridge)) {
+            return false;
+        }
+
+        boolean matrixPushed = false;
+        try {
+            float renderScale = scale.getValue().floatValue();
+            int renderX = Math.round(getPositionX() / renderScale);
+            int renderY = Math.round(getPositionY() / renderScale);
+            int gap = getGap();
+            int rowY = renderY;
+
+            GlStateManager.pushMatrix();
+            matrixPushed = true;
+            GlStateManager.scale(renderScale, renderScale, 1.0F);
+
+            if (showMovementKeys.isEnabled()) {
+                drawKeyWithBridge(
+                    renderBridge,
+                    "W",
+                    renderX + KEY_WIDTH + gap,
+                    renderY,
+                    KEY_WIDTH,
+                    isKeyDown(minecraft.gameSettings.keyBindForward)
+                );
+                int secondRowY = rowY + KEY_HEIGHT + gap;
+                drawKeyWithBridge(
+                    renderBridge,
+                    "A",
+                    renderX,
+                    secondRowY,
+                    KEY_WIDTH,
+                    isKeyDown(minecraft.gameSettings.keyBindLeft)
+                );
+                drawKeyWithBridge(
+                    renderBridge,
+                    "S",
+                    renderX + KEY_WIDTH + gap,
+                    secondRowY,
+                    KEY_WIDTH,
+                    isKeyDown(minecraft.gameSettings.keyBindBack)
+                );
+                drawKeyWithBridge(
+                    renderBridge,
+                    "D",
+                    renderX + (KEY_WIDTH + gap) * 2,
+                    secondRowY,
+                    KEY_WIDTH,
+                    isKeyDown(minecraft.gameSettings.keyBindRight)
+                );
+                rowY = secondRowY + KEY_HEIGHT + gap;
+            }
+
+            if (showClicks.isEnabled()) {
+                drawKeyWithBridge(
+                    renderBridge,
+                    "LMB",
+                    renderX,
+                    rowY,
+                    MOUSE_WIDTH,
+                    Mouse.isButtonDown(0)
+                );
+                drawKeyWithBridge(
+                    renderBridge,
+                    "RMB",
+                    renderX + MOUSE_WIDTH + gap,
+                    rowY,
+                    MOUSE_WIDTH,
+                    Mouse.isButtonDown(1)
+                );
+                rowY += KEY_HEIGHT + gap;
+            }
+
+            if (showSpace.isEnabled()) {
+                drawKeyWithBridge(
+                    renderBridge,
+                    "SPACE",
+                    renderX,
+                    rowY,
+                    getUnscaledWidth(),
+                    isKeyDown(minecraft.gameSettings.keyBindJump)
+                );
+            }
+
+            return true;
+        } catch (RuntimeException exception) {
+            return false;
+        } finally {
+            if (matrixPushed) {
+                GlStateManager.popMatrix();
+            }
+        }
+    }
+
+    private boolean canUseRenderBridge() {
+        return BridgeDiagnostics.isPassiveBridgeReady()
+            && BridgeRegistry.hasRenderBridge()
+            && BridgeRegistry.getRenderBridge() != null;
+    }
+
+    private boolean hasValidBridgeMetrics(RenderBridge renderBridge) {
+        return renderBridge.getFontHeight() > 0
+            && renderBridge.getStringWidth("W") > 0
+            && renderBridge.getStringWidth("A") > 0
+            && renderBridge.getStringWidth("S") > 0
+            && renderBridge.getStringWidth("D") > 0
+            && renderBridge.getStringWidth("LMB") > 0
+            && renderBridge.getStringWidth("RMB") > 0
+            && renderBridge.getStringWidth("SPACE") > 0;
+    }
+
+    private void renderLegacy() {
         float renderScale = scale.getValue().floatValue();
         int renderX = Math.round(getPositionX() / renderScale);
         int renderY = Math.round(getPositionY() / renderScale);
@@ -197,6 +324,30 @@ public final class KeystrokesModule extends Module implements DraggableHudModule
             Gui.drawRect(x, y, x + width, y + KEY_HEIGHT, color);
         }
         minecraft.fontRendererObj.drawString(label, textX, textY, textColor.getColor());
+    }
+
+    private void drawKeyWithBridge(
+        RenderBridge renderBridge,
+        String label,
+        int x,
+        int y,
+        int width,
+        boolean active
+    ) {
+        int textWidth = renderBridge.getStringWidth(label);
+        int fontHeight = renderBridge.getFontHeight();
+        if (textWidth <= 0 || fontHeight <= 0) {
+            throw new IllegalStateException("Invalid bridge font metrics");
+        }
+
+        int color = active ? pressedColor.getColor() : backgroundColor.getColor();
+        int textX = x + (width - textWidth) / 2;
+        int textY = y + (KEY_HEIGHT - fontHeight) / 2;
+
+        if (active || showBackground.isEnabled()) {
+            renderBridge.drawRect(x, y, x + width, y + KEY_HEIGHT, color);
+        }
+        renderBridge.drawText(label, textX, textY, textColor.getColor(), false);
     }
 
     private int getUnscaledWidth() {

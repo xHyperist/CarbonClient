@@ -157,6 +157,17 @@ This document is intentionally planning-only. It does not start the 1.7.10 port,
 - No 1.7.10 implementation yet.
 - Next candidate can be Keystrokes partial render, with caution due to pressed key, mouse, and space state handling.
 
+## v0.5.16 Keystrokes Partial Render Bridge Prototype
+
+- Keystrokes is now a partial bridge-assisted render consumer.
+- Only the render path uses `RenderBridge`.
+- W/A/S/D, LMB/RMB, and SPACE pressed state logic remains legacy/direct 1.8.9.
+- `InputBridge` is not used yet.
+- Legacy render fallback remains mandatory and is still present.
+- Keystrokes settings, config/profile format, HUD Editor bounds, and visual behavior remain unchanged.
+- No other modules were migrated.
+- No 1.7.10 implementation yet.
+
 ## 2. Current 1.8.9 Status
 
 The 1.8.9 Forge client has a stable Release Candidate baseline:
@@ -414,5 +425,6 @@ Planning interfaces:
 - v0.5.13: Coordinates HUD bridge-assisted render prototype, render-only bridge use.
 - v0.5.14: Coordinates HUD bridge consumer QA, render-only bridge use validated.
 - v0.5.15: Low-risk render bridge consumers QA pass II for FPS, CPS, Clock, and Coordinates.
-- v0.5.16: Validate config/profile compatibility for version-specific modules.
+- v0.5.16: Keystrokes partial render bridge prototype with key/mouse state still direct 1.8.9.
+- v0.5.17: Keystrokes bridge consumer QA and low-risk render consumer cleanup.
 - Later: create the separate 1.7.10 environment only after 1.8.9 remains stable through bridge proof of concept.

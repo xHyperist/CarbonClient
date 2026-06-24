@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.5.16 - Keystrokes Partial Render Bridge Prototype
+
+- Added fallback-safe `RenderBridge` usage in the Keystrokes render path.
+- Kept the legacy Keystrokes render path.
+- Kept W/A/S/D, LMB/RMB, and SPACE pressed state logic unchanged.
+- Did not use `InputBridge` yet.
+- Kept Keystrokes settings, config/profile format, HUD Editor bounds, and visual behavior unchanged.
+- No user-facing render backend or input bridge setting was added.
+- No other modules were migrated to bridge APIs.
+- No 1.7.10 code, dependency, source-set, or build.gradle changes were introduced.
+
 ## v0.5.15 - Low-Risk Render Bridge Consumers QA Pass II
 
 - Validated FPS, CPS, Clock, and Coordinates bridge-assisted render consumers together.

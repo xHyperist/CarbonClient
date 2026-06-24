@@ -3,7 +3,7 @@
 ## Client Launch
 
 - [ ] `.\gradlew.bat runClient` ile client aciliyor.
-- [ ] Loglarda `Carbon Client v0.5.15 is starting.` gorunuyor.
+- [ ] Loglarda `Carbon Client v0.5.16 is starting.` gorunuyor.
 - [ ] Loglarda `Carbon Client initialized successfully.` gorunuyor.
 - [ ] Carbon kaynakli crash yok.
 
@@ -487,4 +487,32 @@
 - [ ] `build.gradle` degistirilmedi.
 - [ ] 1.7.10 code/dependency eklenmedi.
 - [ ] Jar `build/libs/carbon-client-0.5.15.jar` olarak uretiliyor.
+- [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
+
+## v0.5.16 Keystrokes Partial Render Bridge Prototype QA
+
+- [ ] Keystrokes bridge-assisted render path kontrol edildi.
+- [ ] Keystrokes bridge hazir degilse legacy render path'e guvenli dusuyor.
+- [ ] Keystrokes bridge exception durumunda legacy fallback calisiyor.
+- [ ] Keystrokes invalid width/height/font metric durumunda legacy fallback calisiyor.
+- [ ] W/A/S/D pressed logic degismedi.
+- [ ] LMB/RMB pressed logic degismedi.
+- [ ] SPACE pressed logic degismedi.
+- [ ] InputBridge kullanilmadi.
+- [ ] Keystrokes settings degismedi.
+- [ ] Keystrokes config/profile icin yeni alan eklenmedi.
+- [ ] Keystrokes HUD Editor bounds degismedi.
+- [ ] Show Space acik/kapali bounds mevcut legacy mantikta kaldi.
+- [ ] FPS/CPS/Clock/Coordinates hala calisiyor.
+- [ ] Keystrokes disinda yeni bridge consumer eklenmedi.
+- [ ] Diger HUD modulleri bridge'e tasinmadi.
+- [ ] RenderUtils bridge'e tasinmadi.
+- [ ] CarbonMenuScreen bridge'e tasinmadi.
+- [ ] HudLayoutEditorScreen bridge'e tasinmadi.
+- [ ] ForgeEventBridge bridge'e tasinmadi.
+- [ ] KeyInputHandler bridge'e tasinmadi.
+- [ ] `bridge.api`, `bridge.diagnostics`, `bridge.registry` import boundary bozulmadi.
+- [ ] `build.gradle` degistirilmedi.
+- [ ] 1.7.10 code/dependency eklenmedi.
+- [ ] Jar `build/libs/carbon-client-0.5.16.jar` olarak uretiliyor.
 - [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
