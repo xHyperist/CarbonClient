@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.5.20 - Render Bridge Helper QA
+
+- Validated the `RenderBridgeAccess` helper.
+- Confirmed FPS, CPS, Clock, Coordinates, and Keystrokes still use safe bridge fallback.
+- Confirmed config/profile format and HUD Editor bounds remain unchanged.
+- Confirmed no additional module migration.
+- Confirmed no `InputBridge`, `EntityBridge`, or `WorldBridge` usage.
+- Confirmed no 1.7.10 code, dependency, source-set, or build.gradle changes were introduced.
+- Existing 1.8.9 build remains stable.
+
 ## v0.5.19 - Render Bridge Helper Cleanup / Extraction
 
 - Added a small helper for safe `RenderBridge` access and metric handling.
