@@ -254,6 +254,19 @@ This document is intentionally planning-only. It does not start the 1.7.10 port,
 - No 1.7.10 implementation yet.
 - See `MULTI_VERSION_PHASE_REVIEW_v0.5.24.md`.
 
+## v0.6.0 Multi-Version Runtime Preparation
+
+- v0.6.0 starts the multi-version runtime preparation phase after the v0.5.x bridge groundwork.
+- The current runtime remains Minecraft 1.8.9 Forge.
+- No 1.7.10 code, dependency, source-set, or multi-project build change was introduced.
+- `build.gradle` was not changed.
+- `MULTI_VERSION_RUNTIME_PREPARATION_v0.6.0.md` documents the v0.6 strategy.
+- Performance-first architecture is now a core rule: avoid unnecessary render tick allocation, disk IO, logging, and heavy HUD work.
+- PvP responsiveness is now a core rule: improve feel through FPS stability, input responsiveness, lightweight rendering, and stable frame timing, not cheat mechanics.
+- Rod responsiveness is a legit client-feel goal only; no rod cooldown bypass, packet exploit, or server-side mechanic manipulation is allowed.
+- Common vs version-specific package candidates were documented.
+- Branch/source-set/multi-project build options were documented, with isolated branch work preferred for the first 1.7.10 experiment.
+- Future v0.8.x Performance / FPS Optimization Phase was added as a roadmap note.
 ## 2. Current 1.8.9 Status
 
 The 1.8.9 Forge client has a stable Release Candidate baseline:
@@ -527,3 +540,19 @@ Planning interfaces:
 - v0.6.4: Low-risk module port candidate analysis: Clock/FPS/CPS.
 - v0.6.5: First low-risk 1.7.10 module prototype in isolated work only.
 - Later: create the separate 1.7.10 environment only after 1.8.9 remains stable through bridge proof of concept.
+- v0.8.x: Performance / FPS Optimization Phase: HUD render performance, config/profile IO optimization, render tick allocation reduction, GL state optimization, module tick optimization, frame time monitoring, PvP low latency planning, rod responsiveness validation, and benchmark/FPS checklist.
+
+## 14. Performance-First and PvP Responsiveness Rules
+
+Performance-first rule:
+
+- Carbon Client must avoid unnecessary per-frame overhead.
+- Render tick paths should avoid unnecessary allocation, disk IO, config/profile saves, and log spam.
+- HUD and bridge abstraction layers must stay lightweight enough to preserve high FPS and stable frame time.
+- Disabled modules should not perform unnecessary tick/render work.
+
+PvP responsiveness rule:
+
+- Carbon Client should improve PvP feel through FPS stability, input responsiveness, lightweight rendering, and stable frame timing.
+- Rod, block hit, bow, pearl, and item-use feel should remain smooth on the client side.
+- This must never become rod cooldown bypass, packet spam, reach manipulation, hitbox manipulation, velocity manipulation, aim assist, autoclicker, or server-side mechanic manipulation.

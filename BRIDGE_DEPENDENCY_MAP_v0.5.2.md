@@ -357,6 +357,19 @@ Responsibilities:
 - ToggleSprint, Crosshair, Reach Display, Combo Display, Fullbright, Time Changer, RenderUtils, UI screens, event adapters, and input handling remain legacy/direct 1.8.9.
 - v0.6.0 should start with runtime preparation and version strategy, not an immediate 1.7.10 port.
 
+### v0.6.0 Transition Note
+
+- v0.6.0 starts multi-version runtime preparation only.
+- Current render-only bridge consumers remain FPS Display, CPS Display, Clock HUD, Coordinates HUD, Keystrokes, and Ping Display.
+- No new bridge consumer was added.
+- No 1.7.10 runtime, dependency, source-set, or `build.gradle` change was introduced.
+- Future adapter needs:
+  - InputBridge for Keystrokes and keybind/input state.
+  - EntityBridge/WorldBridge for Coordinates, Reach Display, and Combo Display.
+  - Network/Game bridge for Ping Display if needed.
+  - Item render bridge for Armor HUD.
+  - Texture/icon bridge for Potion HUD.
+- Performance-first and PvP responsiveness rules should guide future bridge work so abstraction does not create frame spikes or input delay.
 ### Phase D - UI Bridge Preparation
 
 - Introduce `RenderBridge` into `RenderUtils`.

@@ -1,6 +1,6 @@
 # Carbon Client
 
-Carbon Client, Minecraft 1.8.9 Forge uzerine gelistirilmis premium PvP/HUD client altyapisidir. v0.5.24, Multi-Version Bridge Phase Review asamasidir.
+Carbon Client, Minecraft 1.8.9 Forge uzerine gelistirilmis premium PvP/HUD client altyapisidir. v0.6.0, Multi-Version Runtime Preparation asamasidir.
 
 Carbon Client bir cheat/hile client degildir. Fly, speed, reach, velocity, autoclicker, aim assist veya combat avantaji saglayan ozellikler hedeflenmez.
 
@@ -33,7 +33,7 @@ Jar uretmek:
 Cikti jar dosyasi:
 
 ```text
-build/libs/carbon-client-0.5.24.jar
+build/libs/carbon-client-0.6.0.jar
 ```
 
 Temiz build almak:
@@ -98,7 +98,7 @@ Onemli dosyalar:
 2. Minecraft ana menusu acildiginda Carbon Client loglarini kontrol et.
 3. Oyun icinde `RSHIFT` ile Carbon Menu'yu ac.
 4. Mods Tab, Options, Keybinds, Profiles, Color Picker ve HUD Editor akislarini test et.
-5. Jar ile test etmek icin `build/libs/carbon-client-0.5.24.jar` dosyasini Minecraft 1.8.9 Forge `mods` klasorune koy.
+5. Jar ile test etmek icin `build/libs/carbon-client-0.6.0.jar` dosyasini Minecraft 1.8.9 Forge `mods` klasorune koy.
 
 ## Multi-Version Plan
 
@@ -130,12 +130,14 @@ Onemli dosyalar:
 - v0.5.23 fixes and validates module enabled-state persistence across restarts, and adds Armor/Potion bridge risk analysis.
 - v0.5.23-hotfix audits the real file state and prevents stale active profile snapshots from overwriting newer config enabled states.
 - v0.5.24 completes the Multi-Version Bridge Phase Review, reviews v0.5.x render bridge preparation, and prepares v0.6.0 planning.
+- v0.6.0 starts Multi-Version Runtime Preparation, documents performance-first and PvP responsiveness goals, and keeps runtime on 1.8.9 with no 1.7.10 code/dependency yet.
 - Current runtime still remains Minecraft 1.8.9 Forge; bridge usage is limited to internal render-assisted consumers.
 - This does not mean 1.7.10 support is active yet.
 - No 1.12.2, 1.16.5, or 1.20.x target is planned right now.
 - See `MULTI_VERSION_ARCHITECTURE_PLAN.md` for common/version-specific system boundaries and migration phases.
 - See `BRIDGE_DEPENDENCY_MAP_v0.5.2.md` for class-level dependency categories, bridge needs, and migration order.
 - See `MULTI_VERSION_PHASE_REVIEW_v0.5.24.md` for the v0.5.x bridge checkpoint and v0.6.x roadmap.
+- See `MULTI_VERSION_RUNTIME_PREPARATION_v0.6.0.md` for the v0.6 runtime preparation, performance-first rule, and PvP responsiveness plan.
 
 ## Yasak / Istenmeyen Yon
 
@@ -153,7 +155,8 @@ Carbon Client bir cheat/hile client degildir. Asagidaki ozellikler hedeflenmez:
 
 - v0.4.x: 1.8.9 polish, stabilite ve UX iyilestirmeleri
 - v0.5.x: Multi-version architecture planning ve 1.7.10 port hazirligi
-- v0.6.x: 1.7.10 first boot ve feature parity
+- v0.6.x: Multi-version runtime preparation and isolated 1.7.10 strategy
+- v0.8.x: Performance / FPS Optimization Phase
 - Later / research required: Scoreboard customization after safe vanilla render hook research
 - Later / research required: Zoom after OptiFine/launcher compatibility planning
 - Later: Block Overlay

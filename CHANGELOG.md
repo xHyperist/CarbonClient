@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.6.0 - Multi-Version Runtime Preparation
+
+- Added v0.6 multi-version runtime preparation document.
+- Added performance-first architecture rule.
+- Added PvP responsiveness and rod responsiveness goals.
+- Documented common vs version-specific strategy.
+- Documented v0.6.x roadmap.
+- Confirmed no runtime behavior changes.
+- Confirmed no 1.7.10 code/dependency added.
+
 ## v0.5.24 - Multi-Version Bridge Phase Review
 
 - Added v0.5.x bridge phase review.

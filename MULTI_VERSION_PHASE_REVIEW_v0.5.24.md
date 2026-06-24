@@ -142,3 +142,8 @@ Alternative if manual runtime validation is still incomplete:
 Known checkpoint note:
 
 - The module enabled-state persistence hotfix has build/static validation, but if manual restart QA was not completed locally, it should be completed before v0.6 implementation work begins.
+## v0.6.0 Follow-Up
+
+- v0.6.0 Multi-Version Runtime Preparation has started in `MULTI_VERSION_RUNTIME_PREPARATION_v0.6.0.md`.
+- The next phase documents performance-first architecture and PvP responsiveness / rod responsiveness principles.
+- Current runtime remains 1.8.9, and no 1.7.10 code/dependency has been added yet.

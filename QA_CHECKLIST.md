@@ -3,7 +3,7 @@
 ## Client Launch
 
 - [ ] `.\gradlew.bat runClient` ile client aciliyor.
-- [ ] Loglarda `Carbon Client v0.5.24 is starting.` gorunuyor.
+- [ ] Loglarda `Carbon Client v0.6.0 is starting.` gorunuyor.
 - [ ] Loglarda `Carbon Client initialized successfully.` gorunuyor.
 - [ ] Carbon kaynakli crash yok.
 
@@ -742,4 +742,22 @@
 - [ ] `build.gradle` degistirilmedi.
 - [ ] 1.7.10 code/dependency eklenmedi.
 - [ ] Jar `build/libs/carbon-client-0.5.24.jar` olarak uretiliyor.
+- [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
+
+## v0.6.0 Multi-Version Runtime Preparation
+
+- [ ] v0.6.0 planning document added.
+- [ ] Performance-first rule documented.
+- [ ] PvP responsiveness rule documented.
+- [ ] Rod responsiveness goals documented with legit boundaries.
+- [ ] Common/version-specific strategy documented.
+- [ ] Build strategy options documented.
+- [ ] v0.6.x roadmap documented.
+- [ ] v0.8 performance roadmap note documented.
+- [ ] No new bridge consumers added.
+- [ ] No `build.gradle` changes.
+- [ ] No 1.7.10 dependency added.
+- [ ] No InputBridge/EntityBridge/WorldBridge usage added.
+- [ ] No cheat/PvP advantage feature added.
+- [ ] Jar `build/libs/carbon-client-0.6.0.jar` olarak uretiliyor.
 - [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
