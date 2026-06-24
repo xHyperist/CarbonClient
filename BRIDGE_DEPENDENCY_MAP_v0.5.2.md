@@ -315,9 +315,11 @@ Responsibilities:
 - v0.5.9 completed CPS Display bridge consumer QA.
 - v0.5.10 continues Phase C with Clock HUD bridge-assisted render prototype.
 - v0.5.11 completed Clock HUD bridge consumer QA.
+- v0.5.12 completed low-risk bridge consumer QA for FPS, CPS, and Clock HUD together.
 - FPS Display, CPS Display, and Clock HUD remain fallback-safe bridge-assisted consumers.
+- Render-only bridge consumers are stable with legacy fallback.
 - Continue moving one low-risk module at a time:
-  - Coordinates HUD
+  - Coordinates HUD, with extra care for player/world/direction/biome dependencies
   - Keystrokes partial render
   - HUD render utility abstraction later
 - Build after each module.

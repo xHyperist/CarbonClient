@@ -16,7 +16,7 @@ public final class V189RenderBridge implements RenderBridge {
     public void drawText(String text, float x, float y, int color, boolean shadow) {
         FontRenderer fontRenderer = getFontRenderer();
         if (fontRenderer == null) {
-            return;
+            throw new IllegalStateException("Font renderer is not available");
         }
 
         String safeText = text != null ? text : "";

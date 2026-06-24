@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.5.12 - Low-Risk Bridge Consumers QA Pass
+
+- Validated FPS, CPS, and Clock HUD bridge-assisted render consumers together.
+- Confirmed legacy fallback behavior remains mandatory across all three consumers.
+- Confirmed no config/profile format changes were introduced.
+- Confirmed HUD Editor bounds remain on the legacy calculation path.
+- Hardened `V189RenderBridge.drawText` so missing font renderer state reaches consumer fallback instead of failing silently.
+- Confirmed no additional module migration.
+- Confirmed no 1.7.10 code, dependency, source-set, or build.gradle changes were introduced.
+- Existing 1.8.9 build remains stable.
+
 ## v0.5.11 - Clock HUD Bridge Consumer QA
 
 - Validated Clock HUD bridge-assisted render path.

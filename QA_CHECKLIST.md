@@ -3,7 +3,7 @@
 ## Client Launch
 
 - [ ] `.\gradlew.bat runClient` ile client aciliyor.
-- [ ] Loglarda `Carbon Client v0.5.11 is starting.` gorunuyor.
+- [ ] Loglarda `Carbon Client v0.5.12 is starting.` gorunuyor.
 - [ ] Loglarda `Carbon Client initialized successfully.` gorunuyor.
 - [ ] Carbon kaynakli crash yok.
 
@@ -376,4 +376,31 @@
 - [ ] `bridge.api`, `bridge.diagnostics`, `bridge.registry` import boundary bozulmadi.
 - [ ] `build.gradle` degistirilmedi.
 - [ ] Jar `build/libs/carbon-client-0.5.11.jar` olarak uretiliyor.
+- [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
+
+## v0.5.12 Low-Risk Bridge Consumers QA Pass
+
+- [ ] FPS/CPS/Clock bridge consumers birlikte kontrol edildi.
+- [ ] FPS Display bridge fallback kontrol edildi.
+- [ ] CPS Display bridge fallback kontrol edildi.
+- [ ] Clock HUD bridge fallback kontrol edildi.
+- [ ] FPS/CPS/Clock legacy fallback zorunlu kaldi.
+- [ ] FPS/CPS/Clock config/profile formatlari degismedi.
+- [ ] FPS/CPS/Clock HUD Editor bounds legacy hesapta kaldi.
+- [ ] FPS runtime value config/profile'a yazilmiyor.
+- [ ] CPS click list/value config/profile'a yazilmiyor.
+- [ ] Clock runtime time config/profile'a yazilmiyor.
+- [ ] FPS/CPS/Clock disinda yeni bridge consumer eklenmedi.
+- [ ] Coordinates HUD bridge'e tasinmadi.
+- [ ] Keystrokes bridge'e tasinmadi.
+- [ ] Diger HUD modulleri bridge'e tasinmadi.
+- [ ] RenderUtils bridge'e tasinmadi.
+- [ ] CarbonMenuScreen bridge'e tasinmadi.
+- [ ] HudLayoutEditorScreen bridge'e tasinmadi.
+- [ ] ForgeEventBridge bridge'e tasinmadi.
+- [ ] KeyInputHandler bridge'e tasinmadi.
+- [ ] `bridge.api`, `bridge.diagnostics`, `bridge.registry` import boundary bozulmadi.
+- [ ] `build.gradle` degistirilmedi.
+- [ ] 1.7.10 code/dependency eklenmedi.
+- [ ] Jar `build/libs/carbon-client-0.5.12.jar` olarak uretiliyor.
 - [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.

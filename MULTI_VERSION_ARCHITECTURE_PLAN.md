@@ -116,6 +116,16 @@ This document is intentionally planning-only. It does not start the 1.7.10 port,
 - No other modules were migrated.
 - No 1.7.10 implementation yet.
 
+## v0.5.12 Low-Risk Bridge Consumers QA Pass
+
+- FPS Display, CPS Display, and Clock HUD bridge-assisted consumers were validated together.
+- Legacy fallback remains mandatory across all low-risk bridge consumers.
+- `V189RenderBridge.drawText` now lets missing font renderer state reach the consumer fallback path instead of silently returning.
+- Config/profile format and HUD Editor bounds remain unchanged.
+- No additional module migration was introduced.
+- No 1.7.10 implementation yet.
+- Next candidate remains Coordinates HUD, with caution because it reads player/world position, direction, and biome data.
+
 ## 2. Current 1.8.9 Status
 
 The 1.8.9 Forge client has a stable Release Candidate baseline:
@@ -369,5 +379,6 @@ Planning interfaces:
 - v0.5.9: CPS bridge consumer QA with LMB-only counting and fallback validation.
 - v0.5.10: Clock HUD bridge-assisted render prototype with legacy fallback.
 - v0.5.11: Clock HUD bridge consumer QA with local/system-time formatting and fallback validation.
-- v0.5.12: Validate config/profile compatibility for version-specific modules.
+- v0.5.12: Low-risk bridge consumers QA pass for FPS, CPS, and Clock HUD.
+- v0.5.13: Validate config/profile compatibility for version-specific modules.
 - Later: create the separate 1.7.10 environment only after 1.8.9 remains stable through bridge proof of concept.
