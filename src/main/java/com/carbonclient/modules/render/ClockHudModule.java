@@ -1,8 +1,7 @@
 package com.carbonclient.modules.render;
 
 import com.carbonclient.bridge.api.render.RenderBridge;
-import com.carbonclient.bridge.diagnostics.BridgeDiagnostics;
-import com.carbonclient.bridge.registry.BridgeRegistry;
+import com.carbonclient.bridge.render.RenderBridgeAccess;
 import com.carbonclient.event.EventListener;
 import com.carbonclient.event.impl.Render2DEvent;
 import com.carbonclient.module.DraggableHudModule;
@@ -102,19 +101,15 @@ public final class ClockHudModule extends Module implements DraggableHudModule {
     }
 
     private boolean renderWithBridge(String text) {
-        if (!canUseRenderBridge()) {
-            return false;
-        }
-
-        RenderBridge renderBridge = BridgeRegistry.getRenderBridge();
+        RenderBridge renderBridge = RenderBridgeAccess.getIfReady();
         if (renderBridge == null) {
             return false;
         }
 
         boolean matrixPushed = false;
         try {
-            int textWidth = renderBridge.getStringWidth(text);
-            int textHeight = renderBridge.getFontHeight();
+            int textWidth = RenderBridgeAccess.safeStringWidth(renderBridge, text);
+            int textHeight = RenderBridgeAccess.safeFontHeight(renderBridge);
             if (textWidth <= 0 || textHeight <= 0) {
                 return false;
             }
@@ -152,12 +147,6 @@ public final class ClockHudModule extends Module implements DraggableHudModule {
                 GlStateManager.popMatrix();
             }
         }
-    }
-
-    private boolean canUseRenderBridge() {
-        return BridgeDiagnostics.isPassiveBridgeReady()
-            && BridgeRegistry.hasRenderBridge()
-            && BridgeRegistry.getRenderBridge() != null;
     }
 
     private void renderLegacy(String text) {

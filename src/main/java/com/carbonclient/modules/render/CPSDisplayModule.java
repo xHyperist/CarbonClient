@@ -1,8 +1,7 @@
 package com.carbonclient.modules.render;
 
 import com.carbonclient.bridge.api.render.RenderBridge;
-import com.carbonclient.bridge.diagnostics.BridgeDiagnostics;
-import com.carbonclient.bridge.registry.BridgeRegistry;
+import com.carbonclient.bridge.render.RenderBridgeAccess;
 import com.carbonclient.event.EventListener;
 import com.carbonclient.event.impl.MouseButtonEvent;
 import com.carbonclient.event.impl.Render2DEvent;
@@ -113,19 +112,15 @@ public final class CPSDisplayModule extends Module implements DraggableHudModule
     }
 
     private boolean renderWithBridge(String text) {
-        if (!canUseRenderBridge()) {
-            return false;
-        }
-
-        RenderBridge renderBridge = BridgeRegistry.getRenderBridge();
+        RenderBridge renderBridge = RenderBridgeAccess.getIfReady();
         if (renderBridge == null) {
             return false;
         }
 
         boolean matrixPushed = false;
         try {
-            int width = renderBridge.getStringWidth(text);
-            int height = renderBridge.getFontHeight();
+            int width = RenderBridgeAccess.safeStringWidth(renderBridge, text);
+            int height = RenderBridgeAccess.safeFontHeight(renderBridge);
             if (width <= 0 || height <= 0) {
                 return false;
             }
@@ -163,12 +158,6 @@ public final class CPSDisplayModule extends Module implements DraggableHudModule
                 GlStateManager.popMatrix();
             }
         }
-    }
-
-    private boolean canUseRenderBridge() {
-        return BridgeDiagnostics.isPassiveBridgeReady()
-            && BridgeRegistry.hasRenderBridge()
-            && BridgeRegistry.getRenderBridge() != null;
     }
 
     private void renderLegacy(String text) {

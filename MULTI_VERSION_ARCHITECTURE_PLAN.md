@@ -189,6 +189,17 @@ This document is intentionally planning-only. It does not start the 1.7.10 port,
 - No 1.7.10 implementation yet.
 - Next possible step can be render bridge helper cleanup/extraction if duplication is becoming too high.
 
+## v0.5.19 Render Bridge Helper Cleanup / Extraction
+
+- `RenderBridge` access and fallback preparation was centralized into a small helper.
+- Existing bridge consumers remain FPS Display, CPS Display, Clock HUD, Coordinates HUD, and Keystrokes.
+- Existing consumers still own module-specific render layout, drawing decisions, and legacy fallback.
+- Coordinates remains render-only bridge-assisted with direct 1.8.9 data access.
+- Keystrokes remains render-only bridge-assisted with direct legacy input state.
+- No `InputBridge`, `EntityBridge`, or `WorldBridge` usage was introduced.
+- No additional module migration was introduced.
+- No 1.7.10 implementation yet.
+
 ## 2. Current 1.8.9 Status
 
 The 1.8.9 Forge client has a stable Release Candidate baseline:
@@ -449,5 +460,6 @@ Planning interfaces:
 - v0.5.16: Keystrokes partial render bridge prototype with key/mouse state still direct 1.8.9.
 - v0.5.17: Keystrokes bridge consumer QA with InputBridge still unused.
 - v0.5.18: Render bridge consumers QA pass III for FPS, CPS, Clock, Coordinates, and Keystrokes.
-- v0.5.19: Render bridge helper cleanup/extraction or careful Armor/Potion evaluation.
+- v0.5.19: Render bridge helper cleanup/extraction for current render consumers.
+- v0.5.20: Render bridge helper QA or careful Armor/Potion evaluation.
 - Later: create the separate 1.7.10 environment only after 1.8.9 remains stable through bridge proof of concept.

@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.5.19 - Render Bridge Helper Cleanup / Extraction
+
+- Added a small helper for safe `RenderBridge` access and metric handling.
+- Updated existing FPS, CPS, Clock, Coordinates, and Keystrokes render consumers to use the helper.
+- Preserved module-owned render decisions and legacy fallback behavior.
+- Preserved config/profile format and HUD Editor bounds.
+- Confirmed no additional module migration.
+- Confirmed no `InputBridge`, `EntityBridge`, or `WorldBridge` usage.
+- Confirmed no 1.7.10 code, dependency, source-set, or build.gradle changes were introduced.
+
 ## v0.5.18 - Render Bridge Consumers QA Pass III
 
 - Validated FPS, CPS, Clock, Coordinates, and Keystrokes bridge-assisted render consumers together.

@@ -1,8 +1,7 @@
 package com.carbonclient.modules.render;
 
 import com.carbonclient.bridge.api.render.RenderBridge;
-import com.carbonclient.bridge.diagnostics.BridgeDiagnostics;
-import com.carbonclient.bridge.registry.BridgeRegistry;
+import com.carbonclient.bridge.render.RenderBridgeAccess;
 import com.carbonclient.event.EventListener;
 import com.carbonclient.event.impl.Render2DEvent;
 import com.carbonclient.module.DraggableHudModule;
@@ -101,11 +100,7 @@ public final class KeystrokesModule extends Module implements DraggableHudModule
     }
 
     private boolean renderWithBridge() {
-        if (!canUseRenderBridge()) {
-            return false;
-        }
-
-        RenderBridge renderBridge = BridgeRegistry.getRenderBridge();
+        RenderBridge renderBridge = RenderBridgeAccess.getIfReady();
         if (renderBridge == null) {
             return false;
         }
@@ -204,21 +199,17 @@ public final class KeystrokesModule extends Module implements DraggableHudModule
         }
     }
 
-    private boolean canUseRenderBridge() {
-        return BridgeDiagnostics.isPassiveBridgeReady()
-            && BridgeRegistry.hasRenderBridge()
-            && BridgeRegistry.getRenderBridge() != null;
-    }
-
     private boolean hasValidBridgeMetrics(RenderBridge renderBridge) {
-        return renderBridge.getFontHeight() > 0
-            && renderBridge.getStringWidth("W") > 0
-            && renderBridge.getStringWidth("A") > 0
-            && renderBridge.getStringWidth("S") > 0
-            && renderBridge.getStringWidth("D") > 0
-            && renderBridge.getStringWidth("LMB") > 0
-            && renderBridge.getStringWidth("RMB") > 0
-            && renderBridge.getStringWidth("SPACE") > 0;
+        return RenderBridgeAccess.hasValidMetrics(
+            renderBridge,
+            "W",
+            "A",
+            "S",
+            "D",
+            "LMB",
+            "RMB",
+            "SPACE"
+        );
     }
 
     private void renderLegacy() {
@@ -338,8 +329,8 @@ public final class KeystrokesModule extends Module implements DraggableHudModule
         int width,
         boolean active
     ) {
-        int textWidth = renderBridge.getStringWidth(label);
-        int fontHeight = renderBridge.getFontHeight();
+        int textWidth = RenderBridgeAccess.safeStringWidth(renderBridge, label);
+        int fontHeight = RenderBridgeAccess.safeFontHeight(renderBridge);
         if (textWidth <= 0 || fontHeight <= 0) {
             throw new IllegalStateException("Invalid bridge font metrics");
         }

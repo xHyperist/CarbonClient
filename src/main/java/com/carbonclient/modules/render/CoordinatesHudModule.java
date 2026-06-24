@@ -1,8 +1,7 @@
 package com.carbonclient.modules.render;
 
 import com.carbonclient.bridge.api.render.RenderBridge;
-import com.carbonclient.bridge.diagnostics.BridgeDiagnostics;
-import com.carbonclient.bridge.registry.BridgeRegistry;
+import com.carbonclient.bridge.render.RenderBridgeAccess;
 import com.carbonclient.event.EventListener;
 import com.carbonclient.event.impl.Render2DEvent;
 import com.carbonclient.module.DraggableHudModule;
@@ -123,18 +122,14 @@ public final class CoordinatesHudModule
     }
 
     private boolean renderWithBridge(List<String> lines) {
-        if (!canUseRenderBridge()) {
-            return false;
-        }
-
-        RenderBridge renderBridge = BridgeRegistry.getRenderBridge();
+        RenderBridge renderBridge = RenderBridgeAccess.getIfReady();
         if (renderBridge == null) {
             return false;
         }
 
         boolean matrixPushed = false;
         try {
-            int fontHeight = renderBridge.getFontHeight();
+            int fontHeight = RenderBridgeAccess.safeFontHeight(renderBridge);
             if (fontHeight <= 0) {
                 return false;
             }
@@ -187,16 +182,10 @@ public final class CoordinatesHudModule
         }
     }
 
-    private boolean canUseRenderBridge() {
-        return BridgeDiagnostics.isPassiveBridgeReady()
-            && BridgeRegistry.hasRenderBridge()
-            && BridgeRegistry.getRenderBridge() != null;
-    }
-
     private int getBridgeContentWidth(RenderBridge renderBridge, List<String> lines) {
         int width = 1;
         for (String line : lines) {
-            int lineWidth = renderBridge.getStringWidth(line);
+            int lineWidth = RenderBridgeAccess.safeStringWidth(renderBridge, line);
             if (lineWidth <= 0) {
                 return 0;
             }

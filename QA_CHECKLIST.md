@@ -3,7 +3,7 @@
 ## Client Launch
 
 - [ ] `.\gradlew.bat runClient` ile client aciliyor.
-- [ ] Loglarda `Carbon Client v0.5.18 is starting.` gorunuyor.
+- [ ] Loglarda `Carbon Client v0.5.19 is starting.` gorunuyor.
 - [ ] Loglarda `Carbon Client initialized successfully.` gorunuyor.
 - [ ] Carbon kaynakli crash yok.
 
@@ -576,4 +576,33 @@
 - [ ] `build.gradle` degistirilmedi.
 - [ ] 1.7.10 code/dependency eklenmedi.
 - [ ] Jar `build/libs/carbon-client-0.5.18.jar` olarak uretiliyor.
+- [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
+
+## v0.5.19 Render Bridge Helper Cleanup / Extraction QA
+
+- [ ] RenderBridge helper eklendi.
+- [ ] Helper safe RenderBridge readiness kontrolu yapiyor.
+- [ ] Helper safe font height ve string width metric okuma sagliyor.
+- [ ] Helper Minecraft/Forge/LWJGL import etmiyor.
+- [ ] FPS Display helper kullanirken davranisi degismedi.
+- [ ] CPS Display helper kullanirken LMB-only davranisi degismedi.
+- [ ] Clock HUD helper kullanirken local/system time davranisi degismedi.
+- [ ] Coordinates HUD helper kullanirken direct 1.8.9 data access degismedi.
+- [ ] Keystrokes helper kullanirken direct key/mouse pressed state degismedi.
+- [ ] Legacy fallback bes modulde de korunuyor.
+- [ ] Config/profile formatlari degismedi.
+- [ ] HUD Editor bounds legacy hesapta kaldi.
+- [ ] Yeni bridge consumer eklenmedi.
+- [ ] InputBridge kullanilmadi.
+- [ ] EntityBridge kullanilmadi.
+- [ ] WorldBridge kullanilmadi.
+- [ ] Armor/Potion/Ping bridge'e tasinmadi.
+- [ ] RenderUtils bridge'e tasinmadi.
+- [ ] CarbonMenuScreen bridge'e tasinmadi.
+- [ ] ForgeEventBridge bridge'e tasinmadi.
+- [ ] KeyInputHandler bridge'e tasinmadi.
+- [ ] `bridge.api`, `bridge.diagnostics`, `bridge.registry`, `bridge.render` import boundary bozulmadi.
+- [ ] `build.gradle` degistirilmedi.
+- [ ] 1.7.10 code/dependency eklenmedi.
+- [ ] Jar `build/libs/carbon-client-0.5.19.jar` olarak uretiliyor.
 - [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
