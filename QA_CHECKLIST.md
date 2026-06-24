@@ -3,7 +3,7 @@
 ## Client Launch
 
 - [ ] `.\gradlew.bat runClient` ile client aciliyor.
-- [ ] Loglarda `Carbon Client v0.5.21 is starting.` gorunuyor.
+- [ ] Loglarda `Carbon Client v0.5.22 is starting.` gorunuyor.
 - [ ] Loglarda `Carbon Client initialized successfully.` gorunuyor.
 - [ ] Carbon kaynakli crash yok.
 
@@ -657,4 +657,32 @@
 - [ ] `build.gradle` degistirilmedi.
 - [ ] 1.7.10 code/dependency eklenmedi.
 - [ ] Jar `build/libs/carbon-client-0.5.21.jar` olarak uretiliyor.
+- [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
+
+## v0.5.22 Ping Display Bridge Consumer QA
+
+- [ ] Ping Display bridge path kontrol edildi.
+- [ ] Ping Display legacy fallback kontrol edildi.
+- [ ] RenderBridgeAccess getIfReady/safeFontHeight/safeStringWidth kullanimi kontrol edildi.
+- [ ] Ping data/network/player info logic degismedi.
+- [ ] Singleplayer/server yok/null durumlari crash riski acisindan kontrol edildi.
+- [ ] Ping options degismedi.
+- [ ] Ping HUD Editor bounds legacy hesapta kaldi.
+- [ ] Yeni config/profile alani eklenmedi.
+- [ ] GameBridge kullanilmadi.
+- [ ] EntityBridge kullanilmadi.
+- [ ] WorldBridge kullanilmadi.
+- [ ] InputBridge kullanilmadi.
+- [ ] Yeni NetworkBridge olusturulmadi.
+- [ ] Yeni bridge consumer eklenmedi.
+- [ ] Armor/Potion bridge'e tasinmadi.
+- [ ] Diger moduller bridge'e tasinmadi.
+- [ ] RenderUtils bridge'e tasinmadi.
+- [ ] CarbonMenuScreen bridge'e tasinmadi.
+- [ ] ForgeEventBridge bridge'e tasinmadi.
+- [ ] KeyInputHandler bridge'e tasinmadi.
+- [ ] `bridge.api`, `bridge.diagnostics`, `bridge.registry`, `bridge.render` import boundary bozulmadi.
+- [ ] `build.gradle` degistirilmedi.
+- [ ] 1.7.10 code/dependency eklenmedi.
+- [ ] Jar `build/libs/carbon-client-0.5.22.jar` olarak uretiliyor.
 - [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.

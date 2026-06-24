@@ -4,7 +4,7 @@ public final class Reference {
 
     public static final String MOD_ID = "carbonclient";
     public static final String MOD_NAME = "Carbon Client";
-    public static final String VERSION = "0.5.21";
+    public static final String VERSION = "0.5.22";
 
     private Reference() {
     }

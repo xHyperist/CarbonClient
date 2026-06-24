@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.5.22 - Ping Display Bridge Consumer QA
+
+- Validated the Ping Display bridge-assisted render path.
+- Confirmed Ping Display legacy fallback behavior.
+- Confirmed ping, network, and player info logic remains unchanged on the direct 1.8.9 path.
+- Confirmed `GameBridge`, `EntityBridge`, `WorldBridge`, and `InputBridge` are not used by Ping Display.
+- Confirmed config/profile format and HUD Editor bounds remain unchanged.
+- Confirmed no additional module migration.
+- Existing 1.8.9 build remains stable.
+
 ## v0.5.21 - Ping Display Render Bridge Prototype
 
 - Added fallback-safe `RenderBridge` usage in the Ping Display render path.

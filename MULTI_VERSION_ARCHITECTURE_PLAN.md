@@ -221,6 +221,15 @@ This document is intentionally planning-only. It does not start the 1.7.10 port,
 - No additional module migration was introduced.
 - No 1.7.10 implementation yet.
 
+## v0.5.22 Ping Display Bridge Consumer QA
+
+- Ping Display render-only bridge prototype was validated.
+- Legacy render fallback remains mandatory.
+- Ping, network, and player info data access remains direct 1.8.9.
+- No `GameBridge`, `EntityBridge`, or `WorldBridge` usage was introduced.
+- No additional module migration was introduced.
+- No 1.7.10 implementation yet.
+
 ## 2. Current 1.8.9 Status
 
 The 1.8.9 Forge client has a stable Release Candidate baseline:
@@ -484,5 +493,6 @@ Planning interfaces:
 - v0.5.19: Render bridge helper cleanup/extraction for current render consumers.
 - v0.5.20: Render bridge helper QA for existing render consumers.
 - v0.5.21: Ping Display render-only bridge prototype.
-- v0.5.22: Ping Display bridge consumer QA or careful Armor/Potion risk analysis.
+- v0.5.22: Ping Display bridge consumer QA.
+- v0.5.23: Armor/Potion bridge risk analysis or multi-version bridge phase review.
 - Later: create the separate 1.7.10 environment only after 1.8.9 remains stable through bridge proof of concept.

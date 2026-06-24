@@ -325,15 +325,17 @@ Responsibilities:
 - v0.5.19 completed RenderBridge helper extraction for safe readiness and metric access.
 - v0.5.20 completed RenderBridge helper QA.
 - v0.5.21 continues Phase C with Ping Display render-only bridge prototype.
+- v0.5.22 completed Ping Display bridge consumer QA.
 - FPS Display, CPS Display, Clock HUD, Coordinates HUD, Keystrokes, and Ping Display remain fallback-safe bridge-assisted render consumers.
 - Render-only bridge consumers are stable with legacy fallback.
 - The helper centralizes safe RenderBridge readiness and metric access; consumers still own module-specific render and fallback decisions.
 - Coordinates HUD remains render-only bridge-assisted; entity/world data abstraction is future work.
 - Keystrokes remains render-only bridge-assisted; input abstraction remains future work and `InputBridge` is still not used.
 - Ping Display remains render-only bridge-assisted; ping data still comes from direct 1.8.9 network/player info access.
+- Ping data abstraction remains future work.
 - Continue moving one low-risk module at a time:
-  - Ping Display bridge consumer QA
-  - Carefully evaluate Armor/Potion with item/effect render caution
+  - Armor/Potion bridge risk analysis due to item/effect rendering
+  - Multi-version bridge phase review
   - HUD render utility abstraction later
 - Build after each module.
 
