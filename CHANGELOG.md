@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.5.18 - Render Bridge Consumers QA Pass III
+
+- Validated FPS, CPS, Clock, Coordinates, and Keystrokes bridge-assisted render consumers together.
+- Confirmed legacy fallback behavior remains mandatory across all five consumers.
+- Confirmed no config/profile format changes were introduced.
+- Confirmed HUD Editor bounds remain on the legacy calculation path.
+- Confirmed Coordinates remains render-only bridge-assisted with direct 1.8.9 player/world data access.
+- Confirmed Keystrokes remains render-only bridge-assisted with direct 1.8.9 key/mouse state.
+- Confirmed no additional module migration.
+- Existing 1.8.9 build remains stable.
+
 ## v0.5.17 - Keystrokes Bridge Consumer QA
 
 - Validated the Keystrokes bridge-assisted render path.

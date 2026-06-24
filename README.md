@@ -1,6 +1,6 @@
 # Carbon Client
 
-Carbon Client, Minecraft 1.8.9 Forge uzerine gelistirilmis premium PvP/HUD client altyapisidir. v0.5.17, Keystrokes bridge consumer QA asamasidir.
+Carbon Client, Minecraft 1.8.9 Forge uzerine gelistirilmis premium PvP/HUD client altyapisidir. v0.5.18, Render Bridge Consumers QA Pass III asamasidir.
 
 Carbon Client bir cheat/hile client degildir. Fly, speed, reach, velocity, autoclicker, aim assist veya combat avantaji saglayan ozellikler hedeflenmez.
 
@@ -33,7 +33,7 @@ Jar uretmek:
 Cikti jar dosyasi:
 
 ```text
-build/libs/carbon-client-0.5.17.jar
+build/libs/carbon-client-0.5.18.jar
 ```
 
 Temiz build almak:
@@ -98,7 +98,7 @@ Onemli dosyalar:
 2. Minecraft ana menusu acildiginda Carbon Client loglarini kontrol et.
 3. Oyun icinde `RSHIFT` ile Carbon Menu'yu ac.
 4. Mods Tab, Options, Keybinds, Profiles, Color Picker ve HUD Editor akislarini test et.
-5. Jar ile test etmek icin `build/libs/carbon-client-0.5.17.jar` dosyasini Minecraft 1.8.9 Forge `mods` klasorune koy.
+5. Jar ile test etmek icin `build/libs/carbon-client-0.5.18.jar` dosyasini Minecraft 1.8.9 Forge `mods` klasorune koy.
 
 ## Multi-Version Plan
 
@@ -122,6 +122,7 @@ Onemli dosyalar:
 - v0.5.15 QA-checks FPS, CPS, Clock, and Coordinates render bridge consumers together.
 - v0.5.16 lets Keystrokes try RenderBridge internally for rendering only, while key/mouse state remains legacy direct 1.8.9.
 - v0.5.17 QA-checks Keystrokes bridge-assisted render, legacy fallback, and direct key/mouse state behavior.
+- v0.5.18 QA-checks FPS, CPS, Clock, Coordinates, and Keystrokes render bridge consumers together.
 - Current runtime still remains Minecraft 1.8.9 Forge and does not use the bridge yet.
 - This does not mean 1.7.10 support is active yet.
 - No 1.12.2, 1.16.5, or 1.20.x target is planned right now.

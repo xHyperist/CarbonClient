@@ -178,6 +178,17 @@ This document is intentionally planning-only. It does not start the 1.7.10 port,
 - No additional module migration was introduced.
 - No 1.7.10 implementation yet.
 
+## v0.5.18 Render Bridge Consumers QA Pass III
+
+- FPS Display, CPS Display, Clock HUD, Coordinates HUD, and Keystrokes bridge-assisted consumers were validated together.
+- Legacy fallback remains mandatory across all five consumers.
+- Coordinates remains render-only bridge-assisted; player/world data is still direct 1.8.9.
+- Keystrokes remains render-only bridge-assisted; key/mouse state is still direct 1.8.9.
+- Config/profile format and HUD Editor bounds remain unchanged.
+- No additional module migration was introduced.
+- No 1.7.10 implementation yet.
+- Next possible step can be render bridge helper cleanup/extraction if duplication is becoming too high.
+
 ## 2. Current 1.8.9 Status
 
 The 1.8.9 Forge client has a stable Release Candidate baseline:
@@ -437,5 +448,6 @@ Planning interfaces:
 - v0.5.15: Low-risk render bridge consumers QA pass II for FPS, CPS, Clock, and Coordinates.
 - v0.5.16: Keystrokes partial render bridge prototype with key/mouse state still direct 1.8.9.
 - v0.5.17: Keystrokes bridge consumer QA with InputBridge still unused.
-- v0.5.18: Low-risk render consumers QA pass III or render bridge helper cleanup.
+- v0.5.18: Render bridge consumers QA pass III for FPS, CPS, Clock, Coordinates, and Keystrokes.
+- v0.5.19: Render bridge helper cleanup/extraction or careful Armor/Potion evaluation.
 - Later: create the separate 1.7.10 environment only after 1.8.9 remains stable through bridge proof of concept.

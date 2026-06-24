@@ -3,7 +3,7 @@
 ## Client Launch
 
 - [ ] `.\gradlew.bat runClient` ile client aciliyor.
-- [ ] Loglarda `Carbon Client v0.5.17 is starting.` gorunuyor.
+- [ ] Loglarda `Carbon Client v0.5.18 is starting.` gorunuyor.
 - [ ] Loglarda `Carbon Client initialized successfully.` gorunuyor.
 - [ ] Carbon kaynakli crash yok.
 
@@ -546,4 +546,34 @@
 - [ ] `build.gradle` degistirilmedi.
 - [ ] 1.7.10 code/dependency eklenmedi.
 - [ ] Jar `build/libs/carbon-client-0.5.17.jar` olarak uretiliyor.
+- [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
+
+## v0.5.18 Render Bridge Consumers QA Pass III
+
+- [ ] FPS/CPS/Clock/Coordinates/Keystrokes bridge consumers birlikte kontrol edildi.
+- [ ] FPS Display legacy fallback kontrol edildi.
+- [ ] CPS Display legacy fallback kontrol edildi.
+- [ ] Clock HUD legacy fallback kontrol edildi.
+- [ ] Coordinates HUD legacy fallback kontrol edildi.
+- [ ] Keystrokes legacy fallback kontrol edildi.
+- [ ] Metric cagri kontrolleri renderWithBridge try/catch icinde kaliyor.
+- [ ] FPS/CPS/Clock/Coordinates/Keystrokes config/profile formatlari degismedi.
+- [ ] FPS/CPS/Clock/Coordinates/Keystrokes HUD Editor bounds legacy hesapta kaldi.
+- [ ] Coordinates data access direct 1.8.9 path'te kaldi.
+- [ ] Keystrokes key/mouse pressed state direct 1.8.9 path'te kaldi.
+- [ ] EntityBridge kullanilmadi.
+- [ ] WorldBridge kullanilmadi.
+- [ ] InputBridge kullanilmadi.
+- [ ] Armor/Potion/Ping/ToggleSprint/Crosshair/Reach/Combo bridge'e tasinmadi.
+- [ ] Fullbright/Time Changer bridge'e tasinmadi.
+- [ ] RenderUtils bridge'e tasinmadi.
+- [ ] CarbonMenuScreen bridge'e tasinmadi.
+- [ ] HudLayoutEditorScreen bridge'e tasinmadi.
+- [ ] ForgeEventBridge bridge'e tasinmadi.
+- [ ] KeyInputHandler bridge'e tasinmadi.
+- [ ] ConfigManager/ProfileManager bridge'e tasinmadi.
+- [ ] `bridge.api`, `bridge.diagnostics`, `bridge.registry` import boundary bozulmadi.
+- [ ] `build.gradle` degistirilmedi.
+- [ ] 1.7.10 code/dependency eklenmedi.
+- [ ] Jar `build/libs/carbon-client-0.5.18.jar` olarak uretiliyor.
 - [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
