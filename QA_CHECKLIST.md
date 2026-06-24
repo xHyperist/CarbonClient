@@ -3,7 +3,7 @@
 ## Client Launch
 
 - [ ] `.\gradlew.bat runClient` ile client aciliyor.
-- [ ] Loglarda `Carbon Client v0.5.16 is starting.` gorunuyor.
+- [ ] Loglarda `Carbon Client v0.5.17 is starting.` gorunuyor.
 - [ ] Loglarda `Carbon Client initialized successfully.` gorunuyor.
 - [ ] Carbon kaynakli crash yok.
 
@@ -515,4 +515,35 @@
 - [ ] `build.gradle` degistirilmedi.
 - [ ] 1.7.10 code/dependency eklenmedi.
 - [ ] Jar `build/libs/carbon-client-0.5.16.jar` olarak uretiliyor.
+- [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
+
+## v0.5.17 Keystrokes Bridge Consumer QA
+
+- [ ] Keystrokes bridge-assisted render path kontrol edildi.
+- [ ] Keystrokes legacy fallback kontrol edildi.
+- [ ] Keystrokes bridge metric exception durumunda legacy fallback calisiyor.
+- [ ] Keystrokes bridge draw exception durumunda legacy fallback calisiyor.
+- [ ] W/A/S/D pressed logic degismedi.
+- [ ] LMB/RMB pressed logic degismedi.
+- [ ] SPACE pressed logic degismedi.
+- [ ] Show Space false iken SPACE satiri gizli kaliyor.
+- [ ] Show Space true iken SPACE satiri gorunuyor.
+- [ ] Pressed Color mantigi degismedi.
+- [ ] InputBridge kullanilmadi.
+- [ ] KeyInputHandler degistirilmedi.
+- [ ] Keystrokes options degismedi.
+- [ ] Keystrokes config/profile icin yeni alan eklenmedi.
+- [ ] Keystrokes HUD Editor bounds legacy hesapta kaldi.
+- [ ] Position X/Y Options icinde gorunmuyor.
+- [ ] FPS/CPS/Clock/Coordinates hala calisiyor.
+- [ ] Keystrokes disinda yeni bridge consumer eklenmedi.
+- [ ] Armor/Potion/Ping/Crosshair/Reach/Combo bridge'e tasinmadi.
+- [ ] RenderUtils bridge'e tasinmadi.
+- [ ] CarbonMenuScreen bridge'e tasinmadi.
+- [ ] HudLayoutEditorScreen bridge'e tasinmadi.
+- [ ] ForgeEventBridge bridge'e tasinmadi.
+- [ ] `bridge.api`, `bridge.diagnostics`, `bridge.registry` import boundary bozulmadi.
+- [ ] `build.gradle` degistirilmedi.
+- [ ] 1.7.10 code/dependency eklenmedi.
+- [ ] Jar `build/libs/carbon-client-0.5.17.jar` olarak uretiliyor.
 - [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.

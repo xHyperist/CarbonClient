@@ -168,6 +168,16 @@ This document is intentionally planning-only. It does not start the 1.7.10 port,
 - No other modules were migrated.
 - No 1.7.10 implementation yet.
 
+## v0.5.17 Keystrokes Bridge Consumer QA
+
+- Keystrokes partial render bridge prototype was validated.
+- Legacy fallback remains mandatory.
+- Bridge metric failures now stay inside the Keystrokes fallback guard and return to the legacy render path.
+- W/A/S/D, LMB/RMB, and SPACE pressed state remains legacy/direct 1.8.9.
+- `InputBridge` is still not used.
+- No additional module migration was introduced.
+- No 1.7.10 implementation yet.
+
 ## 2. Current 1.8.9 Status
 
 The 1.8.9 Forge client has a stable Release Candidate baseline:
@@ -426,5 +436,6 @@ Planning interfaces:
 - v0.5.14: Coordinates HUD bridge consumer QA, render-only bridge use validated.
 - v0.5.15: Low-risk render bridge consumers QA pass II for FPS, CPS, Clock, and Coordinates.
 - v0.5.16: Keystrokes partial render bridge prototype with key/mouse state still direct 1.8.9.
-- v0.5.17: Keystrokes bridge consumer QA and low-risk render consumer cleanup.
+- v0.5.17: Keystrokes bridge consumer QA with InputBridge still unused.
+- v0.5.18: Low-risk render consumers QA pass III or render bridge helper cleanup.
 - Later: create the separate 1.7.10 environment only after 1.8.9 remains stable through bridge proof of concept.

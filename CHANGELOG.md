@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.5.17 - Keystrokes Bridge Consumer QA
+
+- Validated the Keystrokes bridge-assisted render path.
+- Confirmed Keystrokes legacy fallback remains mandatory.
+- Hardened Keystrokes bridge metric fallback so metric exceptions also return to the legacy render path.
+- Confirmed W/A/S/D, LMB/RMB, and SPACE pressed logic remains unchanged.
+- Confirmed `InputBridge` is still not used.
+- Confirmed Keystrokes settings, config/profile format, HUD Editor bounds, and visual behavior remain unchanged.
+- Confirmed no additional module migration.
+- Existing 1.8.9 build remains stable.
+
 ## v0.5.16 - Keystrokes Partial Render Bridge Prototype
 
 - Added fallback-safe `RenderBridge` usage in the Keystrokes render path.

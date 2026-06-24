@@ -106,12 +106,16 @@ public final class KeystrokesModule extends Module implements DraggableHudModule
         }
 
         RenderBridge renderBridge = BridgeRegistry.getRenderBridge();
-        if (renderBridge == null || !hasValidBridgeMetrics(renderBridge)) {
+        if (renderBridge == null) {
             return false;
         }
 
         boolean matrixPushed = false;
         try {
+            if (!hasValidBridgeMetrics(renderBridge)) {
+                return false;
+            }
+
             float renderScale = scale.getValue().floatValue();
             int renderX = Math.round(getPositionX() / renderScale);
             int renderY = Math.round(getPositionY() / renderScale);

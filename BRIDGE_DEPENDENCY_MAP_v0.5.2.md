@@ -320,12 +320,13 @@ Responsibilities:
 - v0.5.14 completed Coordinates HUD bridge consumer QA.
 - v0.5.15 completed low-risk render bridge consumer QA pass II for FPS, CPS, Clock, and Coordinates.
 - v0.5.16 continues Phase C with Keystrokes partial render bridge prototype.
+- v0.5.17 completed Keystrokes bridge consumer QA.
 - FPS Display, CPS Display, Clock HUD, Coordinates HUD, and Keystrokes remain fallback-safe bridge-assisted render consumers.
 - Render-only bridge consumers are stable with legacy fallback.
 - Coordinates HUD remains render-only bridge-assisted; entity/world data abstraction is future work.
-- Keystrokes requires additional caution because it has multi-box layout and input state; in v0.5.16 only rendering is bridge-assisted and `InputBridge` is not used.
+- Keystrokes remains render-only bridge-assisted; input abstraction remains future work and `InputBridge` is still not used.
 - Continue moving one low-risk module at a time:
-  - Keystrokes Bridge Consumer QA
+  - Low-risk render consumers QA pass III
   - Render bridge consumer cleanup/helper extraction
   - Armor/Potion later with item/effect render caution
   - HUD render utility abstraction later
