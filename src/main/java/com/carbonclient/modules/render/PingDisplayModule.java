@@ -1,5 +1,7 @@
 package com.carbonclient.modules.render;
 
+import com.carbonclient.bridge.api.render.RenderBridge;
+import com.carbonclient.bridge.render.RenderBridgeAccess;
 import com.carbonclient.event.EventListener;
 import com.carbonclient.event.impl.Render2DEvent;
 import com.carbonclient.module.DraggableHudModule;
@@ -93,6 +95,63 @@ public final class PingDisplayModule
     public void renderHud() {
         int ping = getPing();
         String text = getDisplayText(ping);
+        if (renderWithBridge(text, ping)) {
+            return;
+        }
+        renderLegacy(text, ping);
+    }
+
+    private boolean renderWithBridge(String text, int ping) {
+        RenderBridge renderBridge = RenderBridgeAccess.getIfReady();
+        if (renderBridge == null) {
+            return false;
+        }
+
+        boolean matrixPushed = false;
+        try {
+            int width = RenderBridgeAccess.safeStringWidth(renderBridge, text);
+            int height = RenderBridgeAccess.safeFontHeight(renderBridge);
+            if (width <= 0 || height <= 0) {
+                return false;
+            }
+
+            int padding = showBackground.isEnabled() ? PADDING : 0;
+            float renderScale = scale.getValue().floatValue();
+            int renderX = Math.round(getPositionX() / renderScale);
+            int renderY = Math.round(getPositionY() / renderScale);
+
+            GlStateManager.pushMatrix();
+            matrixPushed = true;
+            GlStateManager.scale(renderScale, renderScale, 1.0F);
+
+            if (showBackground.isEnabled()) {
+                renderBridge.drawRect(
+                    renderX,
+                    renderY,
+                    renderX + width + PADDING * 2,
+                    renderY + height + PADDING * 2,
+                    backgroundColor.getColor()
+                );
+            }
+
+            renderBridge.drawText(
+                text,
+                renderX + padding,
+                renderY + padding,
+                getTextColor(ping),
+                false
+            );
+            return true;
+        } catch (RuntimeException exception) {
+            return false;
+        } finally {
+            if (matrixPushed) {
+                GlStateManager.popMatrix();
+            }
+        }
+    }
+
+    private void renderLegacy(String text, int ping) {
         int width = minecraft.fontRendererObj.getStringWidth(text);
         int height = minecraft.fontRendererObj.FONT_HEIGHT;
         int padding = showBackground.isEnabled() ? PADDING : 0;

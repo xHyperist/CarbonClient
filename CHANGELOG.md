@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.5.21 - Ping Display Render Bridge Prototype
+
+- Added fallback-safe `RenderBridge` usage in the Ping Display render path.
+- Used `RenderBridgeAccess` for safe bridge readiness and font metric handling.
+- Kept ping, network, and player info data access unchanged on the direct 1.8.9 path.
+- Preserved the legacy render fallback.
+- Preserved config/profile format and HUD Editor bounds.
+- Confirmed no additional module migration.
+- Confirmed no 1.7.10 code, dependency, source-set, or build.gradle changes were introduced.
+
 ## v0.5.20 - Render Bridge Helper QA
 
 - Validated the `RenderBridgeAccess` helper.
