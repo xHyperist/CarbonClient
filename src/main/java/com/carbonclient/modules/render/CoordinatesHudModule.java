@@ -1,5 +1,8 @@
 package com.carbonclient.modules.render;
 
+import com.carbonclient.bridge.api.render.RenderBridge;
+import com.carbonclient.bridge.diagnostics.BridgeDiagnostics;
+import com.carbonclient.bridge.registry.BridgeRegistry;
 import com.carbonclient.event.EventListener;
 import com.carbonclient.event.impl.Render2DEvent;
 import com.carbonclient.module.DraggableHudModule;
@@ -113,6 +116,103 @@ public final class CoordinatesHudModule
             return;
         }
 
+        if (renderWithBridge(lines)) {
+            return;
+        }
+        renderLegacy(lines);
+    }
+
+    private boolean renderWithBridge(List<String> lines) {
+        if (!canUseRenderBridge()) {
+            return false;
+        }
+
+        RenderBridge renderBridge = BridgeRegistry.getRenderBridge();
+        if (renderBridge == null) {
+            return false;
+        }
+
+        boolean matrixPushed = false;
+        try {
+            int fontHeight = renderBridge.getFontHeight();
+            if (fontHeight <= 0) {
+                return false;
+            }
+
+            int width = getBridgeContentWidth(renderBridge, lines);
+            if (width <= 0) {
+                return false;
+            }
+
+            int height = getBridgeContentHeight(fontHeight, lines);
+            if (height <= 0) {
+                return false;
+            }
+
+            float renderScale = scale.getValue().floatValue();
+            int renderX = Math.round(getPositionX() / renderScale);
+            int renderY = Math.round(getPositionY() / renderScale);
+            int padding = showBackground.isEnabled() ? PADDING : 0;
+
+            GlStateManager.pushMatrix();
+            matrixPushed = true;
+            GlStateManager.scale(renderScale, renderScale, 1.0F);
+
+            if (showBackground.isEnabled()) {
+                renderBridge.drawRect(
+                    renderX,
+                    renderY,
+                    renderX + width + PADDING * 2,
+                    renderY + height + PADDING * 2,
+                    backgroundColor.getColor()
+                );
+            }
+
+            for (int index = 0; index < lines.size(); index++) {
+                renderBridge.drawText(
+                    lines.get(index),
+                    renderX + padding,
+                    renderY + padding + index * (fontHeight + LINE_GAP),
+                    textColor.getColor(),
+                    false
+                );
+            }
+            return true;
+        } catch (RuntimeException exception) {
+            return false;
+        } finally {
+            if (matrixPushed) {
+                GlStateManager.popMatrix();
+            }
+        }
+    }
+
+    private boolean canUseRenderBridge() {
+        return BridgeDiagnostics.isPassiveBridgeReady()
+            && BridgeRegistry.hasRenderBridge()
+            && BridgeRegistry.getRenderBridge() != null;
+    }
+
+    private int getBridgeContentWidth(RenderBridge renderBridge, List<String> lines) {
+        int width = 1;
+        for (String line : lines) {
+            int lineWidth = renderBridge.getStringWidth(line);
+            if (lineWidth <= 0) {
+                return 0;
+            }
+            width = Math.max(width, lineWidth);
+        }
+        return width;
+    }
+
+    private int getBridgeContentHeight(int fontHeight, List<String> lines) {
+        return lines.isEmpty()
+            ? fontHeight
+            : lines.size() * fontHeight
+                + Math.max(0, lines.size() - 1) * LINE_GAP;
+    }
+
+    private void renderLegacy(List<String> lines) {
         float renderScale = scale.getValue().floatValue();
         int renderX = Math.round(getPositionX() / renderScale);
         int renderY = Math.round(getPositionY() / renderScale);

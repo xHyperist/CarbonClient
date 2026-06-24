@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.5.13 - Coordinates HUD Bridge-Assisted Render Prototype
+
+- Added fallback-safe `RenderBridge` usage in Coordinates HUD.
+- Kept the legacy Coordinates HUD render path.
+- Kept coordinate, direction, biome, and player/world data access logic unchanged.
+- Did not use `EntityBridge` or `WorldBridge` yet.
+- Kept Coordinates HUD settings, config/profile format, HUD Editor bounds, and visual behavior unchanged.
+- No user-facing render backend setting was added.
+- No other modules were migrated to bridge APIs.
+- No 1.7.10 code, dependency, source-set, or build.gradle changes were introduced.
+
 ## v0.5.12 - Low-Risk Bridge Consumers QA Pass
 
 - Validated FPS, CPS, and Clock HUD bridge-assisted render consumers together.

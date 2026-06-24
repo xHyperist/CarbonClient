@@ -1,6 +1,6 @@
 # Carbon Client
 
-Carbon Client, Minecraft 1.8.9 Forge uzerine gelistirilmis premium PvP/HUD client altyapisidir. v0.5.12, low-risk bridge consumers QA pass asamasidir.
+Carbon Client, Minecraft 1.8.9 Forge uzerine gelistirilmis premium PvP/HUD client altyapisidir. v0.5.13, Coordinates HUD bridge-assisted render prototype asamasidir.
 
 Carbon Client bir cheat/hile client degildir. Fly, speed, reach, velocity, autoclicker, aim assist veya combat avantaji saglayan ozellikler hedeflenmez.
 
@@ -33,7 +33,7 @@ Jar uretmek:
 Cikti jar dosyasi:
 
 ```text
-build/libs/carbon-client-0.5.12.jar
+build/libs/carbon-client-0.5.13.jar
 ```
 
 Temiz build almak:
@@ -98,7 +98,7 @@ Onemli dosyalar:
 2. Minecraft ana menusu acildiginda Carbon Client loglarini kontrol et.
 3. Oyun icinde `RSHIFT` ile Carbon Menu'yu ac.
 4. Mods Tab, Options, Keybinds, Profiles, Color Picker ve HUD Editor akislarini test et.
-5. Jar ile test etmek icin `build/libs/carbon-client-0.5.12.jar` dosyasini Minecraft 1.8.9 Forge `mods` klasorune koy.
+5. Jar ile test etmek icin `build/libs/carbon-client-0.5.13.jar` dosyasini Minecraft 1.8.9 Forge `mods` klasorune koy.
 
 ## Multi-Version Plan
 
@@ -117,6 +117,7 @@ Onemli dosyalar:
 - v0.5.10 lets Clock HUD try RenderBridge internally while keeping local/system-time formatting and legacy fallback.
 - v0.5.11 QA-checks Clock HUD bridge consumer behavior, local/system-time formatting, and legacy fallback.
 - v0.5.12 QA-checks FPS, CPS, and Clock HUD bridge-assisted consumers together.
+- v0.5.13 lets Coordinates HUD try RenderBridge internally while keeping player/world data access on the legacy 1.8.9 path.
 - Current runtime still remains Minecraft 1.8.9 Forge and does not use the bridge yet.
 - This does not mean 1.7.10 support is active yet.
 - No 1.12.2, 1.16.5, or 1.20.x target is planned right now.

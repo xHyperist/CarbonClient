@@ -126,6 +126,17 @@ This document is intentionally planning-only. It does not start the 1.7.10 port,
 - No 1.7.10 implementation yet.
 - Next candidate remains Coordinates HUD, with caution because it reads player/world position, direction, and biome data.
 
+## v0.5.13 Coordinates HUD Bridge-Assisted Render Prototype
+
+- Coordinates HUD is the next bridge-assisted render consumer.
+- Only the render path uses `RenderBridge`.
+- Player, world, biome, coordinate, and direction data access remains legacy/direct 1.8.9.
+- `EntityBridge` and `WorldBridge` are not used yet.
+- Legacy render fallback remains mandatory and is still present.
+- Coordinates HUD settings, config/profile format, HUD Editor bounds, and visual behavior remain unchanged.
+- No other modules were migrated.
+- No 1.7.10 implementation yet.
+
 ## 2. Current 1.8.9 Status
 
 The 1.8.9 Forge client has a stable Release Candidate baseline:
@@ -380,5 +391,6 @@ Planning interfaces:
 - v0.5.10: Clock HUD bridge-assisted render prototype with legacy fallback.
 - v0.5.11: Clock HUD bridge consumer QA with local/system-time formatting and fallback validation.
 - v0.5.12: Low-risk bridge consumers QA pass for FPS, CPS, and Clock HUD.
-- v0.5.13: Validate config/profile compatibility for version-specific modules.
+- v0.5.13: Coordinates HUD bridge-assisted render prototype, render-only bridge use.
+- v0.5.14: Validate config/profile compatibility for version-specific modules.
 - Later: create the separate 1.7.10 environment only after 1.8.9 remains stable through bridge proof of concept.

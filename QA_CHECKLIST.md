@@ -3,7 +3,7 @@
 ## Client Launch
 
 - [ ] `.\gradlew.bat runClient` ile client aciliyor.
-- [ ] Loglarda `Carbon Client v0.5.12 is starting.` gorunuyor.
+- [ ] Loglarda `Carbon Client v0.5.13 is starting.` gorunuyor.
 - [ ] Loglarda `Carbon Client initialized successfully.` gorunuyor.
 - [ ] Carbon kaynakli crash yok.
 
@@ -403,4 +403,31 @@
 - [ ] `build.gradle` degistirilmedi.
 - [ ] 1.7.10 code/dependency eklenmedi.
 - [ ] Jar `build/libs/carbon-client-0.5.12.jar` olarak uretiliyor.
+- [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
+
+## v0.5.13 Coordinates HUD Bridge-Assisted Render Prototype QA
+
+- [ ] Coordinates HUD bridge-assisted render path bridge available iken deneniyor.
+- [ ] Coordinates HUD bridge yoksa legacy render path'e guvenli dusuyor.
+- [ ] Coordinates HUD bridge exception durumunda legacy fallback calisiyor.
+- [ ] Coordinates HUD invalid width/height/font metric durumunda legacy fallback calisiyor.
+- [ ] X/Y/Z hesaplama mantigi degismedi.
+- [ ] Direction/yön mantigi degismedi.
+- [ ] Biome okuma mantigi degismedi.
+- [ ] Player/world data access legacy/direct 1.8.9 path'te kaldi.
+- [ ] EntityBridge/WorldBridge kullanilmadi.
+- [ ] Coordinates settings degismedi.
+- [ ] Coordinates config/profile icin yeni alan eklenmedi.
+- [ ] Coordinates HUD Editor bounds degismedi.
+- [ ] FPS/CPS/Clock hala calisiyor.
+- [ ] Coordinates disinda yeni bridge consumer eklenmedi.
+- [ ] Keystrokes bridge'e tasinmadi.
+- [ ] Diger HUD modulleri bridge'e tasinmadi.
+- [ ] RenderUtils bridge'e tasinmadi.
+- [ ] CarbonMenuScreen bridge'e tasinmadi.
+- [ ] ForgeEventBridge bridge'e tasinmadi.
+- [ ] `bridge.api`, `bridge.diagnostics`, `bridge.registry` import boundary bozulmadi.
+- [ ] `build.gradle` degistirilmedi.
+- [ ] 1.7.10 code/dependency eklenmedi.
+- [ ] Jar `build/libs/carbon-client-0.5.13.jar` olarak uretiliyor.
 - [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
