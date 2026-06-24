@@ -230,6 +230,18 @@ This document is intentionally planning-only. It does not start the 1.7.10 port,
 - No additional module migration was introduced.
 - No 1.7.10 implementation yet.
 
+## v0.5.23 Module Enabled State Persistence Bugfix + Armor/Potion Bridge Risk Analysis
+
+- Module enabled/disabled state persistence was fixed and validated.
+- Active profile snapshots are now updated alongside config saves for module toggles, visual toggles, settings, keybinds, colors, resets, keybind-triggered toggles, and shutdown persistence.
+- Saved enabled state should override constructor defaults after config/profile load.
+- Runtime-only values such as FPS value, CPS click history, clock time, coordinates, ping value, combo count, reach distance, and pressed key state are not persisted.
+- Armor/Potion bridge migration was analyzed but not implemented.
+- Armor item render, `RenderItem`, `RenderHelper`, overlays, and `ItemStack` access remain 1.8.9-specific for now.
+- Potion icon render, inventory texture binding, potion APIs, and GL state remain 1.8.9-specific for now.
+- No new bridge consumer was added.
+- No 1.7.10 implementation yet.
+
 ## 2. Current 1.8.9 Status
 
 The 1.8.9 Forge client has a stable Release Candidate baseline:
@@ -494,5 +506,6 @@ Planning interfaces:
 - v0.5.20: Render bridge helper QA for existing render consumers.
 - v0.5.21: Ping Display render-only bridge prototype.
 - v0.5.22: Ping Display bridge consumer QA.
-- v0.5.23: Armor/Potion bridge risk analysis or multi-version bridge phase review.
+- v0.5.23: Module enabled state persistence bugfix plus Armor/Potion bridge risk analysis.
+- v0.5.24: Armor/Potion bridge phase decision or multi-version bridge phase review.
 - Later: create the separate 1.7.10 environment only after 1.8.9 remains stable through bridge proof of concept.

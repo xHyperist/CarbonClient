@@ -74,6 +74,17 @@ public final class KeyInputHandler {
             return;
         }
 
-        moduleManager.toggleByKeyCode(keyCode);
+        if (moduleManager.toggleByKeyCode(keyCode)) {
+            persistActiveState();
+        }
+    }
+
+    private void persistActiveState() {
+        if (configManager != null) {
+            configManager.save();
+        }
+        if (profileManager != null) {
+            profileManager.saveActiveProfileSilently();
+        }
     }
 }

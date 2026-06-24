@@ -1837,7 +1837,7 @@ public final class CarbonMenuScreen extends GuiScreen {
 
         if (isInside(mouseX, mouseY, toggleX, fullbrightY + 16, 56, BUTTON_HEIGHT)) {
             fullbright.setEnabled(!fullbright.isEnabled());
-            configManager.save();
+            persistActiveState();
             notificationManager.success(
                 fullbright.isEnabled()
                     ? "Fullbright Enabled"
@@ -1855,7 +1855,7 @@ public final class CarbonMenuScreen extends GuiScreen {
         }
         if (isInside(mouseX, mouseY, toggleX, fullbrightY + 96, 56, BUTTON_HEIGHT)) {
             fullbright.setSmoothTransition(!fullbright.isSmoothTransition());
-            configManager.save();
+            persistActiveState();
             notificationManager.success(
                 "Visual Settings Saved",
                 "Fullbright transition setting updated."
@@ -1865,7 +1865,7 @@ public final class CarbonMenuScreen extends GuiScreen {
 
         if (isInside(mouseX, mouseY, toggleX, timeChangerY + 16, 56, BUTTON_HEIGHT)) {
             timeChanger.setEnabled(!timeChanger.isEnabled());
-            configManager.save();
+            persistActiveState();
             notificationManager.success(
                 timeChanger.isEnabled()
                     ? "Time Changer Enabled"
@@ -1882,7 +1882,7 @@ public final class CarbonMenuScreen extends GuiScreen {
                 visualScrollOffset,
                 Math.max(0, getVisualsContentHeight() - getVisualsViewportHeight())
             );
-            configManager.save();
+            persistActiveState();
             notificationManager.success(
                 "Visual Settings Saved",
                 "Time Changer mode: " + timeChanger.getMode()
@@ -1901,7 +1901,7 @@ public final class CarbonMenuScreen extends GuiScreen {
             : timeChangerY + 104;
         if (isInside(mouseX, mouseY, toggleX, smoothY, 56, BUTTON_HEIGHT)) {
             timeChanger.setSmoothTransition(!timeChanger.isSmoothTransition());
-            configManager.save();
+            persistActiveState();
             notificationManager.success(
                 "Visual Settings Saved",
                 "Time Changer transition setting updated."
@@ -2134,7 +2134,7 @@ public final class CarbonMenuScreen extends GuiScreen {
 
         moduleManager.resetAllToDefaults();
         visualManager.resetAllToDefaults();
-        configManager.save();
+        persistActiveState();
         notificationManager.success(
             "Settings Reset",
             "All settings reset to defaults."
@@ -2186,7 +2186,7 @@ public final class CarbonMenuScreen extends GuiScreen {
                 BUTTON_HEIGHT
             )) {
                 module.setKeyCode(module.getDefaultKeyCode());
-                configManager.save();
+                persistActiveState();
                 notifyModuleKeybindChanged(module);
                 listeningModuleKeybind = null;
                 return true;
@@ -2207,6 +2207,7 @@ public final class CarbonMenuScreen extends GuiScreen {
                 new HudLayoutEditorScreen(
                     moduleManager,
                     configManager,
+                    profileManager,
                     notificationManager,
                     notificationRenderer
                 )
@@ -2300,7 +2301,7 @@ public final class CarbonMenuScreen extends GuiScreen {
 
             if (isInside(mouseX, mouseY, toggleX, buttonY, buttonWidth, BUTTON_HEIGHT)) {
                 moduleManager.toggle(module.getName());
-                configManager.save();
+                persistActiveState();
                 return true;
             }
             if (isInside(mouseX, mouseY, optionsX, buttonY, buttonWidth, BUTTON_HEIGHT)) {
@@ -2323,7 +2324,7 @@ public final class CarbonMenuScreen extends GuiScreen {
         int contentTop = panelY + HEADER_HEIGHT;
 
         if (isInside(mouseX, mouseY, panelX + panelWidth - 76, panelY + 14, 60, BUTTON_HEIGHT)) {
-            configManager.save();
+            persistActiveState();
             selectedModule = null;
             draggingSlider = null;
             listeningKeybind = null;
@@ -2340,7 +2341,7 @@ public final class CarbonMenuScreen extends GuiScreen {
             BUTTON_HEIGHT
         )) {
             selectedModule.resetToDefaults();
-            configManager.save();
+            persistActiveState();
             notificationManager.success(
                 "Settings Reset",
                 selectedModule.getName() + " reset to defaults."
@@ -2387,7 +2388,7 @@ public final class CarbonMenuScreen extends GuiScreen {
             if (setting instanceof BooleanSetting
                 && isInside(mouseX, mouseY, controlX + 80, controlY, 70, BUTTON_HEIGHT)) {
                 ((BooleanSetting) setting).toggle();
-                configManager.save();
+                persistActiveState();
                 return true;
             }
             if (setting instanceof KeybindSetting
@@ -2412,7 +2413,7 @@ public final class CarbonMenuScreen extends GuiScreen {
             if (setting instanceof ModeSetting
                 && isInside(mouseX, mouseY, controlX, controlY, CONTROL_WIDTH, BUTTON_HEIGHT)) {
                 cycleMode((ModeSetting) setting);
-                configManager.save();
+                persistActiveState();
                 return true;
             }
             if (setting instanceof ColorSetting
@@ -2614,7 +2615,7 @@ public final class CarbonMenuScreen extends GuiScreen {
             || colorPickerDrag != 0
             || draggingFullbrightBrightness
             || draggingTimeChangerCustomTime) {
-            configManager.save();
+            persistActiveState();
         }
         if (draggingFullbrightBrightness) {
             notificationManager.success(
@@ -2765,7 +2766,7 @@ public final class CarbonMenuScreen extends GuiScreen {
             openColorSetting.setBaseColor(preset);
             updateColorHexDisplay();
             colorHexFocused = false;
-            configManager.save();
+            persistActiveState();
             return;
         }
 
@@ -2788,7 +2789,7 @@ public final class CarbonMenuScreen extends GuiScreen {
         )) {
             openColorSetting.setChroma(!openColorSetting.isChroma());
             colorHexFocused = false;
-            configManager.save();
+            persistActiveState();
             return;
         }
 
@@ -2800,7 +2801,7 @@ public final class CarbonMenuScreen extends GuiScreen {
         )) {
             openColorSetting.cycleType();
             colorHexFocused = false;
-            configManager.save();
+            persistActiveState();
             return;
         }
 
@@ -3184,7 +3185,7 @@ public final class CarbonMenuScreen extends GuiScreen {
                     ? Keyboard.KEY_NONE
                     : keyCode
             );
-            configManager.save();
+            persistActiveState();
             notifyModuleKeybindChanged(listeningModuleKeybind);
             listeningModuleKeybind = null;
             return;
@@ -3201,7 +3202,7 @@ public final class CarbonMenuScreen extends GuiScreen {
                     ? Keyboard.KEY_NONE
                     : keyCode
             );
-            configManager.save();
+            persistActiveState();
             notificationManager.success(
                 "Keybind Changed",
                 selectedModule.getName() + " / "
@@ -3213,7 +3214,7 @@ public final class CarbonMenuScreen extends GuiScreen {
         }
 
         if (keyCode == Keyboard.KEY_ESCAPE && selectedModule != null) {
-            configManager.save();
+            persistActiveState();
             selectedModule = null;
             draggingSlider = null;
             listeningKeybind = null;
@@ -3222,7 +3223,7 @@ public final class CarbonMenuScreen extends GuiScreen {
             return;
         }
         if (keyCode == Keyboard.KEY_ESCAPE || keyCode == Keyboard.KEY_RSHIFT) {
-            configManager.save();
+            persistActiveState();
             mc.displayGuiScreen(null);
             return;
         }
@@ -3233,8 +3234,13 @@ public final class CarbonMenuScreen extends GuiScreen {
     private void applyHexInputIfValid() {
         if (openColorSetting.setHexColor(colorHexInput)) {
             updateColorHexDisplay();
-            configManager.save();
+            persistActiveState();
         }
+    }
+
+    private void persistActiveState() {
+        configManager.save();
+        profileManager.saveActiveProfileSilently();
     }
 
     private void notifyModuleKeybindChanged(Module module) {

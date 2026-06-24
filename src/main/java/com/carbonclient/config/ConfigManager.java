@@ -39,6 +39,8 @@ public final class ConfigManager {
     private final File configFile;
     private final Logger logger;
     private final NotificationManager notificationManager;
+    private boolean loadedExistingConfig;
+    private long lastLoadedConfigModifiedAt;
 
     public ConfigManager(
         File gameDirectory,
@@ -68,6 +70,8 @@ public final class ConfigManager {
     public void load() {
         moduleManager.resetAllToDefaults();
         visualManager.resetAllToDefaults();
+        loadedExistingConfig = false;
+        lastLoadedConfigModifiedAt = 0L;
 
         if (!configFile.isFile()) {
             logger.info("No Carbon config found. Using default values.");
@@ -78,6 +82,8 @@ public final class ConfigManager {
             );
             return;
         }
+
+        lastLoadedConfigModifiedAt = configFile.lastModified();
 
         try (Reader reader = new InputStreamReader(
             new FileInputStream(configFile),
@@ -113,6 +119,7 @@ public final class ConfigManager {
                     visualManager.applySnapshot(
                         getObject(rootElement.getAsJsonObject(), "visuals")
                     );
+                    loadedExistingConfig = true;
                     logger.info(
                         "Loaded Carbon config from {}",
                         configFile.getAbsolutePath()
@@ -464,5 +471,13 @@ public final class ConfigManager {
 
     public File getConfigFile() {
         return configFile;
+    }
+
+    public boolean wasExistingConfigLoaded() {
+        return loadedExistingConfig;
+    }
+
+    public long getLastLoadedConfigModifiedAt() {
+        return lastLoadedConfigModifiedAt;
     }
 }

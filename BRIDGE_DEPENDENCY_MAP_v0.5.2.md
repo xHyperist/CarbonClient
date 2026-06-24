@@ -265,8 +265,8 @@ Responsibilities:
 | Keystrokes | VERSION_SPECIFIC_1_8_9 | `Minecraft`, `KeyBinding`, LWJGL `Keyboard`/`Mouse` | InputBridge, RenderBridge | Low-Medium |
 | Clock HUD | VERSION_SPECIFIC_1_8_9 render only | Java time plus MC render classes | RenderBridge | Low |
 | Coordinates HUD | VERSION_SPECIFIC_1_8_9 | player/world/biome, `BlockPos` | GameBridge, EntityBridge, WorldBridge, RenderBridge | Low |
-| Armor HUD | VERSION_SPECIFIC_1_8_9 | `ItemStack`, `RenderItem`, `RenderHelper` | RenderBridge item extension, GameBridge | Medium |
-| Potion HUD | VERSION_SPECIFIC_1_8_9 | `Potion`, `PotionEffect`, icon texture, `I18n` | RenderBridge icon extension, GameBridge | Medium |
+| Armor HUD | VERSION_SPECIFIC_1_8_9 / RISKY_PORT | `ItemStack`, `RenderItem`, `RenderHelper`, item overlay and GL lighting state | RenderBridge for text/background first; future RenderItemBridge for items | Medium-High |
+| Potion HUD | VERSION_SPECIFIC_1_8_9 / RISKY_PORT | `Potion`, `PotionEffect`, icon texture binding, `I18n`, GL state | RenderBridge for text/background first; future icon/texture bridge for icons | Medium-High |
 | Ping Display | VERSION_SPECIFIC_1_8_9 | `NetworkPlayerInfo` | GameBridge/WorldBridge or future NetworkBridge | Medium |
 | ToggleSprint | RISKY_PORT | `KeyBinding`, player movement/sneak/sprint state | InputBridge, EntityBridge, EventBridge | High |
 | Crosshair | RISKY_PORT | overlay/crosshair hook, mouse movement | EventBridge, RenderBridge, InputBridge | High |
@@ -326,6 +326,7 @@ Responsibilities:
 - v0.5.20 completed RenderBridge helper QA.
 - v0.5.21 continues Phase C with Ping Display render-only bridge prototype.
 - v0.5.22 completed Ping Display bridge consumer QA.
+- v0.5.23 fixed module enabled-state persistence and completed Armor/Potion bridge risk analysis.
 - FPS Display, CPS Display, Clock HUD, Coordinates HUD, Keystrokes, and Ping Display remain fallback-safe bridge-assisted render consumers.
 - Render-only bridge consumers are stable with legacy fallback.
 - The helper centralizes safe RenderBridge readiness and metric access; consumers still own module-specific render and fallback decisions.
@@ -333,8 +334,16 @@ Responsibilities:
 - Keystrokes remains render-only bridge-assisted; input abstraction remains future work and `InputBridge` is still not used.
 - Ping Display remains render-only bridge-assisted; ping data still comes from direct 1.8.9 network/player info access.
 - Ping data abstraction remains future work.
+- Armor HUD risk classification:
+  - Safe first step: background/text/durability text may use `RenderBridge` later.
+  - Keep direct 1.8.9 for armor item list, `ItemStack`, `RenderItem`, `RenderHelper`, item overlay, durability bar, enchanted glint, z-level/lighting state, and null slot handling.
+  - Full bridge migration should wait for a dedicated RenderItemBridge or item render adapter.
+- Potion HUD risk classification:
+  - Safe first step: background/text, potion name, duration text, and amplifier text may use `RenderBridge` later.
+  - Keep direct 1.8.9 for active potion effect data, potion icon texture binding, icon draw, texture atlas coordinates, GL blend/alpha state, effect ordering, and vanilla potion internals.
+  - Full bridge migration should wait for a dedicated icon/texture bridge or potion render adapter.
+- Data access remains direct 1.8.9 until bridge abstractions are explicitly designed.
 - Continue moving one low-risk module at a time:
-  - Armor/Potion bridge risk analysis due to item/effect rendering
   - Multi-version bridge phase review
   - HUD render utility abstraction later
 - Build after each module.

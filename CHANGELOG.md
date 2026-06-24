@@ -1,5 +1,19 @@
 # Changelog
 
+## v0.5.23 - Module Enabled State Persistence + Armor/Potion Risk Analysis
+
+- Hotfix audit: verified the actual git diff and completed the real persistence fix.
+- Fixed and validated module enabled/disabled persistence across restarts.
+- Ensured active profile snapshots are updated when module, visual, setting, keybind, color, and reset state changes are saved.
+- Ensured keybind-triggered module toggles persist to config and the active profile.
+- Added startup reconciliation so stale active profiles from older builds cannot overwrite a newer loaded config state.
+- Made silent active profile saves notification-free and crash-safe.
+- Ensured saved enabled state is not overwritten by constructor defaults after config/profile load.
+- Confirmed runtime-only values remain non-persistent.
+- Added Armor HUD bridge risk analysis.
+- Added Potion HUD bridge risk analysis.
+- Confirmed no new bridge consumer and no 1.7.10 code/dependency were added.
+
 ## v0.5.22 - Ping Display Bridge Consumer QA
 
 - Validated the Ping Display bridge-assisted render path.

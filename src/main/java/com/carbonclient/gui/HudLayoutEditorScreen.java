@@ -6,6 +6,7 @@ import com.carbonclient.module.Module;
 import com.carbonclient.module.ModuleManager;
 import com.carbonclient.notification.NotificationManager;
 import com.carbonclient.notification.NotificationRenderer;
+import com.carbonclient.profile.ProfileManager;
 import com.carbonclient.ui.render.RenderUtils;
 import com.carbonclient.ui.theme.CarbonTheme;
 import java.io.IOException;
@@ -18,6 +19,7 @@ public final class HudLayoutEditorScreen extends GuiScreen {
 
     private final ModuleManager moduleManager;
     private final ConfigManager configManager;
+    private final ProfileManager profileManager;
     private final NotificationManager notificationManager;
     private final NotificationRenderer notificationRenderer;
     private DraggableHudModule selectedHud;
@@ -27,11 +29,13 @@ public final class HudLayoutEditorScreen extends GuiScreen {
     public HudLayoutEditorScreen(
         ModuleManager moduleManager,
         ConfigManager configManager,
+        ProfileManager profileManager,
         NotificationManager notificationManager,
         NotificationRenderer notificationRenderer
     ) {
         if (moduleManager == null
             || configManager == null
+            || profileManager == null
             || notificationManager == null
             || notificationRenderer == null) {
             throw new IllegalArgumentException(
@@ -41,6 +45,7 @@ public final class HudLayoutEditorScreen extends GuiScreen {
 
         this.moduleManager = moduleManager;
         this.configManager = configManager;
+        this.profileManager = profileManager;
         this.notificationManager = notificationManager;
         this.notificationRenderer = notificationRenderer;
     }
@@ -154,7 +159,7 @@ public final class HudLayoutEditorScreen extends GuiScreen {
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         if (keyCode == Keyboard.KEY_ESCAPE) {
-            configManager.save();
+            persistActiveState();
             notificationManager.success(
                 "HUD Layout Saved",
                 "HUD positions were saved."
@@ -164,6 +169,11 @@ public final class HudLayoutEditorScreen extends GuiScreen {
         }
 
         super.keyTyped(typedChar, keyCode);
+    }
+
+    private void persistActiveState() {
+        configManager.save();
+        profileManager.saveActiveProfileSilently();
     }
 
     @Override

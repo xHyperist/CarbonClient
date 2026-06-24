@@ -3,7 +3,7 @@
 ## Client Launch
 
 - [ ] `.\gradlew.bat runClient` ile client aciliyor.
-- [ ] Loglarda `Carbon Client v0.5.22 is starting.` gorunuyor.
+- [ ] Loglarda `Carbon Client v0.5.23 is starting.` gorunuyor.
 - [ ] Loglarda `Carbon Client initialized successfully.` gorunuyor.
 - [ ] Carbon kaynakli crash yok.
 
@@ -686,3 +686,41 @@
 - [ ] 1.7.10 code/dependency eklenmedi.
 - [ ] Jar `build/libs/carbon-client-0.5.22.jar` olarak uretiliyor.
 - [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
+
+## v0.5.23 Module Enabled State Persistence + Armor/Potion Risk Analysis
+
+- [ ] Module enabled state restart sonrasi korunuyor.
+- [ ] Module disabled state restart sonrasi korunuyor.
+- [ ] Saved enabled state constructor default degerlerini load sonrasi eziyor.
+- [ ] Config snapshot module enabled state yaziyor.
+- [ ] Profile snapshot module enabled state yaziyor.
+- [ ] Carbon Menu module card toggle config ve active profile save tetikliyor.
+- [ ] Options/setting/keybind/color degisiklikleri config ve active profile save tetikliyor.
+- [ ] Keybind ile module toggle config ve active profile save tetikliyor.
+- [ ] Reset to Defaults default enabled state'e donuyor ve kaydediliyor.
+- [ ] Reset All Settings default enabled state'e donuyor ve kaydediliyor.
+- [ ] Shutdown save config ve active profile snapshot yaziyor.
+- [ ] Profile load saved enabled state uyguluyor.
+- [ ] v0.5.23-hotfix gercek git diff uzerinden denetlendi.
+- [ ] Startup stale active profile reconciliation kontrol edildi.
+- [ ] Eski/stale active profile snapshot loaded config'teki daha yeni enabled state'i ezmiyor.
+- [ ] Active profile silent save notification/log spam uretmiyor.
+- [ ] Config/profile compatibility kontrol edildi.
+- [ ] Runtime-only values config/profile'a yazilmiyor.
+- [ ] Armor HUD bridge migration yapilmadi.
+- [ ] Potion HUD bridge migration yapilmadi.
+- [ ] Armor HUD bridge risk analysis tamamlandi.
+- [ ] Potion HUD bridge risk analysis tamamlandi.
+- [ ] Yeni bridge consumer eklenmedi.
+- [ ] InputBridge kullanilmadi.
+- [ ] EntityBridge kullanilmadi.
+- [ ] WorldBridge kullanilmadi.
+- [ ] RenderUtils bridge'e tasinmadi.
+- [ ] CarbonMenuScreen bridge'e tasinmadi.
+- [ ] ForgeEventBridge bridge'e tasinmadi.
+- [ ] KeyInputHandler bridge'e tasinmadi.
+- [ ] `build.gradle` degistirilmedi.
+- [ ] 1.7.10 code/dependency eklenmedi.
+- [ ] Jar `build/libs/carbon-client-0.5.23.jar` olarak uretiliyor.
+- [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
+- [ ] `.\gradlew.bat runClient` manuel persistence testi tamamlandi veya gerekcesi raporlandi.

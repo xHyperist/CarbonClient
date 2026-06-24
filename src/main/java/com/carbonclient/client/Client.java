@@ -227,6 +227,7 @@ public final class Client {
                     public void run() {
                         visualManager.shutdown();
                         configManager.save();
+                        profileManager.saveActiveProfileSilently();
                     }
                 },
                 "Carbon Client Config Saver"

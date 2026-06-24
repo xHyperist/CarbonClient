@@ -50,6 +50,8 @@ public final class ProfileManager {
             storedActive = DEFAULT_PROFILE_NAME;
         }
 
+        reconcileActiveProfileWithLoadedConfig(storedActive);
+
         if (!loadProfile(storedActive, false)) {
             activeProfileName = DEFAULT_PROFILE_NAME;
             loadProfile(DEFAULT_PROFILE_NAME, false);
@@ -93,6 +95,19 @@ public final class ProfileManager {
             activeProfileName + " was saved."
         );
         return true;
+    }
+
+    public boolean saveActiveProfileSilently() {
+        try {
+            String name = sanitizeName(activeProfileName);
+            if (name == null) {
+                return false;
+            }
+            storage.writeProfile(name, configManager.createSnapshot());
+            return true;
+        } catch (Exception ignored) {
+            return false;
+        }
     }
 
     public boolean loadProfile(String requestedName) {
@@ -278,6 +293,28 @@ public final class ProfileManager {
             storage.writeProfile(name, snapshot);
         } catch (Exception exception) {
             reportFailure("create", name, exception);
+        }
+    }
+
+    private void reconcileActiveProfileWithLoadedConfig(String profileName) {
+        Profile profile = findProfile(profileName);
+        if (profile == null || !configManager.wasExistingConfigLoaded()) {
+            return;
+        }
+
+        if (configManager.getLastLoadedConfigModifiedAt()
+            <= profile.getLastModified()) {
+            return;
+        }
+
+        try {
+            storage.writeProfile(profile.getName(), configManager.createSnapshot());
+        } catch (Exception exception) {
+            logger.warn(
+                "Could not update stale Carbon active profile {} from loaded config.",
+                profile.getName(),
+                exception
+            );
         }
     }
 
