@@ -137,6 +137,16 @@ This document is intentionally planning-only. It does not start the 1.7.10 port,
 - No other modules were migrated.
 - No 1.7.10 implementation yet.
 
+## v0.5.14 Coordinates HUD Bridge Consumer QA
+
+- Coordinates HUD bridge-assisted render prototype was validated.
+- Legacy fallback remains mandatory.
+- X/Y/Z, direction, and biome data access remain legacy/direct 1.8.9.
+- `EntityBridge` and `WorldBridge` are still not used.
+- Coordinates HUD options, config/profile format, HUD Editor bounds, and visual behavior remain unchanged.
+- No additional module migration was introduced.
+- No 1.7.10 implementation yet.
+
 ## 2. Current 1.8.9 Status
 
 The 1.8.9 Forge client has a stable Release Candidate baseline:
@@ -392,5 +402,6 @@ Planning interfaces:
 - v0.5.11: Clock HUD bridge consumer QA with local/system-time formatting and fallback validation.
 - v0.5.12: Low-risk bridge consumers QA pass for FPS, CPS, and Clock HUD.
 - v0.5.13: Coordinates HUD bridge-assisted render prototype, render-only bridge use.
-- v0.5.14: Validate config/profile compatibility for version-specific modules.
+- v0.5.14: Coordinates HUD bridge consumer QA, render-only bridge use validated.
+- v0.5.15: Validate config/profile compatibility for version-specific modules.
 - Later: create the separate 1.7.10 environment only after 1.8.9 remains stable through bridge proof of concept.
