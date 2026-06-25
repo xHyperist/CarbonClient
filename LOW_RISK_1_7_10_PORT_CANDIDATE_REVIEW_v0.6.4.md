@@ -268,6 +268,12 @@ Recommended next step:
 
 If the experimental branch is not ready yet, v0.6.5 can remain a final pre-branch stability checkpoint for 1.8.9.
 
+v0.6.5 follow-up:
+
+- `FIRST_1_7_10_RUNTIME_EXPERIMENT_READINESS_v0.6.5.md` now documents the final checklist.
+- The recommended branch remains `experimental/1.7.10-runtime`.
+- The first experiment remains minimal Forge 1.7.10 bootstrap only, with no HUD/module port.
+
 ## 12. What We Are Not Doing Yet
 
 - No branch is created.

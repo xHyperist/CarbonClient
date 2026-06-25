@@ -214,6 +214,12 @@ v0.6.4 follow-up:
 - Keystrokes, Ping Display, and Coordinates HUD should wait for input/network/world data review.
 - Armor HUD, Potion HUD, ToggleSprint, Crosshair, Reach Display, Combo Display, Fullbright, and Time Changer remain deferred from the first experiment.
 
+v0.6.5 follow-up:
+
+- `FIRST_1_7_10_RUNTIME_EXPERIMENT_READINESS_v0.6.5.md` now documents the final pre-branch readiness checklist.
+- The first experiment remains minimal Forge 1.7.10 bootstrap only.
+- Branch creation remains a manual user action.
+
 ## 14. What We Are Not Doing Yet
 
 - Not creating a branch automatically.

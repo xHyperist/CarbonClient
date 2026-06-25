@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.6.5 - First Isolated 1.7.10 Runtime Experiment Readiness
+
+- Added first isolated 1.7.10 runtime experiment readiness checklist.
+- Documented stable 1.8.9 main branch protection rules.
+- Documented `experimental/1.7.10-runtime` as the manual first experiment branch name.
+- Confirmed first experiment scope is minimal Forge 1.7.10 bootstrap only.
+- Added success criteria, rollback plan, risk list, performance-first rule, and PvP/rod responsiveness rule.
+- Confirmed no runtime behavior changes.
+- Confirmed no 1.7.10 code/dependency added.
+
 ## v0.6.4 - Low-Risk 1.7.10 Port Candidate Review
 
 - Added low-risk 1.7.10 port candidate review.

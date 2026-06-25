@@ -3,7 +3,7 @@
 ## Client Launch
 
 - [ ] `.\gradlew.bat runClient` ile client aciliyor.
-- [ ] Loglarda `Carbon Client v0.6.4 is starting.` gorunuyor.
+- [ ] Loglarda `Carbon Client v0.6.5 is starting.` gorunuyor.
 - [ ] Loglarda `Carbon Client initialized successfully.` gorunuyor.
 - [ ] Carbon kaynakli crash yok.
 
@@ -825,4 +825,24 @@
 - [ ] No new bridge consumers added.
 - [ ] No runtime behavior changes.
 - [ ] Jar `build/libs/carbon-client-0.6.4.jar` olarak uretiliyor.
+- [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
+
+## v0.6.5 First Isolated 1.7.10 Runtime Experiment Readiness
+
+- [ ] v0.6.5 readiness checklist document added.
+- [ ] Stable 1.8.9 main branch protection documented.
+- [ ] Manual branch name `experimental/1.7.10-runtime` documented.
+- [ ] First experiment scope limited to minimal Forge 1.7.10 bootstrap.
+- [ ] No HUD/module port in first experiment documented.
+- [ ] Branch-only build rules documented.
+- [ ] Success criteria documented.
+- [ ] Rollback plan documented.
+- [ ] ForgeGradle/JDK/mappings/lifecycle/render/input risks documented.
+- [ ] Performance-first rule documented.
+- [ ] PvP/rod responsiveness rule documented.
+- [ ] No branch created.
+- [ ] No `build.gradle` changes.
+- [ ] No 1.7.10 dependency added.
+- [ ] No runtime code changes.
+- [ ] Jar `build/libs/carbon-client-0.6.5.jar` olarak uretiliyor.
 - [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.

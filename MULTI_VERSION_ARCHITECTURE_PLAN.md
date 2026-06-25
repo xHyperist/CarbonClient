@@ -321,6 +321,20 @@ This document is intentionally planning-only. It does not start the 1.7.10 port,
 - No 1.7.10 code/dependency was added.
 - See `LOW_RISK_1_7_10_PORT_CANDIDATE_REVIEW_v0.6.4.md`.
 
+## v0.6.5 First Isolated 1.7.10 Runtime Experiment Readiness
+
+- v0.6.5 adds the final readiness checklist before the user manually creates the first isolated 1.7.10 experimental branch.
+- Recommended branch name remains `experimental/1.7.10-runtime`.
+- First experiment scope is limited to minimal Forge 1.7.10 bootstrap.
+- HUD/module ports remain out of scope for the first experiment.
+- Branch-only build rules, success criteria, rollback plan, technical risks, performance-first rules, and PvP/rod responsiveness rules were documented.
+- No branch was created.
+- No `build.gradle` change was introduced.
+- No runtime behavior changes were introduced.
+- No new bridge consumer was added.
+- No 1.7.10 code/dependency was added.
+- See `FIRST_1_7_10_RUNTIME_EXPERIMENT_READINESS_v0.6.5.md`.
+
 ## 2. Current 1.8.9 Status
 
 The 1.8.9 Forge client has a stable Release Candidate baseline:
@@ -592,7 +606,7 @@ Planning interfaces:
 - v0.6.2: Common vs Version-Specific Package Separation Plan, no physical package move.
 - v0.6.3: Isolated 1.7.10 experimental branch preparation plan, no branch created.
 - v0.6.4: Low-risk module port candidate analysis: Clock/FPS/CPS.
-- v0.6.5: First low-risk 1.7.10 module prototype in isolated work only.
+- v0.6.5: First isolated 1.7.10 runtime experiment readiness checklist; no branch created.
 - Later: create the separate 1.7.10 environment only after 1.8.9 remains stable through bridge proof of concept.
 - v0.8.x: Performance / FPS Optimization Phase: HUD render performance, config/profile IO optimization, render tick allocation reduction, GL state optimization, module tick optimization, frame time monitoring, PvP low latency planning, rod responsiveness validation, and benchmark/FPS checklist.
 
