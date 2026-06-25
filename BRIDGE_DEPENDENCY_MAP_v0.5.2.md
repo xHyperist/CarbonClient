@@ -377,6 +377,21 @@ Responsibilities:
 - Initial 1.7.10 work should happen on an isolated experimental branch.
 - The stable 1.8.9 branch should not receive risky `build.gradle`, dependency, source-set, or multi-project changes yet.
 - Future adapter needs remain unchanged: InputBridge for input-heavy systems, Entity/World bridges for entity/world systems, Network/Game bridge for ping if needed, item render bridge for Armor, and texture/icon bridge for Potion.
+
+### v0.6.2 Separation Classification Note
+
+- v0.6.2 classified current packages as common candidates, version-specific candidates, or mixed/adapter-needed candidates.
+- No new bridge consumer was added.
+- No package was physically moved.
+- Adapter needs remain:
+  - `InputBridge`: Keystrokes, ToggleSprint, keybind/input state.
+  - `EntityBridge` / `EventBridge`: Reach Display, Combo Display, combat/entity event logic.
+  - `WorldBridge`: Coordinates HUD, Time Changer, biome/world time access.
+  - Network/Game bridge: Ping Display, server/player info access if needed.
+  - ItemRenderBridge: Armor HUD item rendering.
+  - Texture/IconBridge: Potion HUD icon rendering.
+  - `RenderBridge`: existing HUD text/background consumers.
+
 ### Phase D - UI Bridge Preparation
 
 - Introduce `RenderBridge` into `RenderUtils`.

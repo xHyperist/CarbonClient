@@ -328,3 +328,10 @@ Before the first 1.7.10 experiment:
 - The recommended first strategy is an isolated experimental 1.7.10 branch.
 - Stable 1.8.9 main should not receive risky `build.gradle` changes before the 1.7.10 environment is proven.
 - v0.6.2 should prepare the Common vs Version-Specific Package Separation Plan.
+
+## v0.6.2 Separation Plan Result
+
+- v0.6.2 adds `COMMON_VERSION_SPECIFIC_SEPARATION_PLAN_v0.6.2.md`.
+- Common, version-specific, and mixed/adapter-needed packages were classified.
+- No physical package move, source-set change, multi-project change, or 1.7.10 dependency was introduced.
+- v0.6.3 should remain focused on isolated 1.7.10 branch preparation.

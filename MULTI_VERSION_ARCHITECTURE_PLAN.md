@@ -267,6 +267,7 @@ This document is intentionally planning-only. It does not start the 1.7.10 port,
 - Common vs version-specific package candidates were documented.
 - Branch/source-set/multi-project build options were documented, with isolated branch work preferred for the first 1.7.10 experiment.
 - Future v0.8.x Performance / FPS Optimization Phase was added as a roadmap note.
+
 ## v0.6.1 1.7.10 Environment Strategy
 
 - v0.6.1 documents the 1.7.10 environment strategy.
@@ -280,6 +281,20 @@ This document is intentionally planning-only. It does not start the 1.7.10 port,
 - No new bridge consumer was added.
 - No 1.7.10 code/dependency was added.
 - See `MULTI_VERSION_ENVIRONMENT_STRATEGY_v0.6.1.md`.
+
+## v0.6.2 Common vs Version-Specific Package Separation Plan
+
+- v0.6.2 documents the common vs version-specific package separation plan.
+- Common, version-specific, and mixed/adapter-needed package candidates were classified.
+- Module-level separation notes were added for HUD, PvP/info, visual, input, render, config, profile, and bridge systems.
+- Performance-first and PvP/rod responsiveness separation rules were documented.
+- No package was physically moved.
+- No `build.gradle` change was introduced.
+- No runtime behavior changes were introduced.
+- No new bridge consumer was added.
+- No 1.7.10 code/dependency was added.
+- See `COMMON_VERSION_SPECIFIC_SEPARATION_PLAN_v0.6.2.md`.
+
 ## 2. Current 1.8.9 Status
 
 The 1.8.9 Forge client has a stable Release Candidate baseline:
@@ -548,7 +563,7 @@ Planning interfaces:
 - v0.5.24: Multi-version bridge phase review and v0.6.0 planning.
 - v0.6.0: Multi-Version Runtime Preparation.
 - v0.6.1: 1.7.10 Environment Strategy / Branch or Source Layout Decision; isolated branch recommended for the first experiment.
-- v0.6.2: Common vs Version-Specific Package Separation Plan.
+- v0.6.2: Common vs Version-Specific Package Separation Plan, no physical package move.
 - v0.6.3: First 1.7.10 Experimental Runtime Setup in a separate branch or safe isolation.
 - v0.6.4: Low-risk module port candidate analysis: Clock/FPS/CPS.
 - v0.6.5: First low-risk 1.7.10 module prototype in isolated work only.

@@ -194,6 +194,11 @@ Recommended next step:
 
 The next planning phase should define which packages can stay common, which must remain version-specific, and which need adapters before any 1.7.10 branch experiment begins.
 
+v0.6.2 follow-up:
+
+- `COMMON_VERSION_SPECIFIC_SEPARATION_PLAN_v0.6.2.md` now documents that classification.
+- No branch was created and no `build.gradle` change was made in v0.6.2.
+
 ## 13. What We Are Not Doing Yet
 
 - Not starting the 1.7.10 port.

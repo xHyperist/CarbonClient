@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.6.2 - Common vs Version-Specific Separation Plan
+
+- Added common/version-specific separation plan.
+- Classified common, version-specific, and mixed packages.
+- Added module separation table.
+- Added performance-first separation rules.
+- Added PvP/rod responsiveness separation rules.
+- Confirmed no runtime behavior changes.
+- Confirmed no 1.7.10 code/dependency added.
+
 ## v0.6.1 - 1.7.10 Environment Strategy
 
 - Added 1.7.10 environment strategy document.
