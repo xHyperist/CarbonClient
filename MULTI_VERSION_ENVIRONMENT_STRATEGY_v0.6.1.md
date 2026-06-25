@@ -212,3 +212,9 @@ v0.6.2 follow-up:
 - Not changing runtime behavior.
 - Not starting launcher/auth/cosmetic work.
 - Not adding cheat/PvP advantage features.
+
+## v0.6.3 Branch Preparation Follow-Up
+
+- v0.6.3 adds `ISOLATED_1_7_10_BRANCH_PREPARATION_v0.6.3.md`.
+- The isolated branch strategy is now backed by documented manual steps, safety rules, rollback guidance, and first experiment scope.
+- No branch was created automatically.

@@ -1,6 +1,6 @@
 # Carbon Client
 
-Carbon Client, Minecraft 1.8.9 Forge uzerine gelistirilmis premium PvP/HUD client altyapisidir. v0.6.2, Common vs Version-Specific Package Separation Plan asamasidir.
+Carbon Client, Minecraft 1.8.9 Forge uzerine gelistirilmis premium PvP/HUD client altyapisidir. v0.6.3, Isolated 1.7.10 Experimental Branch Preparation Plan asamasidir.
 
 Carbon Client bir cheat/hile client degildir. Fly, speed, reach, velocity, autoclicker, aim assist veya combat avantaji saglayan ozellikler hedeflenmez.
 
@@ -33,7 +33,7 @@ Jar uretmek:
 Cikti jar dosyasi:
 
 ```text
-build/libs/carbon-client-0.6.2.jar
+build/libs/carbon-client-0.6.3.jar
 ```
 
 Temiz build almak:
@@ -98,7 +98,7 @@ Onemli dosyalar:
 2. Minecraft ana menusu acildiginda Carbon Client loglarini kontrol et.
 3. Oyun icinde `RSHIFT` ile Carbon Menu'yu ac.
 4. Mods Tab, Options, Keybinds, Profiles, Color Picker ve HUD Editor akislarini test et.
-5. Jar ile test etmek icin `build/libs/carbon-client-0.6.2.jar` dosyasini Minecraft 1.8.9 Forge `mods` klasorune koy.
+5. Jar ile test etmek icin `build/libs/carbon-client-0.6.3.jar` dosyasini Minecraft 1.8.9 Forge `mods` klasorune koy.
 
 ## Multi-Version Plan
 
@@ -133,6 +133,7 @@ Onemli dosyalar:
 - v0.6.0 starts Multi-Version Runtime Preparation, documents performance-first and PvP responsiveness goals, and keeps runtime on 1.8.9 with no 1.7.10 code/dependency yet.
 - v0.6.1 documents the 1.7.10 environment strategy, compares separate branch/source-set/multi-project approaches, and recommends an isolated branch for the first 1.7.10 experiment.
 - v0.6.2 documents the common vs version-specific package separation plan without moving packages or changing runtime behavior.
+- v0.6.3 documents isolated 1.7.10 experimental branch preparation, manual branch steps, safety rules, and rollback planning without creating a branch.
 - Current runtime still remains Minecraft 1.8.9 Forge; bridge usage is limited to internal render-assisted consumers.
 - This does not mean 1.7.10 support is active yet.
 - No 1.12.2, 1.16.5, or 1.20.x target is planned right now.
@@ -142,6 +143,7 @@ Onemli dosyalar:
 - See `MULTI_VERSION_RUNTIME_PREPARATION_v0.6.0.md` for the v0.6 runtime preparation, performance-first rule, and PvP responsiveness plan.
 - See `MULTI_VERSION_ENVIRONMENT_STRATEGY_v0.6.1.md` for the 1.7.10 environment strategy decision.
 - See `COMMON_VERSION_SPECIFIC_SEPARATION_PLAN_v0.6.2.md` for common/version-specific package classification and adapter needs.
+- See `ISOLATED_1_7_10_BRANCH_PREPARATION_v0.6.3.md` for manual experimental branch preparation and rollback rules.
 
 ## Yasak / Istenmeyen Yon
 

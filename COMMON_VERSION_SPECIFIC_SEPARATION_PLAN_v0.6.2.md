@@ -203,3 +203,9 @@ Before v0.6.3:
 - Not changing runtime behavior.
 - Not starting launcher/auth/cosmetic work.
 - Not adding cheat/PvP advantage features.
+
+## v0.6.3 Branch Preparation Follow-Up
+
+- v0.6.3 adds `ISOLATED_1_7_10_BRANCH_PREPARATION_v0.6.3.md`.
+- The next step after separation planning is isolated branch preparation, not physical package movement.
+- v0.6.4 should review low-risk 1.7.10 port candidates before module work begins.

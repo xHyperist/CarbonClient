@@ -295,6 +295,17 @@ This document is intentionally planning-only. It does not start the 1.7.10 port,
 - No 1.7.10 code/dependency was added.
 - See `COMMON_VERSION_SPECIFIC_SEPARATION_PLAN_v0.6.2.md`.
 
+## v0.6.3 Isolated 1.7.10 Branch Preparation
+
+- v0.6.3 documents manual isolated 1.7.10 experimental branch preparation.
+- Recommended branch name: `experimental/1.7.10-runtime`.
+- Manual branch creation steps, safety rules, first experiment scope, technical risks, performance-first branch rules, PvP/rod responsiveness rules, and rollback plan were documented.
+- No branch was created.
+- No `build.gradle` change was introduced.
+- No runtime behavior changes were introduced.
+- No new bridge consumer was added.
+- No 1.7.10 code/dependency was added.
+- See `ISOLATED_1_7_10_BRANCH_PREPARATION_v0.6.3.md`.
 ## 2. Current 1.8.9 Status
 
 The 1.8.9 Forge client has a stable Release Candidate baseline:
@@ -564,7 +575,7 @@ Planning interfaces:
 - v0.6.0: Multi-Version Runtime Preparation.
 - v0.6.1: 1.7.10 Environment Strategy / Branch or Source Layout Decision; isolated branch recommended for the first experiment.
 - v0.6.2: Common vs Version-Specific Package Separation Plan, no physical package move.
-- v0.6.3: First 1.7.10 Experimental Runtime Setup in a separate branch or safe isolation.
+- v0.6.3: Isolated 1.7.10 experimental branch preparation plan, no branch created.
 - v0.6.4: Low-risk module port candidate analysis: Clock/FPS/CPS.
 - v0.6.5: First low-risk 1.7.10 module prototype in isolated work only.
 - Later: create the separate 1.7.10 environment only after 1.8.9 remains stable through bridge proof of concept.

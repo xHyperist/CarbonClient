@@ -335,3 +335,10 @@ Before the first 1.7.10 experiment:
 - Common, version-specific, and mixed/adapter-needed packages were classified.
 - No physical package move, source-set change, multi-project change, or 1.7.10 dependency was introduced.
 - v0.6.3 should remain focused on isolated 1.7.10 branch preparation.
+
+## v0.6.3 Branch Preparation Result
+
+- v0.6.3 adds `ISOLATED_1_7_10_BRANCH_PREPARATION_v0.6.3.md`.
+- The document defines manual branch creation steps, safety rules, first experiment scope, rollback plan, and performance/PvP branch constraints.
+- No branch was created and no `build.gradle` change was made in v0.6.3.
+- v0.6.4 should review low-risk 1.7.10 port candidates before any feature port is attempted.

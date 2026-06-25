@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.6.3 - Isolated 1.7.10 Branch Preparation
+
+- Added isolated 1.7.10 branch preparation document.
+- Documented manual branch creation strategy.
+- Documented first experiment scope and safety rules.
+- Documented rollback plan.
+- Added performance-first and PvP/rod responsiveness branch rules.
+- Confirmed no runtime behavior changes.
+- Confirmed no 1.7.10 code/dependency added.
+
 ## v0.6.2 - Common vs Version-Specific Separation Plan
 
 - Added common/version-specific separation plan.
