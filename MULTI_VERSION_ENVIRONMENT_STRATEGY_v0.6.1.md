@@ -218,3 +218,10 @@ v0.6.2 follow-up:
 - v0.6.3 adds `ISOLATED_1_7_10_BRANCH_PREPARATION_v0.6.3.md`.
 - The isolated branch strategy is now backed by documented manual steps, safety rules, rollback guidance, and first experiment scope.
 - No branch was created automatically.
+
+## v0.6.4 Candidate Review Follow-Up
+
+- v0.6.4 adds `LOW_RISK_1_7_10_PORT_CANDIDATE_REVIEW_v0.6.4.md`.
+- The first isolated 1.7.10 experiment should still start with minimal bootstrap before any module work.
+- Clock HUD, FPS Display, and CPS Display are the safest early module candidates after bootstrap.
+- No branch was created and no 1.7.10 dependency or `build.gradle` change was added in v0.6.4.

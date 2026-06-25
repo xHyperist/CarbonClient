@@ -392,6 +392,30 @@ Responsibilities:
   - Texture/IconBridge: Potion HUD icon rendering.
   - `RenderBridge`: existing HUD text/background consumers.
 
+### v0.6.4 Candidate Review Note
+
+- v0.6.4 reviewed low-risk 1.7.10 port candidates without adding a new bridge consumer.
+- Safest early candidates:
+  - Clock HUD: render-only, Java/system time.
+  - FPS Display: render-only, simple text HUD.
+  - CPS Display: render-only with mouse click tracking review required.
+- Medium-risk candidates:
+  - Keystrokes: future `InputBridge` review needed.
+  - Ping Display: future Network/Game bridge review may be needed.
+  - Coordinates HUD: future `WorldBridge` / entity-player data review needed.
+- Deferred candidates:
+  - Armor HUD: future ItemRenderBridge needed before item rendering is portable.
+  - Potion HUD: future Texture/IconBridge needed before icon rendering is portable.
+  - ToggleSprint, Crosshair, Reach Display, Combo Display, Fullbright, and Time Changer remain outside the first experiment.
+- Adapter needs remain:
+  - `RenderBridge`: Clock/FPS/CPS early candidates and existing text/background HUD consumers.
+  - `InputBridge`: Keystrokes and ToggleSprint later.
+  - `EntityBridge` / `EventBridge`: Reach Display and Combo Display later.
+  - `WorldBridge`: Coordinates HUD and Time Changer later.
+  - Network/Game bridge: Ping Display later.
+  - ItemRenderBridge: Armor HUD later.
+  - Texture/IconBridge: Potion HUD later.
+
 ### Phase D - UI Bridge Preparation
 
 - Introduce `RenderBridge` into `RenderUtils`.

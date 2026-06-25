@@ -306,6 +306,21 @@ This document is intentionally planning-only. It does not start the 1.7.10 port,
 - No new bridge consumer was added.
 - No 1.7.10 code/dependency was added.
 - See `ISOLATED_1_7_10_BRANCH_PREPARATION_v0.6.3.md`.
+
+## v0.6.4 Low-Risk 1.7.10 Port Candidate Review
+
+- v0.6.4 reviews first-wave 1.7.10 port candidates before any port work starts.
+- Clock HUD, FPS Display, and CPS Display were identified as the safest early module candidates.
+- Keystrokes, Ping Display, and Coordinates HUD were classified as medium-risk because they depend on input, network/player info, or world/player/biome data.
+- Armor HUD, Potion HUD, ToggleSprint, Crosshair, Reach Display, Combo Display, Fullbright, and Time Changer were deferred from the first experiment.
+- Performance-first and PvP/rod responsiveness candidate rules were documented.
+- No branch was created.
+- No `build.gradle` change was introduced.
+- No runtime behavior changes were introduced.
+- No new bridge consumer was added.
+- No 1.7.10 code/dependency was added.
+- See `LOW_RISK_1_7_10_PORT_CANDIDATE_REVIEW_v0.6.4.md`.
+
 ## 2. Current 1.8.9 Status
 
 The 1.8.9 Forge client has a stable Release Candidate baseline:

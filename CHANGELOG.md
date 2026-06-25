@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.6.4 - Low-Risk 1.7.10 Port Candidate Review
+
+- Added low-risk 1.7.10 port candidate review.
+- Identified Clock/FPS/CPS as safest early candidates.
+- Classified Keystrokes/Ping/Coordinates as medium-risk.
+- Deferred Armor/Potion/ToggleSprint/Crosshair/Reach/Combo and other high-risk modules.
+- Added performance-first candidate rules.
+- Added PvP/rod responsiveness candidate rules.
+- Confirmed no runtime behavior changes.
+- Confirmed no 1.7.10 code/dependency added.
+
 ## v0.6.3 - Isolated 1.7.10 Branch Preparation
 
 - Added isolated 1.7.10 branch preparation document.

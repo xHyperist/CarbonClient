@@ -342,3 +342,11 @@ Before the first 1.7.10 experiment:
 - The document defines manual branch creation steps, safety rules, first experiment scope, rollback plan, and performance/PvP branch constraints.
 - No branch was created and no `build.gradle` change was made in v0.6.3.
 - v0.6.4 should review low-risk 1.7.10 port candidates before any feature port is attempted.
+
+## v0.6.4 Candidate Review Result
+
+- v0.6.4 adds `LOW_RISK_1_7_10_PORT_CANDIDATE_REVIEW_v0.6.4.md`.
+- Clock HUD, FPS Display, and CPS Display are the safest early module candidates for a future isolated 1.7.10 branch.
+- Keystrokes, Ping Display, and Coordinates HUD remain medium-risk because they need input, network/player info, or world/player data review.
+- Armor HUD, Potion HUD, ToggleSprint, Crosshair, Reach Display, Combo Display, Fullbright, and Time Changer remain deferred from the first experiment.
+- No branch was created and no 1.7.10 dependency or `build.gradle` change was added in v0.6.4.

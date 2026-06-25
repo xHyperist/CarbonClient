@@ -204,6 +204,16 @@ Candidate modules/systems to review:
 
 v0.6.4 does not have to port anything. A careful candidate review is still useful before or alongside the first experimental branch.
 
+v0.6.4 follow-up:
+
+- `LOW_RISK_1_7_10_PORT_CANDIDATE_REVIEW_v0.6.4.md` now documents the candidate review.
+- Recommended first real module order after minimal bootstrap:
+  1. Clock HUD.
+  2. FPS Display.
+  3. CPS Display.
+- Keystrokes, Ping Display, and Coordinates HUD should wait for input/network/world data review.
+- Armor HUD, Potion HUD, ToggleSprint, Crosshair, Reach Display, Combo Display, Fullbright, and Time Changer remain deferred from the first experiment.
+
 ## 14. What We Are Not Doing Yet
 
 - Not creating a branch automatically.

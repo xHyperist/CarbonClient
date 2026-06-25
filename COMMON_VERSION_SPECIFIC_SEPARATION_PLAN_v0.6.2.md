@@ -209,3 +209,10 @@ Before v0.6.3:
 - v0.6.3 adds `ISOLATED_1_7_10_BRANCH_PREPARATION_v0.6.3.md`.
 - The next step after separation planning is isolated branch preparation, not physical package movement.
 - v0.6.4 should review low-risk 1.7.10 port candidates before module work begins.
+
+## v0.6.4 Candidate Review Follow-Up
+
+- v0.6.4 adds `LOW_RISK_1_7_10_PORT_CANDIDATE_REVIEW_v0.6.4.md`.
+- Clock HUD, FPS Display, and CPS Display are the safest early candidates because they have simple render/data surfaces.
+- Keystrokes, Ping Display, and Coordinates HUD remain mixed/adapter-needed candidates because input, network, and world/player data are version-sensitive.
+- High-risk modules remain deferred until dedicated adapters are planned.
