@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.6.1 - 1.7.10 Environment Strategy
+
+- Added 1.7.10 environment strategy document.
+- Compared separate branch, source-set, and multi-project approaches.
+- Recommended isolated branch for first 1.7.10 experiment.
+- Added performance-first requirements.
+- Added PvP/rod responsiveness requirements.
+- Confirmed no runtime behavior changes.
+- Confirmed no 1.7.10 code/dependency added.
+
 ## v0.6.0 - Multi-Version Runtime Preparation
 
 - Added v0.6 multi-version runtime preparation document.

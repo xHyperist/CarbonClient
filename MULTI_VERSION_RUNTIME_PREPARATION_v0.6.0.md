@@ -320,3 +320,11 @@ Before the first 1.7.10 experiment:
 - Not using InputBridge, EntityBridge, WorldBridge, or NetworkBridge.
 - Not starting launcher/auth/cosmetic work.
 - Not adding cheat/PvP advantage features.
+
+## v0.6.1 Environment Strategy Result
+
+- v0.6.1 adds `MULTI_VERSION_ENVIRONMENT_STRATEGY_v0.6.1.md`.
+- Separate branch, source-set, and multi-project Gradle strategies were compared.
+- The recommended first strategy is an isolated experimental 1.7.10 branch.
+- Stable 1.8.9 main should not receive risky `build.gradle` changes before the 1.7.10 environment is proven.
+- v0.6.2 should prepare the Common vs Version-Specific Package Separation Plan.

@@ -1,6 +1,6 @@
 # Carbon Client
 
-Carbon Client, Minecraft 1.8.9 Forge uzerine gelistirilmis premium PvP/HUD client altyapisidir. v0.6.0, Multi-Version Runtime Preparation asamasidir.
+Carbon Client, Minecraft 1.8.9 Forge uzerine gelistirilmis premium PvP/HUD client altyapisidir. v0.6.1, 1.7.10 Environment Strategy asamasidir.
 
 Carbon Client bir cheat/hile client degildir. Fly, speed, reach, velocity, autoclicker, aim assist veya combat avantaji saglayan ozellikler hedeflenmez.
 
@@ -33,7 +33,7 @@ Jar uretmek:
 Cikti jar dosyasi:
 
 ```text
-build/libs/carbon-client-0.6.0.jar
+build/libs/carbon-client-0.6.1.jar
 ```
 
 Temiz build almak:
@@ -98,7 +98,7 @@ Onemli dosyalar:
 2. Minecraft ana menusu acildiginda Carbon Client loglarini kontrol et.
 3. Oyun icinde `RSHIFT` ile Carbon Menu'yu ac.
 4. Mods Tab, Options, Keybinds, Profiles, Color Picker ve HUD Editor akislarini test et.
-5. Jar ile test etmek icin `build/libs/carbon-client-0.6.0.jar` dosyasini Minecraft 1.8.9 Forge `mods` klasorune koy.
+5. Jar ile test etmek icin `build/libs/carbon-client-0.6.1.jar` dosyasini Minecraft 1.8.9 Forge `mods` klasorune koy.
 
 ## Multi-Version Plan
 
@@ -131,6 +131,7 @@ Onemli dosyalar:
 - v0.5.23-hotfix audits the real file state and prevents stale active profile snapshots from overwriting newer config enabled states.
 - v0.5.24 completes the Multi-Version Bridge Phase Review, reviews v0.5.x render bridge preparation, and prepares v0.6.0 planning.
 - v0.6.0 starts Multi-Version Runtime Preparation, documents performance-first and PvP responsiveness goals, and keeps runtime on 1.8.9 with no 1.7.10 code/dependency yet.
+- v0.6.1 documents the 1.7.10 environment strategy, compares separate branch/source-set/multi-project approaches, and recommends an isolated branch for the first 1.7.10 experiment.
 - Current runtime still remains Minecraft 1.8.9 Forge; bridge usage is limited to internal render-assisted consumers.
 - This does not mean 1.7.10 support is active yet.
 - No 1.12.2, 1.16.5, or 1.20.x target is planned right now.
@@ -138,6 +139,7 @@ Onemli dosyalar:
 - See `BRIDGE_DEPENDENCY_MAP_v0.5.2.md` for class-level dependency categories, bridge needs, and migration order.
 - See `MULTI_VERSION_PHASE_REVIEW_v0.5.24.md` for the v0.5.x bridge checkpoint and v0.6.x roadmap.
 - See `MULTI_VERSION_RUNTIME_PREPARATION_v0.6.0.md` for the v0.6 runtime preparation, performance-first rule, and PvP responsiveness plan.
+- See `MULTI_VERSION_ENVIRONMENT_STRATEGY_v0.6.1.md` for the 1.7.10 environment strategy decision.
 
 ## Yasak / Istenmeyen Yon
 

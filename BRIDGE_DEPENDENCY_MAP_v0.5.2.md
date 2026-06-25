@@ -370,6 +370,13 @@ Responsibilities:
   - Item render bridge for Armor HUD.
   - Texture/icon bridge for Potion HUD.
 - Performance-first and PvP responsiveness rules should guide future bridge work so abstraction does not create frame spikes or input delay.
+### v0.6.1 Transition Note
+
+- v0.6.1 is strategy-only and adds no new bridge consumer.
+- Current render-only bridge consumers remain FPS Display, CPS Display, Clock HUD, Coordinates HUD, Keystrokes, and Ping Display.
+- Initial 1.7.10 work should happen on an isolated experimental branch.
+- The stable 1.8.9 branch should not receive risky `build.gradle`, dependency, source-set, or multi-project changes yet.
+- Future adapter needs remain unchanged: InputBridge for input-heavy systems, Entity/World bridges for entity/world systems, Network/Game bridge for ping if needed, item render bridge for Armor, and texture/icon bridge for Potion.
 ### Phase D - UI Bridge Preparation
 
 - Introduce `RenderBridge` into `RenderUtils`.

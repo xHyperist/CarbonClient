@@ -267,6 +267,19 @@ This document is intentionally planning-only. It does not start the 1.7.10 port,
 - Common vs version-specific package candidates were documented.
 - Branch/source-set/multi-project build options were documented, with isolated branch work preferred for the first 1.7.10 experiment.
 - Future v0.8.x Performance / FPS Optimization Phase was added as a roadmap note.
+## v0.6.1 1.7.10 Environment Strategy
+
+- v0.6.1 documents the 1.7.10 environment strategy.
+- Separate branch, source-set, and multi-project Gradle approaches were compared.
+- Recommended strategy: use an isolated experimental 1.7.10 branch for the first environment test.
+- Stable 1.8.9 main should remain protected.
+- `build.gradle` should not be changed on the stable branch yet.
+- Source-set or multi-project restructuring should wait until the 1.7.10 environment is proven.
+- Performance-first and PvP/rod responsiveness requirements remain mandatory constraints.
+- No runtime behavior changes were introduced.
+- No new bridge consumer was added.
+- No 1.7.10 code/dependency was added.
+- See `MULTI_VERSION_ENVIRONMENT_STRATEGY_v0.6.1.md`.
 ## 2. Current 1.8.9 Status
 
 The 1.8.9 Forge client has a stable Release Candidate baseline:
@@ -534,7 +547,7 @@ Planning interfaces:
 - v0.5.23: Module enabled state persistence bugfix plus Armor/Potion bridge risk analysis.
 - v0.5.24: Multi-version bridge phase review and v0.6.0 planning.
 - v0.6.0: Multi-Version Runtime Preparation.
-- v0.6.1: 1.7.10 Environment Strategy / Branch or Source Layout Decision.
+- v0.6.1: 1.7.10 Environment Strategy / Branch or Source Layout Decision; isolated branch recommended for the first experiment.
 - v0.6.2: Common vs Version-Specific Package Separation Plan.
 - v0.6.3: First 1.7.10 Experimental Runtime Setup in a separate branch or safe isolation.
 - v0.6.4: Low-risk module port candidate analysis: Clock/FPS/CPS.
