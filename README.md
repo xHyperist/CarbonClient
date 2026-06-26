@@ -1,6 +1,6 @@
 # Carbon Client
 
-Carbon Client, Minecraft 1.8.9 Forge uzerine gelistirilmis premium PvP/HUD client altyapisidir. v0.6.6, Final 1.8.9 Pre-Branch Stability Checkpoint asamasidir.
+Carbon Client, Minecraft 1.8.9 Forge uzerine gelistirilmis premium PvP/HUD client altyapisidir. v0.6.7, Experimental 1.7.10 Pause + Main 1.8.9 Refocus asamasidir.
 
 Carbon Client bir cheat/hile client degildir. Fly, speed, reach, velocity, autoclicker, aim assist veya combat avantaji saglayan ozellikler hedeflenmez.
 
@@ -33,7 +33,7 @@ Jar uretmek:
 Cikti jar dosyasi:
 
 ```text
-build/libs/carbon-client-0.6.6.jar
+build/libs/carbon-client-0.6.7.jar
 ```
 
 Temiz build almak:
@@ -98,7 +98,7 @@ Onemli dosyalar:
 2. Minecraft ana menusu acildiginda Carbon Client loglarini kontrol et.
 3. Oyun icinde `RSHIFT` ile Carbon Menu'yu ac.
 4. Mods Tab, Options, Keybinds, Profiles, Color Picker ve HUD Editor akislarini test et.
-5. Jar ile test etmek icin `build/libs/carbon-client-0.6.6.jar` dosyasini Minecraft 1.8.9 Forge `mods` klasorune koy.
+5. Jar ile test etmek icin `build/libs/carbon-client-0.6.7.jar` dosyasini Minecraft 1.8.9 Forge `mods` klasorune koy.
 
 ## Multi-Version Plan
 
@@ -137,7 +137,16 @@ Onemli dosyalar:
 - v0.6.4 reviews low-risk 1.7.10 port candidates, identifies Clock/FPS/CPS as the safest early candidates, defers high-risk modules, keeps the current runtime on 1.8.9, and adds no 1.7.10 code/dependency.
 - v0.6.5 adds the final readiness checklist before the user manually creates the isolated `experimental/1.7.10-runtime` branch.
 - v0.6.6 adds the final 1.8.9 pre-branch stability checkpoint and manual QA checklist before any 1.7.10 branch work.
+- v0.6.7 pauses the isolated 1.7.10 experiment after proving bootstrap/runClient/Clock/FPS/CPS prototypes, preserves `experimental/1.7.10-runtime`, and refocuses main on stable 1.8.9 development.
 - Current runtime still remains Minecraft 1.8.9 Forge; bridge usage is limited to internal render-assisted consumers.
+
+## v0.6.7 Refocus Note
+
+- `experimental/1.7.10-runtime` is preserved as a separate experimental branch.
+- `main` remains the stable Minecraft Forge 1.8.9 runtime.
+- 1.7.10 code is not merged into main.
+- `build.gradle` remains unchanged for 1.8.9.
+- Next recommended stage: `v0.7.0 - Carbon Client 1.8.9 Roadmap Refresh`.
 - This does not mean 1.7.10 support is active yet.
 - No 1.12.2, 1.16.5, or 1.20.x target is planned right now.
 - See `MULTI_VERSION_ARCHITECTURE_PLAN.md` for common/version-specific system boundaries and migration phases.
@@ -150,6 +159,7 @@ Onemli dosyalar:
 - See `LOW_RISK_1_7_10_PORT_CANDIDATE_REVIEW_v0.6.4.md` for the first 1.7.10 port candidate risk review.
 - See `FIRST_1_7_10_RUNTIME_EXPERIMENT_READINESS_v0.6.5.md` for the final pre-branch readiness checklist.
 - See `FINAL_1_8_9_PRE_BRANCH_STABILITY_CHECKPOINT_v0.6.6.md` for the final 1.8.9 stability checkpoint before branch creation.
+- See `MAIN_1_8_9_REFOCUS_AFTER_1_7_10_EXPERIMENT_v0.6.7.md` for the 1.7.10 experiment pause and main 1.8.9 refocus decision.
 
 ## Yasak / Istenmeyen Yon
 

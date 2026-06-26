@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.6.7 - Experimental 1.7.10 Pause + Main 1.8.9 Refocus
+
+- Added main 1.8.9 refocus checkpoint after the isolated 1.7.10 experiment.
+- Documented that `experimental/1.7.10-runtime` proved minimal Forge 1.7.10 bootstrap, runClient, assets workaround, and Clock/FPS/CPS prototypes.
+- Documented that 1.7.10 direct-port parity remains the future rule.
+- Confirmed 1.7.10 work is paused and not merged into main.
+- Confirmed main remains the stable Minecraft Forge 1.8.9 runtime.
+- Added next recommended stage: v0.7.0 Carbon Client 1.8.9 Roadmap Refresh.
+- Confirmed no runtime behavior changes.
+- Confirmed no `build.gradle` change and no 1.7.10 dependency was added to main.
+
 ## v0.6.6 - Final 1.8.9 Pre-Branch Stability Checkpoint
 
 - Added final 1.8.9 pre-branch stability checkpoint document.

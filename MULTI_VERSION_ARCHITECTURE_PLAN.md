@@ -620,6 +620,7 @@ Planning interfaces:
 - v0.6.4: Low-risk module port candidate analysis: Clock/FPS/CPS.
 - v0.6.5: First isolated 1.7.10 runtime experiment readiness checklist; no branch created.
 - v0.6.6: Final 1.8.9 pre-branch stability checkpoint; manual QA checklist before branch creation.
+- v0.6.7: Experimental 1.7.10 Pause + Main 1.8.9 Refocus; `experimental/1.7.10-runtime` is preserved, 1.7.10 stays out of main, and main returns to stable 1.8.9 product development.
 - Later: create the separate 1.7.10 environment only after 1.8.9 remains stable through bridge proof of concept.
 - v0.8.x: Performance / FPS Optimization Phase: HUD render performance, config/profile IO optimization, render tick allocation reduction, GL state optimization, module tick optimization, frame time monitoring, PvP low latency planning, rod responsiveness validation, and benchmark/FPS checklist.
 
@@ -637,3 +638,16 @@ PvP responsiveness rule:
 - Carbon Client should improve PvP feel through FPS stability, input responsiveness, lightweight rendering, and stable frame timing.
 - Rod, block hit, bow, pearl, and item-use feel should remain smooth on the client side.
 - This must never become rod cooldown bypass, packet spam, reach manipulation, hitbox manipulation, velocity manipulation, aim assist, autoclicker, or server-side mechanic manipulation.
+
+## v0.6.7 Experimental 1.7.10 Pause + Main 1.8.9 Refocus
+
+- Added `MAIN_1_8_9_REFOCUS_AFTER_1_7_10_EXPERIMENT_v0.6.7.md`.
+- The isolated `experimental/1.7.10-runtime` branch proved minimal Forge 1.7.10 bootstrap viability.
+- The legacy runClient assets index workaround was proven sufficient for local 1.7.10 runtime testing.
+- Minimal Clock HUD, FPS Display, and CPS Display prototypes were proven on the 1.7.10 overlay path.
+- 1.7.10 direct-port parity remains the rule for future work: inspect the 1.8.9 class first, then adapt only version-specific API differences.
+- 1.7.10 work is paused for now.
+- Main remains the stable Minecraft Forge 1.8.9 runtime.
+- 1.7.10 code and dependencies are not merged into main.
+- `build.gradle` remains unchanged.
+- Next recommended stage: `v0.7.0 - Carbon Client 1.8.9 Roadmap Refresh`.

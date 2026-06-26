@@ -3,7 +3,7 @@
 ## Client Launch
 
 - [ ] `.\gradlew.bat runClient` ile client aciliyor.
-- [ ] Loglarda `Carbon Client v0.6.6 is starting.` gorunuyor.
+- [ ] Loglarda `Carbon Client v0.6.7 is starting.` gorunuyor.
 - [ ] Loglarda `Carbon Client initialized successfully.` gorunuyor.
 - [ ] Carbon kaynakli crash yok.
 
@@ -864,4 +864,22 @@
 - [ ] No 1.7.10 dependency added.
 - [ ] No runtime behavior changes.
 - [ ] Jar `build/libs/carbon-client-0.6.6.jar` olarak uretiliyor.
+- [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
+
+## v0.6.7 Experimental 1.7.10 Pause + Main 1.8.9 Refocus
+
+- [ ] v0.6.7 refocus document added.
+- [ ] 1.7.10 experimental bootstrap proof documented.
+- [ ] 1.7.10 runClient assets workaround proof documented.
+- [ ] 1.7.10 Clock/FPS/CPS prototype proof documented.
+- [ ] Direct-port parity rule documented.
+- [ ] `experimental/1.7.10-runtime` preserved as separate branch.
+- [ ] Main branch remains Minecraft Forge 1.8.9 stable runtime.
+- [ ] 1.7.10 is not merged into main.
+- [ ] `build.gradle` unchanged.
+- [ ] No 1.7.10 dependency added to main.
+- [ ] No runtime behavior changes.
+- [ ] No new module added.
+- [ ] Next stage v0.7.0 1.8.9 roadmap refresh documented.
+- [ ] Jar `build/libs/carbon-client-0.6.7.jar` olarak uretiliyor.
 - [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
