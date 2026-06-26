@@ -335,6 +335,18 @@ This document is intentionally planning-only. It does not start the 1.7.10 port,
 - No 1.7.10 code/dependency was added.
 - See `FIRST_1_7_10_RUNTIME_EXPERIMENT_READINESS_v0.6.5.md`.
 
+## v0.6.6 Final 1.8.9 Pre-Branch Stability Checkpoint
+
+- v0.6.6 adds the final 1.8.9 stability checkpoint before the first isolated 1.7.10 branch.
+- Clean build, runClient, config/profile persistence, HUD modules, visual modules, Carbon Menu, HUD Editor, and PvP stability manual QA checklists were documented.
+- Known deferred systems remain explicitly out of the first 1.7.10 experiment.
+- No branch was created.
+- No `build.gradle` change was introduced.
+- No runtime behavior changes were introduced.
+- No new bridge consumer was added.
+- No 1.7.10 code/dependency was added.
+- See `FINAL_1_8_9_PRE_BRANCH_STABILITY_CHECKPOINT_v0.6.6.md`.
+
 ## 2. Current 1.8.9 Status
 
 The 1.8.9 Forge client has a stable Release Candidate baseline:
@@ -607,6 +619,7 @@ Planning interfaces:
 - v0.6.3: Isolated 1.7.10 experimental branch preparation plan, no branch created.
 - v0.6.4: Low-risk module port candidate analysis: Clock/FPS/CPS.
 - v0.6.5: First isolated 1.7.10 runtime experiment readiness checklist; no branch created.
+- v0.6.6: Final 1.8.9 pre-branch stability checkpoint; manual QA checklist before branch creation.
 - Later: create the separate 1.7.10 environment only after 1.8.9 remains stable through bridge proof of concept.
 - v0.8.x: Performance / FPS Optimization Phase: HUD render performance, config/profile IO optimization, render tick allocation reduction, GL state optimization, module tick optimization, frame time monitoring, PvP low latency planning, rod responsiveness validation, and benchmark/FPS checklist.
 

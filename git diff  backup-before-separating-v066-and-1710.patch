@@ -1,0 +1,16 @@
+warning: in the working copy of 'CHANGELOG.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'FIRST_1_7_10_RUNTIME_EXPERIMENT_READINESS_v0.6.5.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'MULTI_VERSION_ARCHITECTURE_PLAN.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'QA_CHECKLIST.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'build.gradle', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'gradle.properties', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/main/java/com/carbonclient/common/Reference.java', LF will be replaced by CRLF the next time Git touches it
+CHANGELOG.md
+FIRST_1_7_10_RUNTIME_EXPERIMENT_READINESS_v0.6.5.md
+MULTI_VERSION_ARCHITECTURE_PLAN.md
+QA_CHECKLIST.md
+README.md
+build.gradle
+gradle.properties
+src/main/java/com/carbonclient/common/Reference.java

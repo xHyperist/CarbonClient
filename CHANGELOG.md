@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.6.6 - Final 1.8.9 Pre-Branch Stability Checkpoint
+
+- Added final 1.8.9 pre-branch stability checkpoint document.
+- Added clean build, runClient, config/profile persistence, HUD, visual, Carbon Menu, HUD Editor, and PvP stability manual QA checklists.
+- Documented known deferred systems before the first 1.7.10 experiment.
+- Confirmed no runtime behavior changes.
+- Confirmed no branch, `build.gradle` change, or 1.7.10 dependency was added.
+
 ## v0.6.5 - First Isolated 1.7.10 Runtime Experiment Readiness
 
 - Added first isolated 1.7.10 runtime experiment readiness checklist.

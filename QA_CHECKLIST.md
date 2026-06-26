@@ -3,7 +3,7 @@
 ## Client Launch
 
 - [ ] `.\gradlew.bat runClient` ile client aciliyor.
-- [ ] Loglarda `Carbon Client v0.6.5 is starting.` gorunuyor.
+- [ ] Loglarda `Carbon Client v0.6.6 is starting.` gorunuyor.
 - [ ] Loglarda `Carbon Client initialized successfully.` gorunuyor.
 - [ ] Carbon kaynakli crash yok.
 
@@ -845,4 +845,23 @@
 - [ ] No 1.7.10 dependency added.
 - [ ] No runtime code changes.
 - [ ] Jar `build/libs/carbon-client-0.6.5.jar` olarak uretiliyor.
+- [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.
+
+## v0.6.6 Final 1.8.9 Pre-Branch Stability Checkpoint
+
+- [ ] v0.6.6 stability checkpoint document added.
+- [ ] Clean build checklist documented.
+- [ ] runClient manual QA checklist documented.
+- [ ] Config/profile persistence manual QA checklist documented.
+- [ ] HUD modules manual QA checklist documented.
+- [ ] Visual modules manual QA checklist documented.
+- [ ] Carbon Menu / HUD Editor manual QA checklist documented.
+- [ ] PvP HUD / stability manual QA checklist documented.
+- [ ] Known deferred systems documented.
+- [ ] Branch pre-open checklist documented.
+- [ ] No branch created.
+- [ ] No `build.gradle` changes.
+- [ ] No 1.7.10 dependency added.
+- [ ] No runtime behavior changes.
+- [ ] Jar `build/libs/carbon-client-0.6.6.jar` olarak uretiliyor.
 - [ ] `.\gradlew.bat clean build` BUILD SUCCESSFUL veriyor.

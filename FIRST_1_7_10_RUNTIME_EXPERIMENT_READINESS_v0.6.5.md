@@ -145,6 +145,7 @@ Forbidden:
 - [ ] Main branch is clean or intentionally committed/stashed by the user.
 - [ ] Main is confirmed as the stable 1.8.9 branch.
 - [ ] `.\gradlew.bat clean build` passes on main.
+- [ ] v0.6.6 final 1.8.9 pre-branch stability checkpoint is reviewed.
 - [ ] User manually creates `experimental/1.7.10-runtime` only when ready.
 - [ ] First experiment scope is limited to minimal Forge 1.7.10 bootstrap.
 - [ ] No HUD/module port is attempted in the first experiment.
@@ -152,6 +153,12 @@ Forbidden:
 - [ ] Rollback plan is understood.
 - [ ] Performance-first rule is active.
 - [ ] PvP/rod responsiveness rule is active.
+
+v0.6.6 follow-up:
+
+- `FINAL_1_8_9_PRE_BRANCH_STABILITY_CHECKPOINT_v0.6.6.md` now documents the final 1.8.9 clean build and manual QA checkpoint before branch creation.
+- Branch creation remains a manual user action.
+- The first experimental branch remains minimal Forge 1.7.10 bootstrap only.
 
 ## 12. What We Are Not Doing Yet
 

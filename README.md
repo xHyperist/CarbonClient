@@ -1,6 +1,6 @@
 # Carbon Client
 
-Carbon Client, Minecraft 1.8.9 Forge uzerine gelistirilmis premium PvP/HUD client altyapisidir. v0.6.5, First Isolated 1.7.10 Runtime Experiment Readiness Checklist asamasidir.
+Carbon Client, Minecraft 1.8.9 Forge uzerine gelistirilmis premium PvP/HUD client altyapisidir. v0.6.6, Final 1.8.9 Pre-Branch Stability Checkpoint asamasidir.
 
 Carbon Client bir cheat/hile client degildir. Fly, speed, reach, velocity, autoclicker, aim assist veya combat avantaji saglayan ozellikler hedeflenmez.
 
@@ -33,7 +33,7 @@ Jar uretmek:
 Cikti jar dosyasi:
 
 ```text
-build/libs/carbon-client-0.6.5.jar
+build/libs/carbon-client-0.6.6.jar
 ```
 
 Temiz build almak:
@@ -98,7 +98,7 @@ Onemli dosyalar:
 2. Minecraft ana menusu acildiginda Carbon Client loglarini kontrol et.
 3. Oyun icinde `RSHIFT` ile Carbon Menu'yu ac.
 4. Mods Tab, Options, Keybinds, Profiles, Color Picker ve HUD Editor akislarini test et.
-5. Jar ile test etmek icin `build/libs/carbon-client-0.6.5.jar` dosyasini Minecraft 1.8.9 Forge `mods` klasorune koy.
+5. Jar ile test etmek icin `build/libs/carbon-client-0.6.6.jar` dosyasini Minecraft 1.8.9 Forge `mods` klasorune koy.
 
 ## Multi-Version Plan
 
@@ -136,6 +136,7 @@ Onemli dosyalar:
 - v0.6.3 documents isolated 1.7.10 experimental branch preparation, manual branch steps, safety rules, and rollback planning without creating a branch.
 - v0.6.4 reviews low-risk 1.7.10 port candidates, identifies Clock/FPS/CPS as the safest early candidates, defers high-risk modules, keeps the current runtime on 1.8.9, and adds no 1.7.10 code/dependency.
 - v0.6.5 adds the final readiness checklist before the user manually creates the isolated `experimental/1.7.10-runtime` branch.
+- v0.6.6 adds the final 1.8.9 pre-branch stability checkpoint and manual QA checklist before any 1.7.10 branch work.
 - Current runtime still remains Minecraft 1.8.9 Forge; bridge usage is limited to internal render-assisted consumers.
 - This does not mean 1.7.10 support is active yet.
 - No 1.12.2, 1.16.5, or 1.20.x target is planned right now.
@@ -148,6 +149,7 @@ Onemli dosyalar:
 - See `ISOLATED_1_7_10_BRANCH_PREPARATION_v0.6.3.md` for manual experimental branch preparation and rollback rules.
 - See `LOW_RISK_1_7_10_PORT_CANDIDATE_REVIEW_v0.6.4.md` for the first 1.7.10 port candidate risk review.
 - See `FIRST_1_7_10_RUNTIME_EXPERIMENT_READINESS_v0.6.5.md` for the final pre-branch readiness checklist.
+- See `FINAL_1_8_9_PRE_BRANCH_STABILITY_CHECKPOINT_v0.6.6.md` for the final 1.8.9 stability checkpoint before branch creation.
 
 ## Yasak / Istenmeyen Yon
 
