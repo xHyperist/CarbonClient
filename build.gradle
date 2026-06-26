@@ -15,6 +15,8 @@ buildscript {
     }
 }
 
+import groovy.json.JsonSlurper
+
 apply plugin: "forge"
 
 version = mod_version
@@ -44,6 +46,66 @@ tasks.matching { it.name == "downloadClient" }.all {
 
 tasks.matching { it.name == "downloadServer" }.all {
     enabled = false
+}
+
+task prepareLegacyAssetsIndex {
+    doLast {
+        File target = new File(
+            gradle.gradleUserHomeDir,
+            "caches/minecraft/assets/indexes/${minecraft_version}.json"
+        )
+        if (target.exists() && target.length() > 0) {
+            logger.lifecycle(
+                "Legacy assets index already present: ${target.absolutePath}"
+            )
+            return
+        }
+
+        target.parentFile.mkdirs()
+
+        String appData = System.getenv("APPDATA")
+        if (appData != null) {
+            File localIndex = new File(
+                appData,
+                ".minecraft/assets/indexes/${minecraft_version}.json"
+            )
+            if (localIndex.exists() && localIndex.length() > 0) {
+                target.bytes = localIndex.bytes
+                logger.lifecycle(
+                    "Copied legacy assets index from local Minecraft cache: "
+                        + target.absolutePath
+                )
+                return
+            }
+        }
+
+        URL manifestUrl = new URL(
+            "https://piston-meta.mojang.com/mc/game/version_manifest_v2.json"
+        )
+        def manifest = new JsonSlurper().parse(manifestUrl)
+        def versionEntry = manifest.versions.find { it.id == minecraft_version }
+        if (versionEntry == null) {
+            throw new GradleException(
+                "Could not find Minecraft ${minecraft_version} in version manifest."
+            )
+        }
+
+        def versionJson = new JsonSlurper().parse(new URL(versionEntry.url))
+        URL assetIndexUrl = new URL(versionJson.assetIndex.url)
+        target.bytes = assetIndexUrl.bytes
+        logger.lifecycle(
+            "Downloaded legacy assets index from Mojang metadata: "
+                + target.absolutePath
+        )
+    }
+}
+
+tasks.matching { it.name == "getAssetsIndex" }.all {
+    dependsOn prepareLegacyAssetsIndex
+}
+
+tasks.matching { it.name == "runClient" }.all {
+    dependsOn prepareLegacyAssetsIndex
 }
 
 processResources {
