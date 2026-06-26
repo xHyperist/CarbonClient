@@ -2,6 +2,7 @@ package com.carbonclient;
 
 import com.carbonclient.common.Reference;
 import com.carbonclient.hud.ClockHudOverlay;
+import com.carbonclient.hud.FpsHudOverlay;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -32,6 +33,7 @@ public final class CarbonClient {
     @Mod.EventHandler
     public void initialize(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new ClockHudOverlay());
+        MinecraftForge.EVENT_BUS.register(new FpsHudOverlay());
         logger.info("{} 1.7.10 experimental bootstrap init.", Reference.MOD_NAME);
     }
 

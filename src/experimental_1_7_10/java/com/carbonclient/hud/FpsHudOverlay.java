@@ -1,26 +1,23 @@
 package com.carbonclient.hud;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 
-public final class ClockHudOverlay {
+public final class FpsHudOverlay {
 
     private static final int X = 5;
-    private static final int Y = 108;
+    private static final int Y = 0;
     private static final float SCALE = 1.0F;
-    private static final int PADDING = 3;
+    private static final int PADDING = 4;
     private static final int TEXT_COLOR = 0xFFFFFFFF;
-    private static final int BACKGROUND_COLOR = 0x6F000000;
+    private static final int BACKGROUND_COLOR = 0xB0121824;
 
     private final Minecraft minecraft = Minecraft.getMinecraft();
-    private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-    private final Date reusableDate = new Date();
-    private long lastSecond = -1L;
-    private String displayText = "";
+    private long lastFpsUpdateTime = System.currentTimeMillis();
+    private int frameCounter;
+    private int displayedFps;
 
     @SubscribeEvent
     public void onRenderGameOverlay(RenderGameOverlayEvent.Text event) {
@@ -28,9 +25,11 @@ public final class ClockHudOverlay {
             return;
         }
 
+        updateFpsCounter();
+
         ExperimentalHudRenderer.drawPanelText(
             minecraft,
-            getDisplayText(),
+            displayedFps + " FPS",
             X,
             Y,
             SCALE,
@@ -41,14 +40,14 @@ public final class ClockHudOverlay {
         );
     }
 
-    private String getDisplayText() {
+    private void updateFpsCounter() {
+        frameCounter++;
+
         long now = System.currentTimeMillis();
-        long currentSecond = now / 1000L;
-        if (currentSecond != lastSecond) {
-            reusableDate.setTime(now);
-            displayText = timeFormat.format(reusableDate);
-            lastSecond = currentSecond;
+        if (now - lastFpsUpdateTime >= 1000L) {
+            displayedFps = frameCounter;
+            frameCounter = 0;
+            lastFpsUpdateTime = now;
         }
-        return displayText;
     }
 }
