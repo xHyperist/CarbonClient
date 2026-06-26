@@ -15,16 +15,18 @@ public final class CarbonTheme {
     public static final int WARNING = 0xFFFFB84D;
 
     // UI surfaces and interaction states
-    public static final int CARD = 0xE0182238;
-    public static final int CARD_HOVER = 0xF01C2942;
-    public static final int BORDER = 0xFF273653;
-    public static final int BORDER_HOVER = 0xFF3B5278;
-    public static final int BUTTON = 0xFF202D49;
-    public static final int BUTTON_HOVER = 0xFF2A3B5E;
-    public static final int ROW = 0xD9162034;
-    public static final int ROW_HOVER = 0xEF1B2942;
+    public static final int CARD = 0xF0141E33;
+    public static final int CARD_HOVER = 0xFF1A2944;
+    public static final int BORDER = 0xFF2A3958;
+    public static final int BORDER_HOVER = 0xFF4DA6FF;
+    public static final int BUTTON = 0xFF1B2740;
+    public static final int BUTTON_HOVER = 0xFF263A5E;
+    public static final int ROW = 0xE5162034;
+    public static final int ROW_HOVER = 0xF01D2B45;
     public static final int TRACK = 0xFF182238;
-    public static final int DIVIDER = 0xFF202D49;
+    public static final int DIVIDER = 0xFF24334F;
+    public static final int SURFACE_SHADOW = 0x66040810;
+    public static final int SURFACE_HIGHLIGHT = 0x22FFFFFF;
 
     // Layout tokens
     public static final int MENU_WIDTH = 500;
@@ -33,7 +35,7 @@ public final class CarbonTheme {
     public static final int FOOTER_HEIGHT = 28;
     public static final int CONTENT_PADDING = 16;
     public static final int GRID_COLUMNS = 3;
-    public static final int CARD_GAP = 10;
+    public static final int CARD_GAP = 12;
     public static final int CARD_HEIGHT = 126;
     public static final int BUTTON_HEIGHT = 20;
     public static final int SETTING_ROW_HEIGHT = 32;

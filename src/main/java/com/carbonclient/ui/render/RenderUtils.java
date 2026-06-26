@@ -25,11 +25,25 @@ public final class RenderUtils {
         int accent
     ) {
         Gui.drawRect(
+            x + 2,
+            y + 2,
+            x + width + 2,
+            y + height + 2,
+            CarbonTheme.SURFACE_SHADOW
+        );
+        Gui.drawRect(
             x,
             y,
             x + width,
             y + height,
             hovered ? CarbonTheme.CARD_HOVER : CarbonTheme.CARD
+        );
+        Gui.drawRect(
+            x,
+            y,
+            x + width,
+            y + 1,
+            CarbonTheme.SURFACE_HIGHLIGHT
         );
         drawOutline(
             x,
@@ -56,11 +70,25 @@ public final class RenderUtils {
         int accent
     ) {
         Gui.drawRect(
+            x + 1,
+            y + 1,
+            x + width + 1,
+            y + height + 1,
+            CarbonTheme.SURFACE_SHADOW
+        );
+        Gui.drawRect(
             x,
             y,
             x + width,
             y + height,
             hovered ? CarbonTheme.BUTTON_HOVER : CarbonTheme.BUTTON
+        );
+        Gui.drawRect(
+            x,
+            y,
+            x + width,
+            y + 1,
+            CarbonTheme.SURFACE_HIGHLIGHT
         );
         drawOutline(
             x,

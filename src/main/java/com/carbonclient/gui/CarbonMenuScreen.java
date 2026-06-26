@@ -55,6 +55,7 @@ public final class CarbonMenuScreen extends GuiScreen {
     private static final int SEARCH_HEIGHT = 24;
     private static final int FILTER_HEIGHT = 20;
     private static final int FILTER_GAP = CarbonTheme.SPACE_6;
+    private static final int CARD_INSET = CarbonTheme.SPACE_12;
     private static final int MODULE_SCROLL_STEP = 36;
     private static final int VISUAL_SCROLL_STEP = 34;
     private static final int MAX_SEARCH_LENGTH = 64;
@@ -635,9 +636,9 @@ public final class CarbonMenuScreen extends GuiScreen {
         int y,
         int width
     ) {
-        int accent = module.isEnabled()
-            ? CarbonTheme.ACCENT
-            : CarbonTheme.PRIMARY;
+        boolean enabled = module.isEnabled();
+        int accent = enabled ? CarbonTheme.ACCENT : CarbonTheme.PRIMARY;
+        boolean hovered = isInside(mouseX, mouseY, x, y, width, CARD_HEIGHT);
         cardComponent.render(
             x,
             y,
@@ -648,66 +649,84 @@ public final class CarbonMenuScreen extends GuiScreen {
             accent
         );
 
+        int titleMaxWidth = width - CARD_INSET * 2 - 36;
         RenderUtils.drawText(
             fontRendererObj,
-            module.getName(),
-            x + CarbonTheme.SPACE_12,
-            y + CarbonTheme.SPACE_12,
+            fontRendererObj.trimStringToWidth(module.getName(), titleMaxWidth),
+            x + CARD_INSET,
+            y + CARD_INSET,
             CarbonTheme.TEXT
+        );
+        RenderUtils.drawPanel(
+            x + width - CARD_INSET - 28,
+            y + CARD_INSET,
+            28,
+            3,
+            accent
         );
         RenderUtils.drawText(
             fontRendererObj,
             module.getCategory().name(),
-            x + CarbonTheme.SPACE_12,
+            x + CARD_INSET,
             y + 30,
             CarbonTheme.MUTED_TEXT
         );
 
-        String status = module.isEnabled() ? "ENABLED" : "DISABLED";
+        String status = enabled ? "ENABLED" : "DISABLED";
         int statusWidth = fontRendererObj.getStringWidth(status)
-            + CarbonTheme.SPACE_12;
+            + CarbonTheme.SPACE_16;
+        int statusX = x + CARD_INSET;
+        int statusY = y + 45;
         RenderUtils.drawPanel(
-            x + CarbonTheme.SPACE_12,
-            y + 46,
+            statusX,
+            statusY,
             statusWidth,
             16,
-            CarbonTheme.TRACK
+            enabled ? CarbonTheme.ROW_HOVER : CarbonTheme.TRACK
         );
         RenderUtils.drawOutline(
-            x + CarbonTheme.SPACE_12,
-            y + 46,
+            statusX,
+            statusY,
             statusWidth,
             16,
+            accent
+        );
+        RenderUtils.drawPanel(
+            statusX + CarbonTheme.SPACE_4,
+            statusY + 6,
+            CarbonTheme.SPACE_4,
+            CarbonTheme.SPACE_4,
             accent
         );
         RenderUtils.drawCenteredText(
             fontRendererObj,
             status,
-            x + CarbonTheme.SPACE_12,
-            y + 46,
+            statusX + CarbonTheme.SPACE_6,
+            statusY,
             statusWidth,
             16,
-            accent
+            enabled ? CarbonTheme.TEXT : accent
         );
+        RenderUtils.drawDivider(x + CARD_INSET, y + 66, width - CARD_INSET * 2);
         RenderUtils.drawText(
             fontRendererObj,
             fontRendererObj.trimStringToWidth(
                 module.getDescription(),
-                width - CarbonTheme.SPACE_24
+                width - CARD_INSET * 2
             ),
-            x + CarbonTheme.SPACE_12,
-            y + 70,
-            CarbonTheme.MUTED_TEXT
+            x + CARD_INSET,
+            y + 73,
+            hovered ? CarbonTheme.TEXT : CarbonTheme.MUTED_TEXT
         );
 
-        int buttonY = y + CARD_HEIGHT - BUTTON_HEIGHT - 10;
-        int buttonGap = 6;
-        int buttonWidth = (width - 20 - buttonGap) / 2;
-        int toggleX = x + 10;
+        int buttonY = y + CARD_HEIGHT - BUTTON_HEIGHT - CARD_INSET;
+        int buttonGap = CarbonTheme.SPACE_6;
+        int buttonWidth = (width - CARD_INSET * 2 - buttonGap) / 2;
+        int toggleX = x + CARD_INSET;
         int optionsX = toggleX + buttonWidth + buttonGap;
 
         drawButton(
-            module.isEnabled() ? "Disable" : "Enable",
+            enabled ? "Disable" : "Enable",
             toggleX,
             buttonY,
             buttonWidth,
