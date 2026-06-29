@@ -2,6 +2,7 @@ package com.carbonclient;
 
 import com.carbonclient.client.Client;
 import com.carbonclient.common.Reference;
+import com.carbonclient.launch.CarbonBootstrap;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -23,6 +24,10 @@ public final class CarbonClient {
 
     @Mod.EventHandler
     public void preInitialize(FMLPreInitializationEvent event) {
+        if (CarbonBootstrap.isLauncherMode()) {
+            System.out.println("[Carbon Client] Carbon Client running in launcher mode.");
+        }
+
         client.preInitialize(event);
     }
 

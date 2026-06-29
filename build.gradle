@@ -51,7 +51,9 @@ jar {
             "Specification-Version": project.version,
             "Implementation-Title": project.name,
             "Implementation-Version": project.version,
-            "Implementation-Vendor": "Carbon Client"
+            "Implementation-Vendor": "Carbon Client",
+            "TweakClass": "com.carbonclient.launch.CarbonTweaker",
+            "Carbon-Launch-Mode": "Tweaker"
         )
     }
 }
